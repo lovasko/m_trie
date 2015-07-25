@@ -1,9 +1,9 @@
-#include <stdlib.h>
+#include "m_trie.h"
 
-char*
+const char*
 m_trie_error_string(int error)
 {
-	char* messages[] = {
+	static const char* messages[] = {
 		"OK",
 		"Argument was NULL",
 		"Not found",
@@ -13,8 +13,9 @@ m_trie_error_string(int error)
 		"Invalid overwrite policy"
 	};
 
-	if (error < 0 || error > 6)
+	if (error < 0 || error > M_TRIE_E_MAX)
 		return NULL;
 	else
 		return messages[error];
 }
+

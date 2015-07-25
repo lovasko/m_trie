@@ -26,6 +26,7 @@ struct m_trie
 #define M_TRIE_E_EXISTS 4
 #define M_TRIE_E_COPY_INVALID 5
 #define M_TRIE_E_OVERWRITE_INVALID 6
+#define M_TRIE_E_MAX 6
 
 #define M_TRIE_OVERWRITE_ALLOW 0
 #define M_TRIE_OVERWRITE_PREVENT 1
@@ -38,7 +39,7 @@ int m_trie_set(struct m_trie* trie, char* key, uint8_t copy, uint8_t overwrite, 
 int m_trie_get(struct m_trie* trie, char* key, void** data);
 int m_trie_keys(struct m_trie* trie, struct m_list** out_keys);
 int m_trie_values(struct m_trie* trie, struct m_list** out_values);
-int m_trie_error_string(int error);
+const char* m_trie_error_string(int error);
 
 #endif
 

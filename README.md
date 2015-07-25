@@ -65,6 +65,12 @@ hash(char key)
 
 ### Get and set
 ```C
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+/* insert hash function here */
+
 int
 main(int argc, char* argv[])
 {

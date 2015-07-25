@@ -68,6 +68,7 @@ hash(char key)
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <m_trie.h>
 
 /* insert hash function here */
 

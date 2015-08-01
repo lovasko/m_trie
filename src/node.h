@@ -6,8 +6,7 @@
 
 #include <stdint.h>
 
-struct __m_node
-{
+struct __m_node {
 	void* data;
 	struct __m_node** children;
 	char key;

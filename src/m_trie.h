@@ -37,11 +37,15 @@ struct m_trie
 int m_trie_init(struct m_trie* trie, int16_t (*hash)(char));
 int m_trie_set(struct m_trie* trie,
                char* key,
+               uint32_t key_length,
                uint8_t copy,
                uint8_t overwrite,
                void* data,
                size_t size);
-int m_trie_get(struct m_trie* trie, char* key, void** data);
+int m_trie_get(struct m_trie* trie,
+               char* key,
+               uint32_t key_length,
+               void** data);
 int m_trie_keys(struct m_trie* trie, struct m_list** out_keys);
 int m_trie_values(struct m_trie* trie, struct m_list** out_values);
 const char* m_trie_error_string(int error);

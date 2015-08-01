@@ -4,11 +4,11 @@
 #include "node.h"
 
 static int
-key_valid(struct m_trie* trie, char* key)
+key_valid(struct m_trie* trie, char* key, uint32_t key_length)
 {
 	uint32_t i;
 
-	for (i = 0; key[i] != '\0'; i++)
+	for (i = 0; i < key_length; i++)
 		if (trie->hash(key[i]) < 0)
 			return 0;
 			
@@ -16,7 +16,10 @@ key_valid(struct m_trie* trie, char* key)
 }
 
 int
-m_trie_get(struct m_trie* trie, char* key, void** data)
+m_trie_get(struct m_trie* trie,
+           char* key,
+					 uint32_t key_length,
+					 void** data)
 {
 	uint32_t i;
 	struct __m_node* node;
@@ -24,12 +27,12 @@ m_trie_get(struct m_trie* trie, char* key, void** data)
 	if (trie == NULL || key == NULL)
 		return M_TRIE_E_NULL;
 
-	if (!key_valid(trie, key))
+	if (!key_valid(trie, key, key_length))
 		return M_TRIE_E_KEY_INVALID;
 
 	node = trie->root;
 
-	for (i = 0; key[i] != '\0'; i++)
+	for (i = 0; i < key_length; i++)
 		if ((node = node->children[trie->hash(key[i])]) == NULL)
 			return M_TRIE_E_NOT_FOUND;
 
@@ -46,6 +49,7 @@ m_trie_get(struct m_trie* trie, char* key, void** data)
 int
 m_trie_set(struct m_trie* trie,
            char* key,
+           uint32_t key_length,
            uint8_t copy,
            uint8_t overwrite,
            void* data,
@@ -58,12 +62,12 @@ m_trie_set(struct m_trie* trie,
 	if (trie == NULL || key == NULL)
 		return M_TRIE_E_NULL;
 
-	if (!key_valid(trie, key))
+	if (!key_valid(trie, key, key_length))
 		return M_TRIE_E_KEY_INVALID;
 
 	node = trie->root;
 
-	for (i = 0; key[i] != '\0'; i++) {
+	for (i = 0; i < key_length; i++) {
 		h = trie->hash(key[i]);
 
 		if (node->children[h] == NULL) {
@@ -94,7 +98,7 @@ m_trie_set(struct m_trie* trie,
 		return M_TRIE_E_COPY_INVALID;	
 	}
 
-	m_list_append(&trie->keys, M_LIST_COPY_DEEP, key, strlen(key)+1);
+	m_list_append(&trie->keys, M_LIST_COPY_DEEP, key, key_length);
 	m_list_append(&trie->values, M_LIST_COPY_SHALLOW, node->data, 0);
 
 	return M_TRIE_OK;

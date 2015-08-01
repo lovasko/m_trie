@@ -19,7 +19,7 @@ int
 m_trie_get(struct m_trie* trie,
            char* key,
 					 uint32_t key_length,
-					 void** data)
+					 void** out_data)
 {
 	uint32_t i;
 	struct __m_node* node;
@@ -37,8 +37,8 @@ m_trie_get(struct m_trie* trie,
 			return M_TRIE_E_NOT_FOUND;
 
 	if (node->type == M_TRIE_NODE_TYPE_DATA) {
-		if (data != NULL)
-			*data = node->data;
+		if (out_data != NULL)
+			*out_data = node->data;
 		return M_TRIE_OK;
 	}
 	else {
@@ -53,7 +53,7 @@ m_trie_set(struct m_trie* trie,
            uint8_t copy,
            uint8_t overwrite,
            void* data,
-           size_t size)
+           size_t data_size)
 {
 	uint32_t i;
 	int16_t h;
@@ -86,11 +86,11 @@ m_trie_set(struct m_trie* trie,
 	node->type = M_TRIE_NODE_TYPE_DATA;
 
 	if (copy == M_TRIE_COPY_DEEP) {
-		if (data == NULL || size == 0) {
+		if (data == NULL || data_size == 0) {
 			node->data = NULL;
 		} else {
-			node->data = malloc(size);
-			memcpy(node->data, data, size);
+			node->data = malloc(data_size);
+			memcpy(node->data, data, data_size);
 		}
 	} else if (copy == M_TRIE_COPY_SHALLOW) {
 		node->data = data;

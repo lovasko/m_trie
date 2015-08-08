@@ -49,5 +49,7 @@ int m_trie_keys(struct m_trie* trie, struct m_list** out_keys);
 int m_trie_values(struct m_trie* trie, struct m_list** out_values);
 const char* m_trie_error_string(int error);
 
+int16_t m_trie_generic_byte_hash(char key);
+
 #endif
 

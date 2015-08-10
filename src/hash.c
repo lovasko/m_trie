@@ -1,4 +1,4 @@
-#include <sys/limits.h>
+#include <limits.h>
 
 #include "m_trie.h"
 

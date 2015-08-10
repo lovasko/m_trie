@@ -32,7 +32,6 @@ struct m_trie {
 
 #define M_TRIE_COPY_DEEP    0
 #define M_TRIE_COPY_SHALLOW 1
-#define M_TRIE_COPY_KEY     2
 
 int m_trie_init(struct m_trie* trie, int16_t (*hash)(char));
 int m_trie_set(struct m_trie* trie,

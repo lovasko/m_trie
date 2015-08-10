@@ -18,8 +18,8 @@ key_valid(struct m_trie* trie, char* key, uint32_t key_length)
 int
 m_trie_get(struct m_trie* trie,
            char* key,
-					 uint32_t key_length,
-					 void** out_data)
+           uint32_t key_length,
+           void** out_data)
 {
 	uint32_t i;
 	struct __m_node* node;
@@ -58,7 +58,6 @@ m_trie_set(struct m_trie* trie,
 	uint32_t i;
 	int16_t h;
 	struct __m_node* node;
-	char* key_copy;
 
 	if (trie == NULL || key == NULL)
 		return M_TRIE_E_NULL;
@@ -86,9 +85,6 @@ m_trie_set(struct m_trie* trie,
 
 	node->type = M_TRIE_NODE_TYPE_DATA;
 
-	key_copy = malloc(key_length);
-	memcpy(key_copy, key, key_length);
-
 	if (copy == M_TRIE_COPY_DEEP) {
 		if (data == NULL || data_size == 0) {
 			node->data = NULL;
@@ -98,13 +94,11 @@ m_trie_set(struct m_trie* trie,
 		}
 	} else if (copy == M_TRIE_COPY_SHALLOW) {
 		node->data = data;
-	} else if (copy == M_TRIE_COPY_KEY) {
-		node->data = key_copy;
 	} else {
 		return M_TRIE_E_COPY_INVALID;	
 	}
 
-	m_list_append(&trie->keys, M_LIST_COPY_SHALLOW, key_copy, 0);
+	m_list_append(&trie->keys, M_LIST_COPY_DEEP, key, key_length);
 	m_list_append(&trie->values, M_LIST_COPY_SHALLOW, node->data, 0);
 
 	return M_TRIE_OK;

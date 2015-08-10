@@ -22,16 +22,35 @@ function with the last argument `NULL`, the function still returns either
 To retrieve all keys and/or values stored in the trie, use functions
 `m_trie_keys` and `m_trie_value` respectively.
 
+### Pre-defined hash functions
+The library ships with a set of pre-defined hash functions that came
+out to be often used in various `m_trie` applications.
+
+#### Generic byte hash
+By passing the `m_trie_generic_byte_hash` to the `m_trie_init` function we
+declare no interest in the meaning of the specific bytes, but rather only their
+numeric representation in the range `0..255`. This hash function works
+perfectly with binary blobs.
+
+#### POSIX path/file name hash
+Hash functions `m_trie_posix_file_name_hash` and `m_trie_posix_path_name_hash`
+are used to hash file and path names that conform to the strict POSIX rules.
+They allow the keys to contain only characters `A-Za-z0-9_.-` with addition of
+`/` in case of the `path` variant.
+
 ## Time and space complexity
 
-| Operation            | Time     |
-|----------------------|----------|
-|`m_trie_init`         | `O(h)`   |
-|`m_trie_set`          | `O(m*h)` |
-|`m_trie_get`          | `O(m*h)` |
-|`m_trie_keys`         | `O(1)`   |
-|`m_trie_values`       | `O(1)`   |
-|`m_trie_error_string` | `O(1)`   |
+| Operation                    | Time     |
+|------------------------------|----------|
+|`m_trie_init`                 | `O(h)`   |
+|`m_trie_set`                  | `O(m*h)` |
+|`m_trie_get`                  | `O(m*h)` |
+|`m_trie_keys`                 | `O(1)`   |
+|`m_trie_values`               | `O(1)`   |
+|`m_trie_error_string`         | `O(1)`   |
+|`m_trie_generic_byte_hash`    | `O(1)`   |
+|`m_trie_posix_file_name_hash` | `O(1)`   |
+|`m_trie_posix_path_name_hash` | `O(1)`   |
 
 where:
 * `h` is the time of the hashing function

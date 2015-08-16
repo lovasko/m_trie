@@ -47,6 +47,8 @@ int m_trie_get(struct m_trie* trie,
                void** out_data);
 int m_trie_keys(struct m_trie* trie, struct m_list** out_keys);
 int m_trie_values(struct m_trie* trie, struct m_list** out_values);
+int m_trie_memory_usage(struct m_trie* trie, uint64_t* usage);
+
 const char* m_trie_error_string(int error);
 
 int16_t m_trie_generic_byte_hash(char key);

@@ -11,6 +11,7 @@ struct __m_node {
 	struct __m_node** children;
 	char key;
 	uint8_t type;
+	char padding[6];
 };
 
 int node_init(struct __m_node** node, uint8_t children_count);

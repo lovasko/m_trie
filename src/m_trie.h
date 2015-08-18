@@ -16,6 +16,7 @@ struct m_trie {
 	struct m_list values;
 	int16_t (*hash)(char);
 	uint8_t children_count;
+	char padding[7];
 };
 
 #define M_TRIE_OK                  0

@@ -26,13 +26,17 @@ struct m_trie {
 #define M_TRIE_E_EXISTS            4
 #define M_TRIE_E_COPY_INVALID      5
 #define M_TRIE_E_OVERWRITE_INVALID 6
-#define M_TRIE_E_MAX               6
+#define M_TRIE_E_PREFIX            7
+#define M_TRIE_E_MAX               7
 
 #define M_TRIE_OVERWRITE_ALLOW   0
 #define M_TRIE_OVERWRITE_PREVENT 1
 
 #define M_TRIE_COPY_DEEP    0
 #define M_TRIE_COPY_SHALLOW 1
+
+#define M_TRIE_REMOVE_NO_CLEANUP 1
+#define M_TRIE_REMOVE_PREFIX     2
 
 int m_trie_init(struct m_trie* trie, int16_t (*hash)(char));
 int m_trie_set(struct m_trie* trie,
@@ -49,6 +53,10 @@ int m_trie_get(struct m_trie* trie,
 int m_trie_keys(struct m_trie* trie, struct m_list** out_keys);
 int m_trie_values(struct m_trie* trie, struct m_list** out_values);
 int m_trie_memory_usage(struct m_trie* trie, uint64_t* usage);
+int m_trie_remove(struct m_trie* trie,
+                  char* key,
+                  uint32_t key_length,
+                  int mode);
 
 const char* m_trie_error_string(int error);
 

@@ -2,18 +2,7 @@
 
 #include "m_trie.h"
 #include "node.h"
-
-static int
-key_valid(struct m_trie* trie, char* key, uint32_t key_length)
-{
-	uint32_t i;
-
-	for (i = 0; i < key_length; i++)
-		if (trie->hash(key[i]) < 0)
-			return 0;
-			
-	return 1;
-}
+#include "key.h"
 
 int
 m_trie_get(struct m_trie* trie,
@@ -88,12 +77,15 @@ m_trie_set(struct m_trie* trie,
 	if (copy == M_TRIE_COPY_DEEP) {
 		if (data == NULL || data_size == 0) {
 			node->data = NULL;
+			node->copy = M_TRIE_NODE_COPY_NULL;
 		} else {
 			node->data = malloc(data_size);
 			memcpy(node->data, data, data_size);
+			node->copy = M_TRIE_NODE_COPY_DEEP;
 		}
 	} else if (copy == M_TRIE_COPY_SHALLOW) {
 		node->data = data;
+		node->copy = M_TRIE_NODE_COPY_SHALLOW;
 	} else {
 		return M_TRIE_E_COPY_INVALID;	
 	}

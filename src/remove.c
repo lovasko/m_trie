@@ -86,7 +86,7 @@ m_trie_remove(struct m_trie* trie, char* key, uint32_t key_length, int mode)
 	if (node->type == M_TRIE_NODE_TYPE_REGULAR 
 	 && !(mode & M_TRIE_REMOVE_PREFIX)) {
 		if (!(mode & M_TRIE_REMOVE_NO_CLEANUP))
-			m_list_clear(&path);
+			m_list_remove_all(&path);
 		return M_TRIE_E_PREFIX;
 	}
 	

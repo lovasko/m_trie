@@ -140,5 +140,5 @@ $ sudo ./install.sh
 free to contact me.
 
 ## Author
-Daniel Lovasko (lovasko@freebsd.org)
+Daniel Lovasko (daniel.lovasko@gmail.com)
 

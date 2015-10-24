@@ -1,21 +1,26 @@
 #include "m_trie.h"
 
-const char*
-m_trie_error_string(int error)
+int
+m_trie_error_string(int code, char** out_error_string)
 {
-	static const char* messages[] = {
+	static const char* strings[] = {
 		"OK",
 		"Argument was NULL",
 		"Not found",
 		"Invalid key",
 		"Entry exists",
 		"Invalid copy method",
-		"Invalid overwrite policy"
+		"Invalid overwrite policy",
+		"Invalid return code"
 	};
 
-	if (error < 0 || error > M_TRIE_E_MAX)
-		return NULL;
-	else
-		return messages[error];
+	if (out_error_string == NULL)
+		return M_TRIE_E_NULL;
+
+	if (code < 0 || code > M_TRIE_E_MAX)
+		return M_TRIE_E_INVALID_CODE;
+
+	*out_error_string = (char*)strings[code];
+	return M_TRIE_OK;
 }
 

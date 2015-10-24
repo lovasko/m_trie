@@ -27,7 +27,8 @@ struct m_trie {
 #define M_TRIE_E_COPY_INVALID      5
 #define M_TRIE_E_OVERWRITE_INVALID 6
 #define M_TRIE_E_PREFIX            7
-#define M_TRIE_E_MAX               7
+#define M_TRIE_E_INVALID_CODE      8
+#define M_TRIE_E_MAX               8
 
 #define M_TRIE_OVERWRITE_ALLOW   0
 #define M_TRIE_OVERWRITE_PREVENT 1
@@ -57,8 +58,7 @@ int m_trie_remove(struct m_trie* trie,
                   char* key,
                   uint32_t key_length,
                   int mode);
-
-const char* m_trie_error_string(int error);
+int m_trie_error_string(int code, char** out_error_string);
 
 int16_t m_trie_generic_byte_hash(char key);
 

@@ -5,20 +5,6 @@
 #include <stdint.h>
 #include <m_list.h>
 
-/* 
- * HACK
- * root in the m_trie structure is a pointer to a struct __m_node, disguised as
- * void* in order not to pollute the namespace of the user of the library.
- */
-struct m_trie {
-	void* root;
-	struct m_list keys;
-	struct m_list values;
-	int16_t (*hash)(char);
-	uint8_t children_count;
-	char padding[7];
-};
-
 #define M_TRIE_OK                  0
 #define M_TRIE_E_NULL              1
 #define M_TRIE_E_NOT_FOUND         2
@@ -39,28 +25,29 @@ struct m_trie {
 #define M_TRIE_REMOVE_NO_CLEANUP 1
 #define M_TRIE_REMOVE_PREFIX     2
 
+/* 
+ * HACK
+ * root in the m_trie structure is a pointer to a struct __m_node, disguised as
+ * void* in order not to pollute the namespace of the user of the library.
+ */
+struct m_trie {
+	void* root;
+	struct m_list keys;
+	struct m_list values;
+	int16_t (*hash)(char);
+	uint8_t children_count;
+	char padding[7];
+};
+
 int m_trie_init(struct m_trie* trie, int16_t (*hash)(char));
-int m_trie_set(struct m_trie* trie,
-               char* key,
-               uint32_t key_length,
-               uint8_t copy,
-               uint8_t overwrite,
-               void* data,
-               size_t data_size);
-int m_trie_get(struct m_trie* trie,
-               char* key,
-               uint32_t key_length,
-               void** out_data);
+int m_trie_set(struct m_trie* trie, char* key, uint32_t key_length, uint8_t copy, uint8_t overwrite, void* data, size_t data_size);
+int m_trie_get(struct m_trie* trie, char* key, uint32_t key_length, void** out_data);
 int m_trie_keys(struct m_trie* trie, struct m_list** out_keys);
 int m_trie_values(struct m_trie* trie, struct m_list** out_values);
 int m_trie_memory_usage(struct m_trie* trie, uint64_t* usage);
 int m_trie_children_stats(struct m_trie* trie, uint64_t** out_stats);
-int m_trie_remove(struct m_trie* trie,
-                  char* key,
-                  uint32_t key_length,
-                  int mode);
+int m_trie_remove(struct m_trie* trie, char* key, uint32_t key_length, int mode);
 int m_trie_error_string(int code, char** out_error_string);
-
 int16_t m_trie_generic_byte_hash(char key);
 
 #endif

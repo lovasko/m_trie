@@ -4,12 +4,14 @@
 #include "node.h"
 
 int
-m_trie_init(struct m_trie* trie, int16_t (*hash)(char))
+m_trie_init(struct m_trie* trie, int16_t (*hash)(char), uint8_t aux_store)
 {
 	char i;
 
 	if (trie == NULL)
 		return M_TRIE_E_NULL;
+
+	trie->aux_store = aux_store;
 
 	trie->hash = hash;
 	trie->children_count = 0;

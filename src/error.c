@@ -11,7 +11,8 @@ m_trie_error_string(int code, char** out_error_string)
 		"Entry exists",
 		"Invalid copy method",
 		"Invalid overwrite policy",
-		"Invalid return code"
+		"Invalid return code",
+		"The data is not stored"
 	};
 
 	if (out_error_string == NULL)

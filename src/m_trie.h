@@ -14,7 +14,8 @@
 #define M_TRIE_E_OVERWRITE_INVALID 6
 #define M_TRIE_E_PREFIX            7
 #define M_TRIE_E_INVALID_CODE      8
-#define M_TRIE_E_MAX               8
+#define M_TRIE_E_NOT_STORED        9
+#define M_TRIE_E_MAX               9
 
 #define M_TRIE_OVERWRITE_ALLOW   0
 #define M_TRIE_OVERWRITE_PREVENT 1
@@ -24,6 +25,9 @@
 
 #define M_TRIE_REMOVE_NO_CLEANUP 1
 #define M_TRIE_REMOVE_PREFIX     2
+
+#define M_TRIE_AUX_STORE_KEYS   1
+#define M_TRIE_AUX_STORE_VALUES 2
 
 /* 
  * HACK
@@ -36,10 +40,11 @@ struct m_trie {
 	struct m_list values;
 	int16_t (*hash)(char);
 	uint8_t children_count;
-	char padding[7];
+	uint8_t aux_store;
+	char padding[6];
 };
 
-int m_trie_init(struct m_trie* trie, int16_t (*hash)(char));
+int m_trie_init(struct m_trie* trie, int16_t (*hash)(char), uint8_t aux_store);
 int m_trie_set(struct m_trie* trie, char* key, uint32_t key_length, uint8_t copy, uint8_t overwrite, void* data, size_t data_size);
 int m_trie_get(struct m_trie* trie, char* key, uint32_t key_length, void** out_data);
 int m_trie_keys(struct m_trie* trie, struct m_list** out_keys);

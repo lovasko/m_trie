@@ -90,8 +90,11 @@ m_trie_set(struct m_trie* trie,
 		return M_TRIE_E_COPY_INVALID;	
 	}
 
-	m_list_append(&trie->keys, M_LIST_COPY_DEEP, key, key_length);
-	m_list_append(&trie->values, M_LIST_COPY_SHALLOW, node->data, 0);
+	if (trie->aux_store & M_TRIE_AUX_STORE_KEYS)
+		m_list_append(&trie->keys, M_LIST_COPY_DEEP, key, key_length);
+
+	if (trie->aux_store & M_TRIE_AUX_STORE_VALUES)
+		m_list_append(&trie->values, M_LIST_COPY_SHALLOW, node->data, 0);
 
 	return M_TRIE_OK;
 }

@@ -1,6 +1,30 @@
 #include "m_trie.h"
 #include "node.h"
 
+static void
+keys_memory_usage(struct m_trie* trie, uint64_t* out_usage)
+{
+	struct m_elem* runner;
+	size_t size;
+
+	m_list_first(&trie->keys, &runner);
+	while (runner != NULL) {
+		m_elem_data_size(runner, &size);
+		*out_usage += (uint64_t)size;
+
+		m_elem_next(runner, &runner);
+	}
+}
+
+static void
+values_memory_usage(struct m_trie* trie, uint64_t* out_usage)
+{
+	uint64_t length;
+
+	m_list_length(&trie->values, &length);
+	*out_usage += ((uint64_t)sizeof(void*)) * length;
+}
+
 int
 m_trie_memory_usage(struct m_trie* trie, uint64_t* out_usage)
 {
@@ -29,6 +53,12 @@ m_trie_memory_usage(struct m_trie* trie, uint64_t* out_usage)
 			if (node->children[i] != NULL)
 				m_list_append(&queue, M_LIST_COPY_SHALLOW, node->children[i], 1);
 	}
+
+	if (trie->aux_store & M_TRIE_AUX_STORE_KEYS)
+		keys_memory_usage(trie, out_usage);
+
+	if (trie->aux_store & M_TRIE_AUX_STORE_VALUES)
+		values_memory_usage(trie, out_usage);
 
 	return M_TRIE_OK;
 }

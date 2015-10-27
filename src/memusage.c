@@ -2,17 +2,17 @@
 #include "node.h"
 
 int
-m_trie_memory_usage(struct m_trie* trie, uint64_t* usage)
+m_trie_memory_usage(struct m_trie* trie, uint64_t* out_usage)
 {
 	struct m_list queue;
 	struct m_elem* first;
 	struct __m_node* node;
 	uint8_t i;
 
-	if (trie == NULL || usage == NULL)
+	if (trie == NULL || out_usage == NULL)
 		return M_TRIE_E_NULL;
 
-	*usage = 0;
+	*out_usage = 0;
 
 	m_list_init(&queue);
 	m_list_append(&queue, M_LIST_COPY_SHALLOW, trie->root, 1);
@@ -22,8 +22,8 @@ m_trie_memory_usage(struct m_trie* trie, uint64_t* usage)
 		m_elem_data(first, (void**)&node);
 		m_list_remove_first(&queue);
 
-		*usage += sizeof(void*) * trie->children_count;
-		*usage += sizeof(struct __m_node);
+		*out_usage += sizeof(void*) * trie->children_count;
+		*out_usage += sizeof(struct __m_node);
 
 		for (i = 0; i < trie->children_count; i++)
 			if (node->children[i] != NULL)

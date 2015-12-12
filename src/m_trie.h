@@ -23,6 +23,7 @@
 #define M_TRIE_COPY_DEEP    0
 #define M_TRIE_COPY_SHALLOW 1
 
+#define M_TRIE_REMOVE_NONE       0
 #define M_TRIE_REMOVE_NO_CLEANUP 1
 #define M_TRIE_REMOVE_PREFIX     2
 

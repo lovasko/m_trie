@@ -19,7 +19,7 @@ m_trie_init(struct m_trie* trie, int16_t (*hash)(char), uint8_t aux_store)
 		if (hash(i) >= 0)
 			trie->children_count++;
 
-	node_init((struct __m_node**)&trie->root, trie->children_count);
+	node_init((struct __m_node**)&trie->root);
 
 	m_list_init(&trie->keys);
 	m_list_init(&trie->values);

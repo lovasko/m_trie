@@ -26,11 +26,15 @@ m_trie_children_stats(struct m_trie* trie, uint64_t** out_stats)
 		m_list_remove_first(&queue);
 
 		count = 0;
-		for (i = 0; i < trie->children_count; i++)
-			if (node->children[i] == NULL)
-				count++;
-			else
-				m_list_append(&queue, M_LIST_COPY_SHALLOW, node->children[i], 1);
+
+		if (node->children != NULL) {
+			for (i = 0; i < trie->children_count; i++) {
+				if (node->children[i] == NULL)
+					count++;
+				else
+					m_list_append(&queue, M_LIST_COPY_SHALLOW, node->children[i], 1);
+			}
+		}
 
 		(*out_stats)[count]++;
 	}

@@ -21,18 +21,19 @@ m_trie_get(struct m_trie* trie,
 
 	node = trie->root;
 
-	for (i = 0; i < key_length; i++)
-		if ((node = node->children[trie->hash(key[i])]) == NULL)
+	for (i = 0; i < key_length; i++) {
+		if (node->children == NULL ||
+		    (node = node->children[trie->hash(key[i])]) == NULL)
 			return M_TRIE_E_NOT_FOUND;
+	}
 
-	if (node->type == M_TRIE_NODE_TYPE_DATA) {
-		if (out_data != NULL)
-			*out_data = node->data;
-		return M_TRIE_OK;
-	}
-	else {
+	if (node->type != M_TRIE_NODE_TYPE_DATA)
 		return M_TRIE_E_NOT_FOUND;
-	}
+
+	if (out_data != NULL)
+		*out_data = node->data;
+
+	return M_TRIE_OK;
 }
 
 int
@@ -59,8 +60,11 @@ m_trie_set(struct m_trie* trie,
 	for (i = 0; i < key_length; i++) {
 		h = trie->hash(key[i]);
 
+		if (node->children == NULL)
+			node_init_children(&node, trie->children_count);
+
 		if (node->children[h] == NULL) {
-			node_init(&node->children[h], trie->children_count);
+			node_init(&node->children[h]);
 			node->children[h]->key = key[i];
 		}
 

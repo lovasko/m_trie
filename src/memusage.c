@@ -49,9 +49,10 @@ m_trie_memory_usage(struct m_trie* trie, uint64_t* out_usage)
 		*out_usage += sizeof(void*) * trie->children_count;
 		*out_usage += sizeof(struct __m_node);
 
-		for (i = 0; i < trie->children_count; i++)
-			if (node->children[i] != NULL)
-				m_list_append(&queue, M_LIST_COPY_SHALLOW, node->children[i], 1);
+		if (node->children != NULL)
+			for (i = 0; i < trie->children_count; i++)
+				if (node->children[i] != NULL)
+					m_list_append(&queue, M_LIST_COPY_SHALLOW, node->children[i], 1);
 	}
 
 	if (trie->aux_store & M_TRIE_AUX_STORE_KEYS)

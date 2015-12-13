@@ -19,7 +19,8 @@ struct __m_node {
 	char padding[5];
 };
 
-int node_init(struct __m_node** node, uint8_t children_count);
+int node_init(struct __m_node** node);
+void node_init_children(struct __m_node** node, uint8_t children_count);
 int node_free(struct __m_node** node);
 
 #endif

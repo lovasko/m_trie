@@ -51,11 +51,14 @@ int m_trie_set(struct m_trie* trie, char* key, uint32_t key_length, uint8_t copy
 int m_trie_get(struct m_trie* trie, char* key, uint32_t key_length, void** out_data);
 int m_trie_keys(struct m_trie* trie, struct m_list** out_keys);
 int m_trie_values(struct m_trie* trie, struct m_list** out_values);
-int m_trie_memory_usage(struct m_trie* trie, uint64_t* out_usage);
-int m_trie_children_stats(struct m_trie* trie, uint64_t** out_stats);
 int m_trie_remove(struct m_trie* trie, char* key, uint32_t key_length, int mode);
 int m_trie_error_string(int code, char** out_error_string);
 int16_t m_trie_generic_byte_hash(char key);
+
+#ifdef M_TRIE_DEBUG
+	int m_trie_memory_usage(struct m_trie* trie, uint64_t* out_usage);
+	int m_trie_children_stats(struct m_trie* trie, uint64_t** out_stats);
+#endif
 
 #endif
 

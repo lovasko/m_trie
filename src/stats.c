@@ -1,3 +1,5 @@
+#ifdef M_TRIE_DEBUG
+
 #include "m_trie.h"
 #include "node.h"
 
@@ -41,4 +43,10 @@ m_trie_children_stats(struct m_trie* trie, uint64_t** out_stats)
 
 	return M_TRIE_OK;
 }
+
+#else
+
+typedef int no_debug_dummy;
+
+#endif
 

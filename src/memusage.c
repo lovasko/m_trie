@@ -1,3 +1,5 @@
+#ifdef M_TRIE_DEBUG
+
 #include "m_trie.h"
 #include "node.h"
 
@@ -63,4 +65,10 @@ m_trie_memory_usage(struct m_trie* trie, uint64_t* out_usage)
 
 	return M_TRIE_OK;
 }
+
+#else
+
+typedef int no_debug_dummy;
+
+#endif
 

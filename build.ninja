@@ -17,6 +17,7 @@ build obj/memusage.o: compile src/memusage.c
 build obj/node.o: compile src/node.c
 build obj/remove.o: compile src/remove.c
 build obj/stats.o: compile src/stats.c
+build obj/walk.o: compile src/walk.c
 
-build bin/libmtrie.so: link obj/access.o obj/error.o obj/get_set.o obj/hash.o obj/init.o obj/key.o obj/memusage.o obj/node.o obj/remove.o obj/stats.o
+build bin/libmtrie.so: link obj/access.o obj/error.o obj/get_set.o obj/hash.o obj/init.o obj/key.o obj/memusage.o obj/node.o obj/remove.o obj/stats.o obj/walk.o
 

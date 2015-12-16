@@ -3,7 +3,7 @@
 #include "m_trie.h"
 
 int16_t
-m_trie_generic_byte_hash(char key)
+m_trie_hash_generic_byte(char key)
 {
 	int16_t result;
 
@@ -11,5 +11,17 @@ m_trie_generic_byte_hash(char key)
 	result -= (int16_t)CHAR_MIN;
 
 	return result;
+}
+
+int16_t
+m_trie_hash_alphabet(char key)
+{
+	if (key >= 'A' && key <= 'Z')
+		return key - 'A';
+
+	if (key >= 'a' && key <= 'z')
+		return 26 + key - 'a';
+
+	return -1;
 }
 

@@ -3,7 +3,7 @@
 #include "m_trie.h"
 
 int16_t
-m_trie_hash_generic_byte(char key)
+m_trie_hash_identity(char key)
 {
 	int16_t result;
 

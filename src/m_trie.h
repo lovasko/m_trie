@@ -54,7 +54,7 @@ int m_trie_values(struct m_trie* trie, struct m_list** out_values);
 int m_trie_remove(struct m_trie* trie, char* key, uint32_t key_length, int mode);
 int m_trie_error_string(int code, char** out_error_string);
 
-int16_t m_trie_hash_generic_byte(char key);
+int16_t m_trie_hash_identity(char key);
 int16_t m_trie_hash_alphabet(char key);
 
 #ifdef M_TRIE_DEBUG

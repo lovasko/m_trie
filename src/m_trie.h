@@ -43,7 +43,7 @@ struct m_trie {
 	int16_t (*hash)(char);
 	uint8_t children_count;
 	uint8_t aux_store;
-	char padding[6];
+	char padding[sizeof(void*)-2];
 };
 
 int m_trie_init(struct m_trie* trie, int16_t (*hash)(char), uint8_t aux_store);

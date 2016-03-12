@@ -7,14 +7,14 @@ free_dfs(struct __m_node* start, uint8_t max_children_count)
 {
 	struct m_list stack;
 	struct __m_node* node;
-	struct m_elem* first;
+	m_list_elem* first;
 	uint8_t i;
 
 	m_list_init(&stack);
 	m_list_prepend(&stack, M_LIST_COPY_SHALLOW, start, 0);
 	while (m_list_is_empty(&stack) != M_LIST_TRUE) {
 		m_list_first(&stack, &first);	
-		m_elem_data(first, (void**)&node);
+		m_list_elem_data(first, (void**)&node);
 		m_list_remove_first(&stack);
 
 		for (i = 0; i < max_children_count; i++)
@@ -26,16 +26,16 @@ free_dfs(struct __m_node* start, uint8_t max_children_count)
 }
 
 static void
-free_path(struct m_list* path, uint8_t max_children_count)
+free_path(m_list* path, uint8_t max_children_count)
 {
 	int has_children;
 	struct __m_node* node;
-	struct m_elem* first;
+	m_list_elem* first;
 	uint8_t i;
 
 	while (m_list_is_empty(path) != M_LIST_TRUE) {
 		m_list_first(path, &first);
-		m_elem_data(first, (void**)&node);
+		m_list_elem_data(first, (void**)&node);
 		m_list_remove_first(path);
 
 		has_children = 0;
@@ -54,9 +54,9 @@ free_path(struct m_list* path, uint8_t max_children_count)
 }
 
 int
-m_trie_remove(struct m_trie* trie, char* key, uint32_t key_length, int mode)
+m_trie_remove(m_trie* trie, char* key, uint32_t key_length, int mode)
 {
-	struct m_list path;
+	m_list path;
 	struct __m_node* node;
 	uint32_t i;
 

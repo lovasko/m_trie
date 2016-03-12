@@ -5,10 +5,7 @@
 #include "key.h"
 
 int
-m_trie_get(struct m_trie* trie,
-           char* key,
-           uint32_t key_length,
-           void** out_data)
+m_trie_get(m_trie* trie, char* key, uint32_t key_length, void** out_data)
 {
 	uint32_t i;
 	struct __m_node* node;
@@ -37,7 +34,7 @@ m_trie_get(struct m_trie* trie,
 }
 
 int
-m_trie_set(struct m_trie* trie,
+m_trie_set(m_trie* trie,
            char* key,
            uint32_t key_length,
            uint8_t copy,

@@ -1,7 +1,7 @@
 #include "m_trie.h"
 
 int
-m_trie_keys(struct m_trie* trie, struct m_list** out_keys)
+m_trie_keys(m_trie* trie, m_list** out_keys)
 {
 	if (trie == NULL || out_keys == NULL)
 		return M_TRIE_E_NULL;
@@ -14,7 +14,7 @@ m_trie_keys(struct m_trie* trie, struct m_list** out_keys)
 }
 
 int
-m_trie_values(struct m_trie* trie, struct m_list** out_values)
+m_trie_values(m_trie* trie, m_list** out_values)
 {
 	if (trie == NULL || out_values == NULL)
 		return M_TRIE_E_NULL;

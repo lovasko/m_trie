@@ -29,7 +29,7 @@ print_user_info(void* _ui)
 int
 main(void)
 {
-	struct m_trie trie;
+	m_trie trie;
 	struct passwd* pwd;
 	struct user_info* ui;
 

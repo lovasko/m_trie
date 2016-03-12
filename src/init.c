@@ -4,7 +4,7 @@
 #include "node.h"
 
 int
-m_trie_init(struct m_trie* trie, int16_t (*hash)(char), uint8_t aux_store)
+m_trie_init(m_trie* trie, int16_t (*hash)(char), uint8_t aux_store)
 {
 	char i;
 

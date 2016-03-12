@@ -1,7 +1,7 @@
 #include "key.h"
 
 int
-key_valid(struct m_trie* trie, char* key, uint32_t key_length)
+key_valid(m_trie* trie, char* key, uint32_t key_length)
 {
 	uint32_t i;
 

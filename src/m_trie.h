@@ -31,22 +31,22 @@
 #define M_TRIE_AUX_STORE_KEYS   1
 #define M_TRIE_AUX_STORE_VALUES 2
 
-struct m_trie {
+typedef struct m_trie {
 	void* root;
-	struct m_list keys;
-	struct m_list values;
+	m_list keys;
+	m_list values;
 	int16_t (*hash)(char);
 	uint8_t children_count;
 	uint8_t aux_store;
 	char padding[sizeof(void*)-2];
-};
+} m_trie;
 
-int m_trie_init(struct m_trie* trie, int16_t (*hash)(char), uint8_t aux_store);
-int m_trie_set(struct m_trie* trie, char* key, uint32_t key_length, uint8_t copy, uint8_t overwrite, void* data, size_t data_size);
-int m_trie_get(struct m_trie* trie, char* key, uint32_t key_length, void** out_data);
-int m_trie_keys(struct m_trie* trie, struct m_list** out_keys);
-int m_trie_values(struct m_trie* trie, struct m_list** out_values);
-int m_trie_remove(struct m_trie* trie, char* key, uint32_t key_length, int mode);
+int m_trie_init(m_trie* trie, int16_t (*hash)(char), uint8_t aux_store);
+int m_trie_set(m_trie* trie, char* key, uint32_t key_length, uint8_t copy, uint8_t overwrite, void* data, size_t data_size);
+int m_trie_get(m_trie* trie, char* key, uint32_t key_length, void** out_data);
+int m_trie_keys(m_trie* trie, m_list** out_keys);
+int m_trie_values(m_trie* trie, m_list** out_values);
+int m_trie_remove(m_trie* trie, char* key, uint32_t key_length, int mode);
 int m_trie_error_string(int code, char** out_error_string);
 
 int16_t m_trie_hash_identity(char key);

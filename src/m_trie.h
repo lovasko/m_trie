@@ -31,11 +31,6 @@
 #define M_TRIE_AUX_STORE_KEYS   1
 #define M_TRIE_AUX_STORE_VALUES 2
 
-/* 
- * HACK
- * root in the m_trie structure is a pointer to a struct __m_node, disguised as
- * void* in order not to pollute the namespace of the user of the library.
- */
 struct m_trie {
 	void* root;
 	struct m_list keys;

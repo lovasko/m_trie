@@ -10,18 +10,17 @@
 
 #include <stdint.h>
 
-struct __m_node {
+struct _node {
 	void* data;
-	struct __m_node** children;
+	struct _node** chld;
 	char key;
 	uint8_t type;
-	uint8_t copy;
-	char padding[5];
+	char pad[sizeof(void*) - 2];
 };
 
-int node_init(struct __m_node** node);
-void node_init_children(struct __m_node** node, uint8_t children_count);
-int node_free(struct __m_node** node);
+void node_init(struct _node** node);
+void node_init_children(struct _node** node, uint8_t ccnt);
+void node_free(struct _node** node);
 
 #endif
 

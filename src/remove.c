@@ -114,7 +114,9 @@ m_trie_remove_prefix(m_trie *trie, char* key, size_t len)
 	if (ret != M_TRIE_OK)
 		return ret;
 
+	m_trie_remove(trie, key, len);
 	free_children(trie, node);
+	node_free(&node);
 
 	return M_TRIE_OK;
 }

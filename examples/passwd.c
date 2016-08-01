@@ -4,14 +4,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pwd.h>
-
-#define M_TRIE_DEBUG
 #include <m_trie.h>
 
 struct user_info {
-	unsigned int id;
 	char* shell;
 	time_t change;
+	unsigned int id;
+	char padding[sizeof(unsigned int)];
 };
 
 static void
@@ -20,10 +19,8 @@ print_user_info(void* _ui)
 	struct user_info* ui;
 
 	ui = _ui;
-	printf("uid = %u, shell = %s, change = %s",
-	       ui->id,
-	       ui->shell,
-	       "not implemented");
+	printf("uid = %u, shell = %s, change = %ld\n",
+	       ui->id, ui->shell, ui->change);
 }
 
 int
@@ -32,8 +29,9 @@ main(void)
 	m_trie trie;
 	struct passwd* pwd;
 	struct user_info* ui;
+	char input[255];
 
-	m_trie_init(&trie, m_trie_hash_alphabet, M_TRIE_AUX_STORE_NONE);
+	m_trie_init(&trie, m_trie_hash_alphabet, M_TRIE_OVERWRITE_ALLOW);
 
 	while ((pwd = getpwent()) != NULL) {
 		ui = malloc(sizeof(struct user_info));
@@ -43,14 +41,18 @@ main(void)
 
 		printf("Adding '%s'\n", pwd->pw_name);
 
-		m_trie_set(&trie,
-		           pwd->pw_name, strlen(pwd->pw_name),
-		           M_TRIE_COPY_SHALLOW, M_TRIE_OVERWRITE_ALLOW,
-		           ui, 1);
+		m_trie_insert(&trie, pwd->pw_name, strlen(pwd->pw_name), ui);
 	}
 	endpwent();
 
-	m_trie_interactive_walk(&trie, print_user_info);
+	while (1) {
+		memset(input, '\0', 255);
+		scanf("%s", input);
+		if (m_trie_search(&trie, input, strlen(input), (void**)&ui) == M_TRIE_OK)
+			print_user_info(ui);
+	}
+
+	m_trie_free(&trie);
 
 	return EXIT_SUCCESS;
 }

@@ -28,6 +28,7 @@ m_trie_init(m_trie* trie, int16_t (*hash)(char), uint8_t owrt)
 
 	trie->owrt = owrt;
 	trie->hash = hash;
+	trie->maxl = 0;
 	trie->ccnt = 0;
 	for (i = CHAR_MIN; i < CHAR_MAX; i++)
 		if (hash(i) >= 0)

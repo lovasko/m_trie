@@ -1,6 +1,6 @@
 #include "m_trie.h"
+#include "common.h"
 #include "node.h"
-#include "key.h"
 
 /**
   * Search for a key in the trie.
@@ -20,23 +20,12 @@
 int
 m_trie_search(m_trie* trie, char* key, size_t len, void** val)
 {
-	size_t i;
 	struct _node* node;
+	int ret;
 
-	if (trie == NULL || key == NULL)
-		return M_TRIE_E_NULL;
-
-	if (len == 0)
-		return M_TRIE_E_LENGTH;
-
-	if (!key_valid(trie, key, len))
-		return M_TRIE_E_INVALID;
-
-	node = trie->root;
-
-	for (i = 0; i < len; i++)
-		if (node->chld == NULL || (node = node->chld[trie->hash(key[i])]) == NULL)
-			return M_TRIE_E_NOT_FOUND;
+	ret = locate(trie, key, len, &node);
+	if (ret != M_TRIE_OK)
+		return ret;
 
 	if (node->type != M_TRIE_NODE_TYPE_DATA)
 		return M_TRIE_E_NOT_FOUND;
@@ -67,16 +56,12 @@ m_trie_insert(m_trie* trie, char* key, size_t len, void* val)
 {
 	size_t i;
 	int16_t h;
+	int ret;
 	struct _node* node;
 
-	if (trie == NULL || key == NULL)
-		return M_TRIE_E_NULL;
-
-	if (len == 0)
-		return M_TRIE_E_LENGTH;
-
-	if (!key_valid(trie, key, len))
-		return M_TRIE_E_INVALID;
+	ret = check(trie, key, len);
+	if (ret != M_TRIE_OK)
+		return ret;
 
 	node = trie->root;
 
@@ -100,6 +85,9 @@ m_trie_insert(m_trie* trie, char* key, size_t len, void* val)
 
 	node->type = M_TRIE_NODE_TYPE_DATA;
 	node->data = val;
+
+	if (trie->maxl < len)
+		trie->maxl = len;
 
 	return M_TRIE_OK;
 }

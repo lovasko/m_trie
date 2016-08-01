@@ -3,54 +3,50 @@
 
 #include <stdlib.h>
 #include <stdint.h>
-#include <m_list.h>
 
-#define M_TRIE_OK                  0
-#define M_TRIE_E_NULL              1
-#define M_TRIE_E_NOT_FOUND         2
-#define M_TRIE_E_KEY_INVALID       3
-#define M_TRIE_E_EXISTS            4
-#define M_TRIE_E_COPY_INVALID      5
-#define M_TRIE_E_OVERWRITE_INVALID 6
-#define M_TRIE_E_PREFIX            7
-#define M_TRIE_E_INVALID_CODE      8
-#define M_TRIE_E_NOT_STORED        9
-#define M_TRIE_E_MAX               9
+#define M_TRIE_OK          0
+#define M_TRIE_E_NULL      1
+#define M_TRIE_E_NOT_FOUND 2
+#define M_TRIE_E_INVALID   3
+#define M_TRIE_E_EXISTS    4
+#define M_TRIE_E_PREFIX    5
+#define M_TRIE_E_LENGTH    6
+#define M_TRIE_E_UNKNOWN   7
+#define M_TRIE_E_NO_VALUE  8
 
 #define M_TRIE_OVERWRITE_ALLOW   0
 #define M_TRIE_OVERWRITE_PREVENT 1
 
-#define M_TRIE_COPY_DEEP    0
-#define M_TRIE_COPY_SHALLOW 1
-
-#define M_TRIE_REMOVE_NONE       0
-#define M_TRIE_REMOVE_NO_CLEANUP 1
-#define M_TRIE_REMOVE_PREFIX     2
-
-#define M_TRIE_AUX_STORE_NONE   0
-#define M_TRIE_AUX_STORE_KEYS   1
-#define M_TRIE_AUX_STORE_VALUES 2
-
 typedef struct m_trie {
 	void* root;
-	m_list keys;
-	m_list values;
 	int16_t (*hash)(char);
-	uint8_t children_count;
-	uint8_t aux_store;
-	char padding[sizeof(void*)-2];
+	size_t maxl;
+	uint8_t ccnt;
+	uint8_t owrt;
+	char pad[sizeof(void*)-2];
 } m_trie;
 
-int m_trie_init(m_trie* trie, int16_t (*hash)(char), uint8_t aux_store);
-int m_trie_set(m_trie* trie, char* key, uint32_t key_length, uint8_t copy, uint8_t overwrite, void* data, size_t data_size);
-int m_trie_get(m_trie* trie, char* key, uint32_t key_length, void** out_data);
-int m_trie_keys(m_trie* trie, m_list** out_keys);
-int m_trie_values(m_trie* trie, m_list** out_values);
-int m_trie_remove(m_trie* trie, char* key, uint32_t key_length, int mode);
-int m_trie_error_string(int code, char** out_error_string);
+/* general */
+int m_trie_init(m_trie* trie, int16_t (*hash)(char), uint8_t owrt);
+int m_trie_free(m_trie* trie);
 
+/* access */
+int m_trie_search(m_trie* trie, char* key, size_t len, void** val);
+int m_trie_insert(m_trie* trie, char* key, size_t len, void* val);
+
+/* remove */
+int m_trie_remove(m_trie* trie, char* key, size_t len);
+int m_trie_remove_prefix(m_trie *trie, char* key, size_t len);
+int m_trie_remove_all(m_trie* trie);
+
+/* hash */
 int16_t m_trie_hash_identity(char key);
 int16_t m_trie_hash_alphabet(char key);
+int16_t m_trie_hash_digits(char key);
+int16_t m_trie_hash_base64(char key);
+int16_t m_trie_hash_alphanumeric(char key);
+int16_t m_trie_hash_lower_alphabet(char key);
+int16_t m_trie_hash_upper_alphabet(char key);
 
 #endif
 

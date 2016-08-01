@@ -7,9 +7,9 @@
 /**
   * Free all resources help by a particular subtree of the trie.
   *
-  * @param start subtree root node
-  * @param maxl  maximal key length
-  * @param ccnt  children count
+  * @param[in] start subtree root node
+  * @param[in] maxl  maximal key length
+  * @param[in] ccnt  children count
 **/
 static void
 free_dfs(struct _node* start, size_t maxl, uint8_t ccnt)
@@ -40,8 +40,8 @@ free_dfs(struct _node* start, size_t maxl, uint8_t ccnt)
   * Free all children subtrees.
   * NOTE: this function is for internal use only.
   *
-  * @param trie trie
-  * @param node node
+  * @param[in] trie trie
+  * @param[in] node node
 **/
 static void
 free_children(m_trie* trie, struct _node* node)
@@ -59,9 +59,9 @@ free_children(m_trie* trie, struct _node* node)
 /**
   * Remove a key from the trie.
   *
-  * @param trie trie
-  * @param key  key
-  * @param len  key length
+  * @param[in] trie trie
+  * @param[in] key  key
+  * @param[in] len  key length
   *
   * @return status code
   * @retval M_TRIE_E_NULL      trie and/or key is NULL
@@ -93,9 +93,9 @@ m_trie_remove(m_trie* trie, char* key, size_t len)
 /**
   * Remove all keys that share the specified prefix.
   *
-  * @param trie trie
-  * @param key  key
-  * @param len  key length
+  * @param[in] trie trie
+  * @param[in] key  key
+  * @param[in] len  key length
   *
   * @return status code
   * @retval M_TRIE_E_NULL      trie and/or key is NULL
@@ -122,7 +122,7 @@ m_trie_remove_prefix(m_trie *trie, char* key, size_t len)
 /**
   * Remove all keys from the trie.
   * 
-  * @param trie trie
+  * @param[in] trie trie
   *
   * @return status code
   * @retval M_TRIE_E_NULL trie is NULL

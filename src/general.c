@@ -56,7 +56,7 @@ m_trie_free(m_trie* trie)
 		return M_TRIE_E_NULL;
 
 	m_trie_remove_all(trie);
-	node_free(trie->root);
+	node_free((struct _node**)&trie->root);
 
 	return M_TRIE_OK;
 }

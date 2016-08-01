@@ -5,9 +5,9 @@
   * Check whether a key is valid.
   * NOTE: this function is for internal use only.
   *
-  * @param trie trie
-  * @param key  key
-  * @param len  key length
+  * @param[in] trie trie
+  * @param[in] key  key
+  * @param[in] len  key length
   *
   * @return key validity
   * @retval 0 key is invalid
@@ -29,9 +29,9 @@ key_valid(m_trie* trie, char* key, size_t len)
   * Check the sanity of the user input.
   * NOTE: this function is for internal use only.
   *
-  * @param trie trie
-  * @param key  key
-  * @param len  key length
+  * @param[in] trie trie
+  * @param[in] key  key
+  * @param[in] len  key length
   *
   * @return status code
   * @retval M_TRIE_E_NULL    trie and/or key is NULL
@@ -58,10 +58,10 @@ check(m_trie* trie, char* key, size_t len)
   * Locate a node within the trie based on a key.
   * NOTE: this function is for internal use only.
   *
-  * @param trie trie
-  * @param key  key
-  * @param len  key length
-  * @param out  found node
+  * @param[in]  trie trie
+  * @param[in]  key  key
+  * @param[in]  len  key length
+  * @param[out] out  found node
   *
   * @retval M_TRIE_E_NULL      trie and/or key is NULL
   * @retval M_TRIE_E_LENGTH    key length is zero

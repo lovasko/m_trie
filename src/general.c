@@ -11,8 +11,9 @@
   * @param[in] owrt overwrite mode
   *
   * @return status code
-  * @retval M_TRIE_E_NULL tr and/or hash is NULL
-  * @retval M_TRIE_OK     success
+  * @retval M_TRIE_E_NULL   tr and/or hash is NULL
+  * @retval M_TRIE_EUNKNOWN no such overwrite mode
+  * @retval M_TRIE_OK       success
 **/
 int
 m_trie_init(m_trie* trie, int16_t (*hash)(char), uint8_t owrt)
@@ -24,7 +25,7 @@ m_trie_init(m_trie* trie, int16_t (*hash)(char), uint8_t owrt)
 
 	if (owrt != M_TRIE_OVERWRITE_ALLOW
 	 && owrt != M_TRIE_OVERWRITE_PREVENT)
-	  return M_TRIE_E_UNKNOWN;
+		return M_TRIE_E_UNKNOWN;
 
 	trie->owrt = owrt;
 	trie->hash = hash;

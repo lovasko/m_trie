@@ -44,7 +44,7 @@ m_trie_init(m_trie* trie, int16_t (*hash)(char), uint8_t owrt)
   * Free all memory resources held by the trie.
   *
   * @param[in] trie trie
-  * 
+  *
   * @return status code
   * @retval M_TRIE_E_NULL tr is NULL
   * @retval M_TRIE_OK     success

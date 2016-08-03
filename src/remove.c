@@ -16,7 +16,7 @@ free_dfs(struct _node* start, size_t maxl, uint8_t ccnt)
 {
 	struct _node** stack;
 	struct _node* node;
-	int top; 
+	int top;
 	uint8_t i;
 
 	top = -1;
@@ -123,7 +123,7 @@ m_trie_remove_prefix(m_trie *trie, char* key, size_t len)
 
 /**
   * Remove all keys from the trie.
-  * 
+  *
   * @param[in] trie trie
   *
   * @return status code

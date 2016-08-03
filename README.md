@@ -1,132 +1,159 @@
 # m_trie
-General-purpose trie implementation in the C89 language that runs on all
-POSIX-compatible systems.
+General-purpose implementation of the prefix tree data structure for the
+C89 language.
 
-## Features
-### Data storage
-In order to store data in the try under a specific key, use the `m_trie_set`
-function. The behaviour of the function can be changed by setting the
-`M_TRIE_OVERWRITE_*` argument to either `_ALLOW` or `_PREVENT`. See
-[m_list](github.com/lovasko/m_list) for more information about the deep and
-shadow copy method.
+## Introduction
+The data structure is able to store key/value pairs, where *key* is an
+array of bytes and *value* is an arbitrary pointer. Even though the key
+type is `char*` due to convenience reasons regarding C string constants,
+it can contain all possible byte values. The zero byte is not treated as
+the end of the key (and therefore valid as one of the key's bytes), as the
+length of the key is determined by a separate argument.
 
-### Data retrieval
-To obtain the data stored in the trie, use the `m_trie_get` function.
+The keys are expected to be reasonably small (tens of bytes) and values
+are allowed to be `NULL`.
 
-### Presence test
-The `m_trie_get` function can be used as a pure presence test. By calling the
-function with the last argument `NULL`, the function still returns either
-`M_TRIE_OK` or `M_TRIE_E_NOT_FOUND`.
+## API
+### General
+Before calling any other function, the `m_trie` object needs to be
+initialised via the `m_trie_init` function. This function does not
+allocate the `m_trie` object  on behalf of the user, therefore it needs to
+be allocated beforehand, either on the stack or on the heap.
 
-### Keys and values
-To retrieve all keys and/or values stored in the trie, use functions
-`m_trie_keys` and `m_trie_value` respectively.
+The initialisation function expects three arguments: a pointer to a
+`m_trie` instance, pointer to a hash function (see below) and a behavioral
+decision in case of inserting the same key twice: `M_TRIE_OVERWRITE_ALLOW`
+and `M_TRIE_OVERWRITE_PREVENT`.
 
-### Pre-defined hash functions
-The library ships with a set of pre-defined hash functions that came
-out to be often used in various `m_trie` applications.
+To free all resources held by the data structure, call the `m_trie_free`
+function.
 
-#### Generic byte hash
-By passing the `m_trie_generic_byte_hash` to the `m_trie_init` function we
-declare no interest in the meaning of the specific bytes, but rather only their
-numeric representation in the range `0..255`. This hash function works
-perfectly with binary blobs.
+Prototypes:
+```c
+int m_trie_init(m_trie* trie, int16_t(*hash)(char), uint8_t owrt);
+int m_trie_free(m_trie* trie);
+```
 
-#### POSIX path/file name hash
-Hash functions `m_trie_posix_file_name_hash` and `m_trie_posix_path_name_hash`
-are used to hash file and path names that conform to the strict POSIX rules.
-They allow the keys to contain only characters `A-Za-z0-9_.-` with addition of
-`/` in case of the `path` variant.
+### Access
+In order to insert a new key/value pair into the prefix tree, the
+`m_trie_insert` function can be used.  Once key/value pairs are inserted
+into the data structure, it is possible to query the `m_trie` for presence
+of certain key with the `m_trie_search` function. The stored value is
+returned via the last argument of the function, while the return value of
+the function is used to report potential errors.
 
-## Time and space complexity
+Prototypes:
+```c
+int m_trie_insert(m_trie* trie, char* key, size_t len, void* val);
+int m_trie_search(m_trie* trie, char* key, size_t len, void** val);
+```
 
-| Operation                    | Time     |
-|------------------------------|----------|
-|`m_trie_init`                 | `O(h)`   |
-|`m_trie_set`                  | `O(m*h)` |
-|`m_trie_get`                  | `O(m*h)` |
-|`m_trie_keys`                 | `O(1)`   |
-|`m_trie_values`               | `O(1)`   |
-|`m_trie_error_string`         | `O(1)`   |
-|`m_trie_generic_byte_hash`    | `O(1)`   |
-|`m_trie_posix_file_name_hash` | `O(1)`   |
-|`m_trie_posix_path_name_hash` | `O(1)`   |
+### Removing
+The library offers three function to remove keys (an their associated
+values): `m_trie_remove` is a direct counterpart to the `m_trie_insert`
+function. It is important to note that the `m_trie_remove` function does
+no deallocations of memory and simply marks node as if it did not contain
+any data. This decision was taken due to performance reasons, where
+cascading freeing of memory could pose significant memory delays and
+therefore uncontrollable jitter in certain scenarios.
 
-where:
-* `h` is the time of the hashing function
-* `m` is the length of the longest key
+The second function, `m_trie_remove_prefix`, remove all keys that start
+with the specified key. The key itself might not indicate a previously
+inserted key, e.g. it is possible to call the `m_trie_remove_prefix`
+function with key `"ca"` and it would delete both `"california"` and
+`"carpool"`, even though `"ca"` itself was not in the trie. Contrary to
+the previous remove function, `m_trie_remove_prefix` performs all
+necessary deallocations and can therefore be considered as a possible
+cause of occasional small slowdowns.
 
-It is generally advised to keep your hashing function in the `O(1)` class.
+The last removal function, `m_trie_remove_all` simply removes and
+deallocates all key stored in the trie. It is still possibe to use the
+`m_trie` instance anfterwards, without a need to call `m_trie_init`.
 
-## Example
-### Hashing function
-This function hashes the character set `._/[a-z]`. It is used as the
-hashing function in the follow-up example below.
-```C
-static int16_t
-hash(char key)
+Prototypes:
+```c
+int m_trie_remove(m_trie* trie, char* key, size_t len);
+int m_trie_remove_prefix(m_trie* trie, char* key, size_t len);
+int m_trie_remove_all(m_trie* trie);
+```
+
+### Hash functions
+The `m_trie` data structure needs a user-supplied hash function to
+navigate the levels of the tree. Each `m_trie` hash function takes a
+`char` value as input and produces a `int16_t` value. In case that the
+character on input is not valid, a proper `m_trie` hash function must
+return `-1`. Otherwise, the function must uniquely map all the supported
+characters onto the interval `0..n`. Each `m_trie` hash function therefore
+must be a *minimal perfect* hash function.
+
+#### Predefined
+The library identifies certain common hash functions that are ubiquitous
+and general enough to be included, such as the identity function
+`m_trie_hash_identity` or a hash function that supports only the letters
+of English alphabet `m_trie_hash_alphabet`.
+
+Prototypes:
+ ```c
+int16_t m_trie_hash_identity(char key);
+int16_t m_trie_hash_alphabet(char key);
+int16_t m_trie_hash_digits(char key);
+int16_t m_trie_hash_base64(char key);
+int16_t m_trie_hash_alphanumeric(char key);
+int16_t m_trie_hash_lower_alphabet(char key);
+int16_t m_trie_hash_upper_alphabet(char key);
+ ```
+
+#### Custom
+Users of the library are welcomed to create custom hash functions that
+obey the rules described above. An example of a hash function that accepts
+only characters `'0'` and `'1'`:
+
+```c
+int16_t
+hash_01(char c)
 {
-  if (key == '.')
-    return 0;
+	if (c == '0') return 0;
+	if (c == '1') return 1;
 
-  if (key == '_')
-    return 1;
-
-  if (key == '/')
-    return 2;
-
-  if (key >= 'a' && key <= 'z')
-    return (key - 'a') + 3;
-
-  return -1;
+	return -1;
 }
 ```
 
-### Get and set
-```C
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <m_trie.h>
+## Complexity
+The table below makes an assumption that the hashing function operates in
+both constant time and constant space.
 
-/* insert hash function here */
+| Function              | Time     | Space    |
+|-----------------------|----------|----------|
+|`m_trie_init`          | `O(1)`   | `O(1)`   |
+|`m_trie_free`          | `O(k*a)` | `O(k*a)` |
+|`m_trie_insert`        | `O(k)`   | `O(k)`   |
+|`m_trie_search`        | `O(k)`   | `O(1)`   |
+|`m_trie_remove`        | `O(k)`   | `O(1)`   |
+|`m_trie_remove_prefix` | `O(k*a)` | `O(k*a)` |
+|`m_trie_remove_all`    | `O(k*a)` | `O(k*a)` |
+|`m_trie_hash_*`        | `O(1)`   | `O(1)`   |
 
-int
-main(int argc, char* argv[])
-{
-  struct m_trie trie;
-  int i;
-  char input[64];
+Where:
+* `k` is the length of the longest key
+* `a` is the number of accepted inputs by the hash function
 
-  m_trie_init(&trie, hash);
-  for (i = 1; i < argc; i++)
-    m_trie_set(&trie,
-               argv[i],
-               M_TRIE_COPY_SHALLOW,
-               M_TRIE_OVERWRITE_PREVENT,
-               NULL,
-               0);
+Note that none of time nor space function classes depend on the variable
+`n`, which is the number of inserted key/value pairs. This is a crucial
+feature of the prefix tree.
 
-  while (1) {
-    memset(input, '\0', 64);
-    if (fgets(input, 64, stdin) == NULL)
-      break;
-    input[strlen(input)-1] = '\0';
-
-    if (m_trie_get(&trie, input, NULL) == M_TRIE_OK)
-      printf("Contains '%s'.\n", input);
-  }
-
-  return EXIT_SUCCESS;
-}
-```
+## Examples
+ * [List of users](examples/passwd.c)
+ * [Insert & Remove & Remove prefix](examples/ipr.c)
 
 ## Supported platforms
  * FreeBSD 10.0 with Clang 3.3
+ * OS X 10.9.2 with Clang 3.5
 
-If a platform does not appear to be in the previous list, it does not mean that
-`m_trie` will not work in such environment. It only means that nobody tested
-it - you are encouraged to do so and report either success or failure.
+If a platform does not appear to be in the previous list, it does not mean
+that `m_trie` will not work in such environment. It only means that nobody
+tested it - you are encouraged to do so and report either success or
+failure.
 
 ## Build & install
 ```
@@ -136,8 +163,8 @@ $ sudo ./install.sh
 
 ## License
 2-clause BSD license. For more information please consult the
-[LICENSE](LICENSE.md) file. In the case that you need a different license, feel
-free to contact me.
+[LICENSE](LICENSE.md) file. In the case that you need a different license,
+feel free to contact me.
 
 ## Author
 Daniel Lovasko (daniel.lovasko@gmail.com)

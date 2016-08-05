@@ -11,8 +11,10 @@
   * @param[in] node node
 **/
 void
-node_init(struct _node** node)
+node_init(m_trie* trie, struct _node** node)
 {
+  trie->ncnt++;
+
   *node = malloc(sizeof(struct _node));
   (*node)->data = NULL;
   (*node)->type = M_TRIE_NODE_TYPE_REGULAR;
@@ -27,13 +29,12 @@ node_init(struct _node** node)
   * @param[in] ccnt children count
 **/
 void
-node_init_children(struct _node** node, uint8_t ccnt)
+node_chld(m_trie* trie, struct _node** node)
 {
   uint8_t i;
 
-  (*node)->chld = malloc(sizeof(struct _node*) * ccnt);
-
-  for (i = 0; i < ccnt; i++)
+  (*node)->chld = malloc(sizeof(struct _node*) * trie->ccnt);
+  for (i = 0; i < trie->ccnt; i++)
     (*node)->chld[i] = NULL;
 }
 
@@ -44,8 +45,10 @@ node_init_children(struct _node** node, uint8_t ccnt)
   * @param[in] node node
 **/
 void
-node_free(struct _node** node)
+node_free(m_trie* trie, struct _node** node)
 {
+  trie->ncnt--;
+
   free((*node)->chld);
   free(*node);
 }

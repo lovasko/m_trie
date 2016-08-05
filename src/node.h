@@ -15,9 +15,9 @@ struct _node {
   char pad[sizeof(void*) - 2];
 };
 
-void node_init(struct _node** node);
-void node_init_children(struct _node** node, uint8_t ccnt);
-void node_free(struct _node** node);
+void node_init(m_trie* trie, struct _node** node);
+void node_chld(m_trie* trie, struct _node** node);
+void node_free(m_trie* trie, struct _node** node);
 
 #endif
 

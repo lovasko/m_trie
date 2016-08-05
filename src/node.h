@@ -1,10 +1,10 @@
 #ifndef M_TRIE_NODE_H
 #define M_TRIE_NODE_H
 
+#include <stdint.h>
+
 #define M_TRIE_NODE_TYPE_DATA 0
 #define M_TRIE_NODE_TYPE_REGULAR 1
-
-#include <stdint.h>
 
 struct _node {
   void* data;

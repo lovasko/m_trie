@@ -69,10 +69,10 @@ m_trie_insert(m_trie* trie, char* key, size_t len, void* val)
 		h = trie->hash(key[i]);
 
 		if (node->chld == NULL)
-			node_init_children(&node, trie->ccnt);
+			node_chld(trie, &node);
 
 		if (node->chld[h] == NULL) {
-			node_init(&node->chld[h]);
+			node_init(trie, &node->chld[h]);
 			node->chld[h]->key = key[i];
 		}
 

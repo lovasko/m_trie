@@ -30,7 +30,7 @@ free_dfs(struct _node* start, size_t maxl, uint8_t ccnt)
 			if (node->chld != NULL && node->chld[i] != NULL)
 				stack[++top] = node->chld[i];
 
-		node_free(&node);
+		node_free(trie, &node);
 	}
 
 	free(stack);
@@ -116,7 +116,7 @@ m_trie_remove_prefix(m_trie *trie, char* key, size_t len)
 
 	m_trie_remove(trie, key, len);
 	free_children(trie, node);
-	node_free(&node);
+	node_free(trie, &node);
 
 	return M_TRIE_OK;
 }

@@ -35,7 +35,7 @@ m_trie_init(m_trie* trie, int16_t (*hash)(char), uint8_t owrt)
 		if (hash(i) >= 0)
 			trie->ccnt++;
 
-	node_init((struct _node**)&trie->root);
+	node_init(trie, (struct _node**)&trie->root);
 
 	return M_TRIE_OK;
 }
@@ -56,7 +56,7 @@ m_trie_free(m_trie* trie)
 		return M_TRIE_E_NULL;
 
 	m_trie_remove_all(trie);
-	node_free((struct _node**)&trie->root);
+	node_free(trie, (struct _node**)&trie->root);
 
 	return M_TRIE_OK;
 }

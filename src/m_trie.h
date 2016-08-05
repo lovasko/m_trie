@@ -18,13 +18,13 @@
 #define M_TRIE_OVERWRITE_PREVENT 1
 
 typedef struct m_trie {
-	void* root;
-	int16_t (*hash)(char);
-	size_t maxl;
-	size_t ncnt;           /**< Overall node count. */
-	uint8_t ccnt;
-	uint8_t owrt;
-	char pad[sizeof(void*)-2];
+  void* root;
+  int16_t (*hash)(char);
+  size_t maxl;
+  size_t ncnt;           /**< Overall node count. */
+  uint8_t ccnt;
+  uint8_t owrt;
+  char pad[sizeof(void*)-2];
 } m_trie;
 
 /* general */

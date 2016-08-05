@@ -13,10 +13,10 @@
 void
 node_init(struct _node** node)
 {
-	*node = malloc(sizeof(struct _node));
-	(*node)->data = NULL;
-	(*node)->type = M_TRIE_NODE_TYPE_REGULAR;
-	(*node)->chld = NULL;
+  *node = malloc(sizeof(struct _node));
+  (*node)->data = NULL;
+  (*node)->type = M_TRIE_NODE_TYPE_REGULAR;
+  (*node)->chld = NULL;
 }
 
 /**
@@ -29,12 +29,12 @@ node_init(struct _node** node)
 void
 node_init_children(struct _node** node, uint8_t ccnt)
 {
-	uint8_t i;
+  uint8_t i;
 
-	(*node)->chld = malloc(sizeof(struct _node*) * ccnt);
+  (*node)->chld = malloc(sizeof(struct _node*) * ccnt);
 
-	for (i = 0; i < ccnt; i++)
-		(*node)->chld[i] = NULL;
+  for (i = 0; i < ccnt; i++)
+    (*node)->chld[i] = NULL;
 }
 
 /**
@@ -46,7 +46,7 @@ node_init_children(struct _node** node, uint8_t ccnt)
 void
 node_free(struct _node** node)
 {
-	free((*node)->chld);
-	free(*node);
+  free((*node)->chld);
+  free(*node);
 }
 

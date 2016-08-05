@@ -11,11 +11,11 @@
 #include <stdint.h>
 
 struct _node {
-	void* data;
-	struct _node** chld;
-	char key;
-	uint8_t type;
-	char pad[sizeof(void*) - 2];
+  void* data;
+  struct _node** chld;
+  char key;
+  uint8_t type;
+  char pad[sizeof(void*) - 2];
 };
 
 void node_init(struct _node** node);

@@ -17,13 +17,13 @@
 #define M_TRIE_OVERWRITE_ALLOW   0
 #define M_TRIE_OVERWRITE_PREVENT 1
 
+/** Opaque main trie object. */
 typedef struct m_trie {
-  void* root;
-  int16_t (*hash)(char);
-  size_t maxl;
-  size_t ncnt;           /**< Overall node count. */
-  uint8_t ccnt;
-  uint8_t owrt;
+  void* root;            /**< Root node.                  */
+  int16_t (*hash)(char); /**< Tree-level hash function.   */
+  size_t ncnt;           /**< Overall node count.         */
+  uint8_t ccnt;          /**< Each node's children count. */
+  uint8_t owrt;          /**< Overwrite policy.           */
   char pad[sizeof(void*)-2];
 } m_trie;
 

@@ -17,7 +17,7 @@
 #define M_TRIE_OVERWRITE_ALLOW   0
 #define M_TRIE_OVERWRITE_PREVENT 1
 
-/** Opaque main trie object. */
+/** Main trie object. */
 typedef struct m_trie {
   void* root;            /**< Root node.                  */
   int16_t (*hash)(char); /**< Tree-level hash function.   */
@@ -38,7 +38,7 @@ int m_trie_insert(m_trie* trie, char* key, size_t len, void* val);
 /* remove */
 int m_trie_remove(m_trie* trie, char* key, size_t len);
 int m_trie_remove_prefix(m_trie *trie, char* key, size_t len);
-int m_trie_remove_all(m_trie* trie);
+int m_trie_trim(m_trie* trie);
 
 /* hash */
 int16_t m_trie_hash_identity(char key);

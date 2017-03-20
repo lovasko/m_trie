@@ -1,55 +1,52 @@
-#include <stdint.h>
 #include <stdlib.h>
 
 #include "m_trie.h"
 #include "node.h"
 
-/**
-  * Initialise a trie node.
+/** Initialise a trie node.
   * NOTE: this function is for internal use only.
   *
-  * @param[in] node node
+  * @param[in]  trie trie
+  * @param[out] nd   node
 **/
 void
-node_init(m_trie* trie, struct _node** node)
+node_init(m_trie* trie, node** nd)
 {
-  trie->ncnt++;
+  trie->tr_ncnt++;
 
-  *node = malloc(sizeof(struct _node));
-  (*node)->data = NULL;
-  (*node)->type = M_TRIE_NODE_TYPE_REGULAR;
-  (*node)->chld = NULL;
+  *nd = malloc(sizeof(node));
+  (*nd)->nd_data = NULL;
+  (*nd)->nd_type = NODE_REGULAR;
+  (*nd)->nd_chld = NULL;
 }
 
-/**
-  * Initialise all children of the node.
+/** Initialise all children of the node.
   * NOTE: this function is for internal use only.
   *
-  * @param[in] node node
-  * @param[in] ccnt children count
+  * @param[in] trie trie
+  * @param[in] nd   node
 **/
 void
-node_chld(m_trie* trie, struct _node** node)
+node_chld(m_trie* trie, node** nd)
 {
-  uint8_t i;
+  int i;
 
-  (*node)->chld = malloc(sizeof(struct _node*) * trie->ccnt);
-  for (i = 0; i < trie->ccnt; i++)
-    (*node)->chld[i] = NULL;
+  (*nd)->nd_chld = malloc(sizeof(node*) * (unsigned long)trie->tr_ccnt);
+  for (i = 0; i < trie->tr_ccnt; i++)
+    (*nd)->nd_chld[i] = NULL;
 }
 
-/**
-  * Free all memory resources held by the trie node.
+/** Free all memory resources held by the trie node.
   * NOTE: this function is for internal use only.
   *
-  * @param[in] node node
+  * @param[in] trie trie
+  * @param[in] nd   node
 **/
 void
-node_free(m_trie* trie, struct _node** node)
+node_free(m_trie* trie, node* nd)
 {
-  trie->ncnt--;
+  trie->tr_ncnt--;
 
-  free((*node)->chld);
-  free(*node);
+  free(nd->nd_chld);
+  free(nd);
 }
-

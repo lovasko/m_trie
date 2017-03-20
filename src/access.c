@@ -2,6 +2,7 @@
 #include "common.h"
 #include "node.h"
 
+
 /** Search for a key in the trie.
  *
  * @param[in]  trie trie

@@ -40,12 +40,12 @@ int m_trie_remove_prefix(m_trie *trie, char* key, size_t len);
 int m_trie_trim(m_trie* trie);
 
 /* hash */
-int16_t m_trie_hash_identity(char key);
-int16_t m_trie_hash_alphabet(char key);
-int16_t m_trie_hash_digits(char key);
-int16_t m_trie_hash_base64(char key);
-int16_t m_trie_hash_alphanumeric(char key);
-int16_t m_trie_hash_lower_alphabet(char key);
-int16_t m_trie_hash_upper_alphabet(char key);
+short m_trie_hash_identity(char key);
+short m_trie_hash_alphabet(char key);
+short m_trie_hash_digits(char key);
+short m_trie_hash_base64(char key);
+short m_trie_hash_alphanumeric(char key);
+short m_trie_hash_lower_alphabet(char key);
+short m_trie_hash_upper_alphabet(char key);
 
 #endif

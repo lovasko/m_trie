@@ -2,30 +2,29 @@
 
 #include "m_trie.h"
 
-/**
-  * Identity hash function.
+
+/** Identity hash function.
   *
   * @param[in] key key
   * @return type-adjusted key
 **/
-int16_t
+short
 m_trie_hash_identity(char key)
 {
-	int16_t result;
+	short result;
 
-	result = (int16_t)key;
-	result -= (int16_t)CHAR_MIN;
+	result = (short)key;
+	result -= (short)CHAR_MIN;
 
 	return result;
 }
 
-/**
-  * Hash function that accepts both upper and lower alphabet characters.
+/** Hash function that accepts both upper and lower alphabet characters.
   *
   * @param[in] key key
   * @return hashed letter
 **/
-int16_t
+short
 m_trie_hash_alphabet(char key)
 {
 	if (key >= 'A' && key <= 'Z')
@@ -37,13 +36,12 @@ m_trie_hash_alphabet(char key)
 	return -1;
 }
 
-/**
-  * Hash function that accepts only decimal digits.
+/** Hash function that accepts only decimal digits.
   *
   * @param[in] key key
   * @return hashed digit
 **/
-int16_t
+short
 m_trie_hash_digits(char key)
 {
 	if (key >= '0' && key <= '9')
@@ -52,13 +50,12 @@ m_trie_hash_digits(char key)
 	return -1;
 }
 
-/**
-  * Hash function that accepts only characters used in the Base64 encoding.
+/** Hash function that accepts only characters used in the Base64 encoding.
   *
   * @param[in] key key
   * @return hashed Base64 character
 **/
-int16_t
+short
 m_trie_hash_base64(char key)
 {
 	if (key >= 'A' && key <= 'Z')
@@ -76,13 +73,12 @@ m_trie_hash_base64(char key)
 	return -1;
 }
 
-/**
-  * Hash function that accepts both decimal digits and lower/upper alphabet.
+/** Hash function that accepts both decimal digits and lower/upper alphabet.
   *
   * @param[in] key key
   * @return hashed alphanumeric character
 **/
-int16_t
+short
 m_trie_hash_alphanumeric(char key)
 {
 	if (key >= 'A' && key <= 'Z')
@@ -97,13 +93,12 @@ m_trie_hash_alphanumeric(char key)
 	return -1;
 }
 
-/**
-  * Hash function that accepts only lower-case alphabet letters.
+/** Hash function that accepts only lower-case alphabet letters.
   *
   * @param[in] key key
   * @return hashed lower letter
 **/
-int16_t
+short
 m_trie_hash_lower_alphabet(char key)
 {
 	if (key >= 'a' && key <= 'z')
@@ -112,13 +107,12 @@ m_trie_hash_lower_alphabet(char key)
 	return -1;
 }
 
-/**
-  * Hash function that accepts only upper-case alphabet letters.
+/** Hash function that accepts only upper-case alphabet letters.
   *
   * @param[in] key key
   * @return hashed upper letter
 **/
-int16_t
+short
 m_trie_hash_upper_alphabet(char key)
 {
 	if (key >= 'A' && key <= 'Z')
@@ -126,4 +120,3 @@ m_trie_hash_upper_alphabet(char key)
 
 	return -1;
 }
-

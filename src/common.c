@@ -1,32 +1,8 @@
 #include "m_trie.h"
 #include "common.h"
 
-/**
-  * Check whether a key is valid.
-  * NOTE: this function is for internal use only.
-  *
-  * @param[in] trie trie
-  * @param[in] key  key
-  * @param[in] len  key length
-  *
-  * @return key validity
-  * @retval 0 key is invalid
-  * @retval 1 key is valid
-**/
-static int
-key_valid(m_trie* trie, char* key, size_t len)
-{
-	size_t i;
 
-	for (i = 0; i < len; i++)
-		if (trie->hash(key[i]) < 0)
-			return 0;
-
-	return 1;
-}
-
-/**
-  * Check the sanity of the user input.
+/** Check the sanity of the user input.
   * NOTE: this function is for internal use only.
   *
   * @param[in] trie trie
@@ -42,20 +18,24 @@ key_valid(m_trie* trie, char* key, size_t len)
 int
 check(m_trie* trie, char* key, size_t len)
 {
-	if (trie == NULL || key == NULL)
-		return M_TRIE_E_NULL;
+  size_t i;
 
-	if (len == 0)
-		return M_TRIE_E_LENGTH;
+  if (trie == NULL || key == NULL)
+    return M_TRIE_E_NULL;
 
-	if (!key_valid(trie, key, len))
-		return M_TRIE_E_INVALID;
+  if (len == 0)
+    return M_TRIE_E_LENGTH;
 
-	return M_TRIE_OK;
+  /* The hash function must return valid value for all
+   * elements of the key. */
+  for (i = 0; i < len; i++)
+    if (trie->tr_hash(key[i]) < 0)
+      return M_TRIE_E_INVALID;
+
+  return M_TRIE_OK;
 }
 
-/**
-  * Locate a node within the trie based on a key.
+/** Locate a node within the trie based on a key.
   * NOTE: this function is for internal use only.
   *
   * @param[in]  trie trie
@@ -63,6 +43,7 @@ check(m_trie* trie, char* key, size_t len)
   * @param[in]  len  key length
   * @param[out] out  found node
   *
+  * @return status code
   * @retval M_TRIE_E_NULL      trie and/or key is NULL
   * @retval M_TRIE_E_LENGTH    key length is zero
   * @retval M_TRIE_E_INVALID   key contains invalid characters
@@ -70,23 +51,25 @@ check(m_trie* trie, char* key, size_t len)
   * @retval M_TRIE_OK          success
 **/
 int
-locate(m_trie* trie, char* key, size_t len, struct _node** out)
+locate(m_trie* trie, char* key, size_t len, node** out)
 {
-	size_t i;
-	struct _node* node;
-	int ret;
+  node* nd;
+  size_t i;
+  int ret;
+  
+  /* Validate the key. */
+  ret = check(trie, key, len);
+  if (ret != M_TRIE_OK)
+    return ret;
 
-	ret = check(trie, key, len);
-	if (ret != M_TRIE_OK)
-		return ret;
+  nd = trie->tr_root;
+  
+  /* Follow the elements of the key. */
+  for (i = 0; i < len; i++)
+    if (nd->nd_chld == NULL
+     || (nd = nd->nd_chld[trie->tr_hash(key[i])]) == NULL)
+      return M_TRIE_E_NOT_FOUND;
 
-	node = trie->root;
-
-	for (i = 0; i < len; i++)
-		if (node->chld == NULL || (node = node->chld[trie->hash(key[i])]) == NULL)
-			return M_TRIE_E_NOT_FOUND;
-
-	*out = node;
-	return M_TRIE_OK;
+  *out = nd;
+  return M_TRIE_OK;
 }
-

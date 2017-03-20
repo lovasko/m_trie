@@ -56,14 +56,14 @@ locate(m_trie* trie, char* key, size_t len, node** out)
   node* nd;
   size_t i;
   int ret;
-  
+
   /* Validate the key. */
   ret = check(trie, key, len);
   if (ret != M_TRIE_OK)
     return ret;
 
   nd = trie->tr_root;
-  
+
   /* Follow the elements of the key. */
   for (i = 0; i < len; i++)
     if (nd->nd_chld == NULL

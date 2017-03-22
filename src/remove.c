@@ -210,13 +210,3 @@ m_trie_trim(m_trie* trie)
 
   return M_TRIE_OK;
 }
-
-int
-m_trie_dfs_trim(m_trie* trie)
-{
-  node* stack;
-
-  stack = malloc(20 * sizeof(node*));
-
-
-}

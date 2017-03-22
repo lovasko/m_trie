@@ -16,6 +16,7 @@
 
 #define M_TRIE_OVERWRITE 1
 #define M_TRIE_CLEANUP   2
+#define M_TRIE_FREE      4
 
 /** Main trie object. */
 typedef struct m_trie {

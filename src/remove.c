@@ -88,8 +88,12 @@ m_trie_remove(m_trie* trie, char* key, size_t len)
   if (nd->nd_type != NODE_DATA)
     return M_TRIE_E_NO_VALUE;
 
+  /* Optionally deallocate the data associated with the node. */
+  if (trie->tr_flags & M_TRIE_FREE)
+    free(nd->nd_data);
+
   /* Mark the node to be up for removal, so that subsequent trim will
-  * delete it. */
+   * delete it. */
   nd->nd_type = NODE_TO_FREE;
   nd->nd_data = NULL;
 
@@ -136,6 +140,13 @@ m_trie_remove_prefix(m_trie* trie, char* key, size_t len)
   /* Mark all nodes in the subtree for future removal. */
   arr = subtree(trie, root);
   for (i = 0; i < trie->tr_ncnt; i++) {
+
+    /* Optionally deallocate the resources associated with the node. */
+    if (trie->tr_flags & M_TRIE_FREE)
+      free(arr[i]->nd_data);
+
+    /* Mark the node to be up for removal, so that subsequent trim will
+     * delete it. */
     arr[i]->nd_type = NODE_TO_FREE;
     arr[i]->nd_data = NULL;
   }
@@ -198,4 +209,14 @@ m_trie_trim(m_trie* trie)
   free(arr);
 
   return M_TRIE_OK;
+}
+
+int
+m_trie_dfs_trim(m_trie* trie)
+{
+  node* stack;
+
+  stack = malloc(20 * sizeof(node*));
+
+
 }

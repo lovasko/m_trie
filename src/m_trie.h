@@ -38,6 +38,7 @@ int m_trie_insert(m_trie* trie, char* key, size_t len, void* val);
 /* remove */
 int m_trie_remove(m_trie* trie, char* key, size_t len);
 int m_trie_remove_prefix(m_trie *trie, char* key, size_t len);
+int m_trie_remove_all(m_trie *trie);
 int m_trie_trim(m_trie* trie);
 
 /* hash */

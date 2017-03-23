@@ -6,6 +6,7 @@
 #include "node.h"
 
 /** Gather all nodes that are located in a specified subtree.
+  * NOTE: this function is for internal use only.
   *
   * @param[in] trie trie
   * @param[in] root root of the subtree
@@ -38,7 +39,8 @@ subtree(m_trie* trie, node* root)
 }
 
 /** Check whether all children of the node are NULL.
-  * NOTE: This function assumes that the nd_chld array is non-NULL.
+  * NOTE: this function is for internal use only.
+  * NOTE: this function assumes that the nd_chld array is non-NULL.
   *
   * @param[in] trie trie
   * @param[in] nd   node
@@ -57,6 +59,34 @@ all_null(m_trie* trie, node* nd)
       return 0;
 
   return 1;
+}
+
+/** Mark all nodes in the selected subtree to be up for removal.
+  * NOTE: this function is for internal use only.
+  * 
+  * @param[in] trie trie
+  * @param[in] root node specifying the subtree
+**/
+static void
+mark_to_free(m_trie* trie, node* root)
+{
+  node** arr;
+  size_t i;
+
+  arr = subtree(trie, root);
+  for (i = 0; i < trie->tr_ncnt; i++) {
+
+    /* Optionally deallocate the resources associated with the node. */
+    if (trie->tr_flags & M_TRIE_FREE)
+      free(arr[i]->nd_data);
+
+    /* Mark the node to be up for removal, so that subsequent trim will
+     * delete it. */
+    arr[i]->nd_type = NODE_TO_FREE;
+    arr[i]->nd_data = NULL;
+  }
+
+  free(arr);
 }
 
 /** Remove a key from the trie.
@@ -121,36 +151,45 @@ int
 m_trie_remove_prefix(m_trie* trie, char* key, size_t len)
 {
   node* root;
-  node** arr;
-  size_t i;
   int ret;
 
+  if (trie == NULL || key == NULL)
+    return M_TRIE_E_NULL;
+
+  if (len == 0)
+    return M_TRIE_E_LENGTH;
+
+  /* Select a root of the specified subtree. */
+  ret = locate(trie, key, len, &root);
+  if (ret != M_TRIE_OK)
+    return ret;
+
+  /* Mark all selected nodes to be up for removal. */
+  mark_to_free(trie, root);
+
+  /* Optionally run the garbage-collection procedure. */
+  if (trie->tr_flags & M_TRIE_CLEANUP)
+    m_trie_trim(trie);
+
+  return M_TRIE_OK;
+}
+
+/** Remove all keys from the trie.
+  * 
+  * @param[in] trie trie
+  * 
+  * @returns status code
+  * @retval M_TRIE_E_NULL trie is NULL
+  * @retval M_TRIE_OK     success
+**/
+int
+m_trie_remove_all(m_trie *trie)
+{
   if (trie == NULL)
     return M_TRIE_E_NULL;
 
-  /* Select a root of a subtree to remove. */
-  if (key == NULL && len == 0)
-    root = (node*)trie->tr_root;
-  else {
-    ret = locate(trie, key, len, &root);
-    if (ret != M_TRIE_OK)
-      return ret;
-  }
-
-  /* Mark all nodes in the subtree for future removal. */
-  arr = subtree(trie, root);
-  for (i = 0; i < trie->tr_ncnt; i++) {
-
-    /* Optionally deallocate the resources associated with the node. */
-    if (trie->tr_flags & M_TRIE_FREE)
-      free(arr[i]->nd_data);
-
-    /* Mark the node to be up for removal, so that subsequent trim will
-     * delete it. */
-    arr[i]->nd_type = NODE_TO_FREE;
-    arr[i]->nd_data = NULL;
-  }
-  free(arr);
+  /* Obtain all nodes of the tree to be up for removal. */
+  mark_to_free(trie, (node*)trie->tr_root);
 
   /* Optionally run the garbage-collection procedure. */
   if (trie->tr_flags & M_TRIE_CLEANUP)

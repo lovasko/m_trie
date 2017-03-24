@@ -30,6 +30,9 @@ install:
 	cp bin/libmtrie.so $(LIB_DIR)
 	cp src/m_trie.h $(INC_DIR)
 
+check:
+	(cd test ; ./test.sh)
+
 clean:
 	rm obj/*.o
 	rm bin/libmtrie.so

@@ -4,6 +4,24 @@
 #include <unistd.h>
 #include <m_trie.h>
 
+static const char* err_msg[] = {
+  "M_TRIE_OK",
+  "M_TRIE_E_NULL",
+  "M_TRIE_E_NOT_FOUND",
+  "M_TRIE_E_INVALID",
+  "M_TRIE_E_EXISTS",
+  "M_TRIE_E_PREFIX",
+  "M_TRIE_E_LENGTH",
+  "M_TRIE_E_UNKNOWN",
+  "M_TRIE_E_NO_VALUE"
+};
+
+#define CHECK(fn) {               \
+  int ret;                        \
+  ret = fn;                       \
+  if (ret != M_TRIE_OK)           \
+    printf("%s\n", err_msg[ret]); \
+}
 
 int
 main(int argc, char* argv[])
@@ -11,17 +29,17 @@ main(int argc, char* argv[])
   m_trie trie;
   int opt;
 
-  m_trie_init(&trie, m_trie_hash_lower_alphabet, M_TRIE_OVERWRITE);
+  CHECK(m_trie_init(&trie, m_trie_hash_lower_alphabet, M_TRIE_OVERWRITE))
 
   while ((opt = getopt(argc, argv, "ai:np:r:s:t")) != -1) {
     switch(opt) {
       case 'a':
-        m_trie_remove_prefix(&trie, NULL, 0);
+        CHECK(m_trie_remove_all(&trie))
         printf("Removing all\n");
         break;
 
       case 'i':
-        m_trie_insert(&trie, optarg, strlen(optarg), NULL);
+        CHECK(m_trie_insert(&trie, optarg, strlen(optarg), NULL))
         printf ("Inserting \"%s\"\n", optarg);
         break;
 
@@ -30,17 +48,17 @@ main(int argc, char* argv[])
         break;
 
       case 'p':
-        m_trie_remove_prefix(&trie, optarg, strlen(optarg));
+        CHECK(m_trie_remove_prefix(&trie, optarg, strlen(optarg)))
         printf("Removing prefix \"%s\"\n", optarg);
         break;
 
       case 'r':
-        m_trie_remove(&trie, optarg, strlen(optarg));
+        CHECK(m_trie_remove(&trie, optarg, strlen(optarg)))
         printf("Removing \"%s\"\n", optarg);
         break;
 
       case 't':
-        m_trie_trim(&trie);
+        CHECK(m_trie_trim(&trie))
         printf("Trimming \n");
         break;
 
@@ -58,7 +76,7 @@ main(int argc, char* argv[])
     }
   }
 
-  m_trie_free(&trie);
+  CHECK(m_trie_free(&trie))
 
   return EXIT_SUCCESS;
 }

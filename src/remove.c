@@ -5,6 +5,7 @@
 #include "common.h"
 #include "node.h"
 
+
 /** Gather all nodes that are located in a specified subtree.
   * NOTE: this function is for internal use only.
   *
@@ -27,10 +28,12 @@ subtree(m_trie* trie, node* root)
   /* Allocate an array of pointers to nodes. */
   arr = malloc(sizeof(node*) * (trie->tr_ncnt + 1));
   arr[0] = root;
+  for (cur = 1; cur < trie->tr_ncnt+1; cur++)
+    arr[cur] = NULL;
 
   /* Fill the node array with nodes in the BFS-order. */
   for (cur = 0; cur < trie->tr_ncnt; cur++)
-    if (arr[cur]->nd_chld != NULL)
+    if (arr[cur] != NULL && arr[cur]->nd_chld != NULL)
       for (i = 0; i < trie->tr_ccnt; i++)
         if (arr[cur]->nd_chld[i] != NULL)
           arr[end++] = arr[cur]->nd_chld[i];
@@ -74,7 +77,7 @@ mark_to_free(m_trie* trie, node* root)
   size_t i;
 
   arr = subtree(trie, root);
-  for (i = 0; i < trie->tr_ncnt; i++) {
+  for (i = 0; i < trie->tr_ncnt && arr[i] != NULL; i++) {
 
     /* Optionally deallocate the resources associated with the node. */
     if (trie->tr_flags & M_TRIE_FREE)

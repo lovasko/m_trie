@@ -166,7 +166,7 @@ of operations - insertion, removal and search of keys - combined in ways
 that covers aim to cover all edge cases. The testing framework consists of
 two files: `test.c` that implements the data structure operations and
 `test.sh` that serves as orchestration and verification of test results.
-The process can be invoked by triggering the `check` target of the
+The process can be invoked by triggering the `test` target of the
 library's `Makefile`.
 
 ## Supported platforms
@@ -187,7 +187,7 @@ report either success or failure to the author.
 ## Build & install
 ```
 $ make
-$ make check
+$ make test
 $ make install
 $ make clean
 ```

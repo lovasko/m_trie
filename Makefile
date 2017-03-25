@@ -3,6 +3,8 @@ CFLAGS=-g -Wall -Wextra -Weverything -ansi -pedantic -Wno-documentation-unknown-
 LIB_DIR=/usr/lib
 INC_DIR=/usr/include
 
+.PHONY: test
+
 all: bin/libmtrie.so
 
 bin/libmtrie.so: obj/access.o obj/common.o obj/general.o obj/hash.o obj/node.o obj/remove.o
@@ -30,7 +32,7 @@ install:
 	cp bin/libmtrie.so $(LIB_DIR)
 	cp src/m_trie.h $(INC_DIR)
 
-check:
+test:
 	(cd test ; ./test.sh)
 
 clean:

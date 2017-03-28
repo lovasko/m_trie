@@ -11,8 +11,9 @@
   * @param[in] flags behaviour flags
   *
   * @return status code
-  * @retval M_TRIE_E_NULL trie and/or hash is NULL
-  * @retval M_TRIE_OK     success
+  * @retval M_TRIE_E_NULL    trie and/or hash is NULL
+  * @retval M_TRIE_E_INVALID hash accepts no inputs
+  * @retval M_TRIE_OK        success
 **/
 int
 m_trie_init(m_trie* trie, short (*hash)(char), int flags)
@@ -32,6 +33,10 @@ m_trie_init(m_trie* trie, short (*hash)(char), int flags)
   for (i = CHAR_MIN; i < CHAR_MAX; i++)
     if (hash(i) >= 0)
       trie->tr_ccnt++;
+
+  /* Refuse hash functions that accept no inputs. */
+  if (trie->tr_ccnt == 0)
+    return M_TRIE_E_INVALID;
 
   /* Initialise the root node. */
   node_init(trie, (node**)&trie->tr_root);

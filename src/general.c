@@ -23,7 +23,7 @@ m_trie_init(m_trie* trie, short (*hash)(char), int flags)
   if (trie == NULL || hash == NULL)
     return M_TRIE_E_NULL;
 
-  trie->tr_flags = (uint8_t)flags;
+  trie->tr_flags = flags;
   trie->tr_hash = hash;
   trie->tr_ncnt = 0;
 

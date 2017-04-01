@@ -18,6 +18,8 @@ node_init(m_trie* trie, node** nd)
   (*nd)->nd_data = NULL;
   (*nd)->nd_type = NODE_REGULAR;
   (*nd)->nd_chld = NULL;
+  (*nd)->nd_cidx = 0;
+  (*nd)->nd_done = 0;
 }
 
 /** Initialise all children of the node.

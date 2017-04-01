@@ -8,11 +8,13 @@
 
 /** Trie internal node. */
 typedef struct node {
-  void*         nd_data; /**< Stored value.             */
-  struct node** nd_chld; /**< Children nodes.           */
-  char          nd_key;  /**< Hash function key.        */
-  unsigned char nd_type; /**< One of the NODE_* values. */
-  char          nd_pad[sizeof(void*) - 2];
+  void*         nd_data; /**< Stored value.                    */
+  struct node** nd_chld; /**< Children nodes.                  */
+  char          nd_key;  /**< Hash function key.               */
+  unsigned char nd_type; /**< One of the NODE_* values.        */
+  unsigned char nd_cidx; /**< Index into array of children.    */
+  unsigned char nd_done; /**< Indicator of finished traversal. */
+  char          nd_pad[sizeof(int)];
 } node;
 
 void node_init(m_trie* trie, node** nd);

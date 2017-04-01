@@ -31,7 +31,7 @@ main(int argc, char* argv[])
 
   CHECK(m_trie_init(&trie, m_trie_hash_lower_alphabet, M_TRIE_OVERWRITE))
 
-  while ((opt = getopt(argc, argv, "ai:np:r:s:t")) != -1) {
+  while ((opt = getopt(argc, argv, "ai:lnp:r:s:tu")) != -1) {
     switch(opt) {
       case 'a':
         CHECK(m_trie_remove_all(&trie))
@@ -41,6 +41,10 @@ main(int argc, char* argv[])
       case 'i':
         CHECK(m_trie_insert(&trie, optarg, strlen(optarg), NULL))
         printf ("Inserting \"%s\"\n", optarg);
+        break;
+
+      case 'l':
+        printf("Maximal length: %zu\n", trie.tr_maxl);
         break;
 
       case 'n':
@@ -60,6 +64,11 @@ main(int argc, char* argv[])
       case 't':
         CHECK(m_trie_trim(&trie))
         printf("Trimming \n");
+        break;
+
+      case 'u':
+        CHECK(m_trie_trim_ng(&trie))
+        printf("Trimming New Generation\n");
         break;
 
       case 's':

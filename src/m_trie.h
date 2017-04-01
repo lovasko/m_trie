@@ -23,6 +23,7 @@ typedef struct m_trie {
   void*   tr_root;        /**< Root tree node.                  */
   short (*tr_hash)(char); /**< Tree-level hash function.        */
   size_t  tr_ncnt;        /**< Overall node count.              */
+  size_t  tr_maxl;        /**< Length of the longest key.       */
   int     tr_ccnt;        /**< Maximal children count per node. */
   int     tr_flags;       /**< Behaviour flags.                 */
 } m_trie;
@@ -37,9 +38,10 @@ int m_trie_insert(m_trie* trie, char* key, size_t len, void* val);
 
 /* remove */
 int m_trie_remove(m_trie* trie, char* key, size_t len);
-int m_trie_remove_prefix(m_trie *trie, char* key, size_t len);
+int m_trie_remove_prefix(m_trie* trie, char* key, size_t len);
 int m_trie_remove_all(m_trie *trie);
 int m_trie_trim(m_trie* trie);
+int m_trie_trim_ng(m_trie* trie);
 
 /* hash */
 short m_trie_hash_identity(char key);

@@ -66,7 +66,7 @@ all_null(m_trie* trie, node* nd)
 
 /** Mark all nodes in the selected subtree to be up for removal.
   * NOTE: this function is for internal use only.
-  * 
+  *
   * @param[in] trie trie
   * @param[in] root node specifying the subtree
 **/
@@ -178,9 +178,9 @@ m_trie_remove_prefix(m_trie* trie, char* key, size_t len)
 }
 
 /** Remove all keys from the trie.
-  * 
+  *
   * @param[in] trie trie
-  * 
+  *
   * @returns status code
   * @retval M_TRIE_E_NULL trie is NULL
   * @retval M_TRIE_OK     success
@@ -249,6 +249,91 @@ m_trie_trim(m_trie* trie)
   ((node*)trie->tr_root)->nd_type = NODE_REGULAR;
 
   free(arr);
+
+  return M_TRIE_OK;
+}
+
+/* TODO decrease the maxl if necessary. */
+int
+m_trie_trim_ng(m_trie* trie)
+{
+  node** stack;
+  node* nd;
+  int top;
+  int i;
+  int keep;
+
+  /* Initialise the stack structure. */
+  stack = malloc(sizeof(node*) * (trie->tr_maxl + 1));
+  top = 0;
+  stack[0] = trie->tr_root;
+  stack[0]->nd_cidx = stack[0]->nd_done = 0;
+
+  /* Perform a depth-first traversal of the trie. */
+  while (top >= 0) {
+    nd = stack[top];
+
+    /* If there are no child nodes to process. */
+    if (nd->nd_chld == NULL)
+      nd->nd_done = 1;
+
+    /* If we have processed all child nodes. */
+    if (nd->nd_done == 1) {
+      keep = 0;
+
+      /* Traverse all child nodes. */
+      if (nd->nd_chld != NULL) {
+        for (i = 0; i < trie->tr_ccnt; i++) {
+          if (nd->nd_chld[i] != NULL) {
+
+            /* Free all child nodes that request it. */
+            if (nd->nd_chld[i]->nd_type == NODE_TO_FREE) {
+              node_free(trie, nd->nd_chld[i]);
+              nd->nd_chld[i] = NULL;
+            } else {
+              /* Keep this node if some of its child nodes were not marked
+               * for removal. */
+              keep = 1;
+            }
+          }
+        }
+      }
+
+      /* Optionally mark the node for removal. */
+      if (keep == 0 && nd->nd_type != NODE_DATA)
+        nd->nd_type = NODE_TO_FREE;
+
+      /* Remove the node from the stack. */
+      top--;
+    } else {
+      if (nd->nd_chld != NULL) {
+        /* Advance to the next existing child node. */
+        for (; nd->nd_cidx < trie->tr_ccnt-1; nd->nd_cidx++)
+          if (nd->nd_chld[nd->nd_cidx] != NULL)
+            break;
+
+        /* Mark the node done if all its child nodes were traversed. */
+        if (nd->nd_cidx == trie->tr_ccnt-1 && nd->nd_chld[nd->nd_cidx] == NULL)
+          nd->nd_done = 1;
+
+        /* Add the next node to process to the stack. */
+        if (nd->nd_done == 0) {
+          stack[top + 1] = nd->nd_chld[nd->nd_cidx];
+          stack[top + 1]->nd_cidx = 0;
+          stack[top + 1]->nd_done = 0;
+          top++;
+
+          /* Move the pointer to the next node if possible. */
+          if (nd->nd_cidx == trie->tr_ccnt-1)
+            nd->nd_done = 1;
+          else
+            nd->nd_cidx++;
+        }
+      }
+    }
+  }
+
+  free(stack);
 
   return M_TRIE_OK;
 }

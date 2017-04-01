@@ -97,5 +97,9 @@ m_trie_insert(m_trie* trie, char* key, size_t len, void* val)
   nd->nd_type = NODE_DATA;
   nd->nd_data = val;
 
+  /* Possibly update the new maximal observed length. */
+  if (len > trie->tr_maxl)
+    trie->tr_maxl = len;
+
   return M_TRIE_OK;
 }

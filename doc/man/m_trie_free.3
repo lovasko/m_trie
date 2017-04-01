@@ -1,0 +1,35 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "M_TRIE_FREE" "3" "March 2017" "lovasko" "m_trie"
+.
+.SH "NAME"
+\fBm_trie_free\fR \- release all resources held by the trie
+.
+.SH "LIBRARY"
+m_trie (\-lmtrie)
+.
+.SH "SYNOPSIS"
+\fB#include <m_trie\.h>\fR
+.
+.P
+\fIint\fR \fBm_trie_free\fR(\fIm_trie\fR \fI*\fR \fItrie\fR)
+.
+.SH "DESCRIPTION"
+The \fIm_trie_free\fR function frees all memory resources held by the trie data structure\. It is not guaranteed that the structure can be used afterwards, even after a call to \fIm_trie_init\fR\.
+.
+.SH "TIME COMPLEXITY"
+\fBO\fR(\fIn\fR\fIk\fR), where \fIn\fR is the number of inserted elements and \fIk\fR is the mapping domain of the hashing function\.
+.
+.SH "RETURN VALUES"
+.
+.TP
+M_TRIE_OK
+success
+.
+.TP
+M_TRIE_E_NULL
+\fItrie\fR was NULL
+.
+.SH "SEE ALSO"
+m_trie_init(3), m_trie_remove(3)

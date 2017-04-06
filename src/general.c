@@ -1,4 +1,5 @@
 #include <limits.h>
+#include <string.h>
 
 #include "m_trie.h"
 #include "node.h"
@@ -26,6 +27,7 @@ m_trie_init(m_trie* trie, short (*hash)(char), int flags)
   trie->tr_flags = flags;
   trie->tr_hash = hash;
   trie->tr_ncnt = 0;
+  trie->tr_maxl = 0;
 
   /* Compute the children count, by counting the number of positive
    * answers from the hash function. */
@@ -59,9 +61,11 @@ m_trie_free(m_trie* trie)
   if (trie == NULL)
     return M_TRIE_E_NULL;
 
-  m_trie_remove_prefix(trie, NULL, 0);
+  m_trie_remove_all(trie);
   m_trie_trim(trie);
+
   node_free(trie, (node*)trie->tr_root);
+  memset(trie, 0, sizeof(m_trie));
 
   return M_TRIE_OK;
 }

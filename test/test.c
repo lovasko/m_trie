@@ -31,7 +31,7 @@ main(int argc, char* argv[])
 
   CHECK(m_trie_init(&trie, m_trie_hash_lower_alphabet, M_TRIE_OVERWRITE))
 
-  while ((opt = getopt(argc, argv, "ai:lnp:r:s:tu")) != -1) {
+  while ((opt = getopt(argc, argv, "ai:lnp:r:s:t")) != -1) {
     switch(opt) {
       case 'a':
         CHECK(m_trie_remove_all(&trie))
@@ -52,23 +52,18 @@ main(int argc, char* argv[])
         break;
 
       case 'p':
-        CHECK(m_trie_remove_prefix(&trie, optarg, strlen(optarg)))
+        CHECK(m_trie_remove(&trie, optarg, strlen(optarg), 1))
         printf("Removing prefix \"%s\"\n", optarg);
         break;
 
       case 'r':
-        CHECK(m_trie_remove(&trie, optarg, strlen(optarg)))
+        CHECK(m_trie_remove(&trie, optarg, strlen(optarg), 0))
         printf("Removing \"%s\"\n", optarg);
         break;
 
       case 't':
         CHECK(m_trie_trim(&trie))
         printf("Trimming \n");
-        break;
-
-      case 'u':
-        CHECK(m_trie_trim_ng(&trie))
-        printf("Trimming New Generation\n");
         break;
 
       case 's':

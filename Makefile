@@ -1,5 +1,7 @@
 CC=clang
-CFLAGS=-O3 -Wall -Wextra -Weverything -ansi -pedantic -Wno-documentation-unknown-command
+WARNINGS=-Wall -Wextra -Weverything -Wno-documentation-unknown-command
+STANDARDS=-ansi -pedantic
+CFLAGS=-g -O3 $(WARNINGS) $(STANDARDS)
 LIB_DIR=/usr/lib
 INC_DIR=/usr/include
 

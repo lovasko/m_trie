@@ -36,3 +36,5 @@ run_test 19 '-i caravan -i cartoonish -r cartoonish -t -l'    7
 run_test 20 '-i boat -a -i boat -s boat'                      Found
 run_test 21 '-i boat -a -t -i boat -s boat'                   Found
 run_test 22 '-i a -i b -i c -a -t -n'                         1
+run_test 23 '-i caravan -i carpool -p car -t -n'              1
+run_test 24 '-i caravan -i carpool -i ca -p car -t -n'        3

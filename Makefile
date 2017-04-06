@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS=-g -Wall -Wextra -Weverything -ansi -pedantic -Wno-documentation-unknown-command
+CFLAGS=-O3 -Wall -Wextra -Weverything -ansi -pedantic -Wno-documentation-unknown-command
 LIB_DIR=/usr/lib
 INC_DIR=/usr/include
 

@@ -1,6 +1,4 @@
 language: c
 compiler: clang
 sudo: false
-script:
- - make && make test
- - cd examples && make && ./words
+script: make && make test

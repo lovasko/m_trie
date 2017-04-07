@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "m_trie.h"
 #include "common.h"
 #include "node.h"

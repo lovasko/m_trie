@@ -18,7 +18,7 @@
   * @retval M_TRIE_OK          success
 **/
 int
-m_trie_search(m_trie* trie, char* key, size_t len, void** val)
+m_trie_search(m_trie* trie, uint8_t* key, uint32_t len, void** val)
 {
   node* nd;
   int ret;
@@ -54,12 +54,12 @@ m_trie_search(m_trie* trie, char* key, size_t len, void** val)
   * @retval M_TRIE_OK        success
 **/
 int
-m_trie_insert(m_trie* trie, char* key, size_t len, void* val)
+m_trie_insert(m_trie* trie, uint8_t* key, uint32_t len, void* val)
 {
-  size_t i;
-  int ret;
-  short h;
   node* nd;
+  int ret;
+  uint32_t i;
+  int16_t h;
 
   /* Validate the key. */
   ret = check(trie, key, len);

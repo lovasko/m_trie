@@ -31,9 +31,9 @@ node_init(m_trie* trie, node** nd)
 void
 node_chld(m_trie* trie, node** nd)
 {
-  int i;
+  uint8_t i;
 
-  (*nd)->nd_chld = malloc(sizeof(node*) * (unsigned long)trie->tr_ccnt);
+  (*nd)->nd_chld = malloc(sizeof(node*) * (size_t)trie->tr_ccnt);
   for (i = 0; i < trie->tr_ccnt; i++)
     (*nd)->nd_chld[i] = NULL;
 }

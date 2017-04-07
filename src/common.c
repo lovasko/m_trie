@@ -16,9 +16,9 @@
   * @retval M_TRIE_OK        success
 **/
 int
-check(m_trie* trie, char* key, size_t len)
+check(m_trie* trie, uint8_t* key, uint32_t len)
 {
-  size_t i;
+  uint32_t i;
 
   if (trie == NULL || key == NULL)
     return M_TRIE_E_NULL;
@@ -51,11 +51,11 @@ check(m_trie* trie, char* key, size_t len)
   * @retval M_TRIE_OK          success
 **/
 int
-locate(m_trie* trie, char* key, size_t len, node** out)
+locate(m_trie* trie, uint8_t* key, uint32_t len, node** out)
 {
   node* nd;
-  size_t i;
   int ret;
+  uint32_t i;
 
   /* Validate the key. */
   ret = check(trie, key, len);

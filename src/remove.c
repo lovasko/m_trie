@@ -14,13 +14,13 @@
   *
   * @return new maximal length of a key
 **/
-static int
+static uint32_t
 dfs(m_trie* trie, node* root, int(*act)(m_trie*, node*))
 {
   node** stack;
   node* nd;
-  int top;
-  int newl;
+  int64_t top;
+  uint32_t newl;
   int del;
 
   /* Initialise the stack structure. */
@@ -49,7 +49,7 @@ dfs(m_trie* trie, node* root, int(*act)(m_trie*, node*))
       /* If the node was not deleted by the action, try to update the
        * new maximal length of a key. */
       if (del == 0 && top > newl)
-        newl = top;
+        newl = (uint32_t)top;
 
     } else {
       if (nd->nd_chld != NULL) {
@@ -113,7 +113,7 @@ static int
 free_child_nodes(m_trie* trie, node* nd)
 {
   int keep;
-  int i;
+  uint8_t i;
 
   keep = 0;
 
@@ -159,7 +159,7 @@ free_child_nodes(m_trie* trie, node* nd)
   * @retval M_TRIE_OK          success
 **/
 int
-m_trie_remove(m_trie* trie, char* key, size_t len, int pfix)
+m_trie_remove(m_trie* trie, uint8_t* key, uint32_t len, uint8_t pfix)
 {
   node* nd;
   int ret;
@@ -229,13 +229,13 @@ m_trie_remove_all(m_trie *trie)
 int
 m_trie_trim(m_trie* trie)
 {
-  int maxl;
+  uint32_t maxl;
 
   if (trie == NULL)
     return M_TRIE_E_NULL;
 
   maxl = dfs(trie, trie->tr_root, free_child_nodes);
-  trie->tr_maxl = (size_t)maxl + 1;
+  trie->tr_maxl = maxl + 1;
 
   return M_TRIE_OK;
 }

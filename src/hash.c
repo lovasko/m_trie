@@ -1,5 +1,3 @@
-#include <limits.h>
-
 #include "m_trie.h"
 
 
@@ -8,15 +6,10 @@
   * @param[in] key key
   * @return type-adjusted key
 **/
-short
-m_trie_hash_identity(char key)
+int16_t
+m_trie_hash_identity(uint8_t key)
 {
-  short result;
-
-  result = (short)key;
-  result -= (short)CHAR_MIN;
-
-  return result;
+  return (int16_t)key;
 }
 
 /** Hash function that accepts both upper and lower alphabet characters.
@@ -24,8 +17,8 @@ m_trie_hash_identity(char key)
   * @param[in] key key
   * @return hashed letter
 **/
-short
-m_trie_hash_alphabet(char key)
+int16_t
+m_trie_hash_alphabet(uint8_t key)
 {
   if (key >= 'A' && key <= 'Z')
     return key - 'A';
@@ -41,8 +34,8 @@ m_trie_hash_alphabet(char key)
   * @param[in] key key
   * @return hashed digit
 **/
-short
-m_trie_hash_digits(char key)
+int16_t
+m_trie_hash_digits(uint8_t key)
 {
   if (key >= '0' && key <= '9')
     return key - '0';
@@ -55,8 +48,8 @@ m_trie_hash_digits(char key)
   * @param[in] key key
   * @return hashed Base64 character
 **/
-short
-m_trie_hash_base64(char key)
+int16_t
+m_trie_hash_base64(uint8_t key)
 {
   if (key >= 'A' && key <= 'Z')
     return key - 'A';
@@ -78,8 +71,8 @@ m_trie_hash_base64(char key)
   * @param[in] key key
   * @return hashed alphanumeric character
 **/
-short
-m_trie_hash_alphanumeric(char key)
+int16_t
+m_trie_hash_alphanumeric(uint8_t key)
 {
   if (key >= 'A' && key <= 'Z')
     return key - 'A';
@@ -98,8 +91,8 @@ m_trie_hash_alphanumeric(char key)
   * @param[in] key key
   * @return hashed lower letter
 **/
-short
-m_trie_hash_lower_alphabet(char key)
+int16_t
+m_trie_hash_lower_alphabet(uint8_t key)
 {
   if (key >= 'a' && key <= 'z')
     return key - 'a';
@@ -112,8 +105,8 @@ m_trie_hash_lower_alphabet(char key)
   * @param[in] key key
   * @return hashed upper letter
 **/
-short
-m_trie_hash_upper_alphabet(char key)
+int16_t
+m_trie_hash_upper_alphabet(uint8_t key)
 {
   if (key >= 'A' && key <= 'Z')
     return key - 'A';

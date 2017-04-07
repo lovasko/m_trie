@@ -1,4 +1,3 @@
-#include <limits.h>
 #include <string.h>
 
 #include "m_trie.h"
@@ -17,9 +16,9 @@
   * @retval M_TRIE_OK        success
 **/
 int
-m_trie_init(m_trie* trie, short (*hash)(char), int flags)
+m_trie_init(m_trie* trie, int16_t (*hash)(uint8_t), uint8_t flags)
 {
-  char i;
+  uint8_t i;
 
   if (trie == NULL || hash == NULL)
     return M_TRIE_E_NULL;
@@ -32,7 +31,7 @@ m_trie_init(m_trie* trie, short (*hash)(char), int flags)
   /* Compute the children count, by counting the number of positive
    * answers from the hash function. */
   trie->tr_ccnt = 0;
-  for (i = CHAR_MIN; i < CHAR_MAX; i++)
+  for (i = 0; i < 255; i++)
     if (hash(i) >= 0)
       trie->tr_ccnt++;
 

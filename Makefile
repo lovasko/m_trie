@@ -1,7 +1,8 @@
 CC=clang
 WARNINGS=-Wall -Wextra -Weverything -Wno-documentation-unknown-command
 STANDARDS=-ansi -pedantic
-CFLAGS=-g -O3 $(WARNINGS) $(STANDARDS)
+CFLAGS=-g -O3 -fPIC $(WARNINGS) $(STANDARDS)
+LDFLAGS=-fPIC
 LIB_DIR=/usr/lib
 INC_DIR=/usr/include
 
@@ -12,9 +13,9 @@ all: bin/libmtrie.so
 bin/libmtrie.so: obj/access.o obj/common.o \
                  obj/general.o obj/hash.o  \
                  obj/node.o obj/remove.o
-	$(CC) -fPIC -o bin/libmtrie.so -shared obj/access.o obj/common.o \
-                                         obj/general.o obj/hash.o  \
-                                         obj/node.o obj/remove.o
+	$(CC) $(LDFLAGS) -o bin/libmtrie.so -shared obj/access.o obj/common.o \
+                                              obj/general.o obj/hash.o  \
+                                              obj/node.o obj/remove.o
 
 obj/access.o: src/access.c
 	$(CC) $(CFLAGS) -c src/access.c -o obj/access.o

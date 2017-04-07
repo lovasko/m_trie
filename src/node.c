@@ -1,5 +1,3 @@
-#include <stdlib.h>
-
 #include "m_trie.h"
 #include "node.h"
 

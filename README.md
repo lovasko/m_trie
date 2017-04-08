@@ -186,7 +186,7 @@ both constant time and constant space.
 
 | Function              | Time   | Space  |
 |-----------------------|--------|--------|
-|`m_trie_init`          | `O(a)` | `O(1)` |
+|`m_trie_init`          | `O(1)` | `O(1)` |
 |`m_trie_free`          | `O(n)` | `O(k)` |
 |`m_trie_insert`        | `O(k)` | `O(k)` |
 |`m_trie_search`        | `O(k)` | `O(1)` |

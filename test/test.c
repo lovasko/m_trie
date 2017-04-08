@@ -79,7 +79,7 @@ main(int argc, char* argv[])
           printf("Not found\n");
         break;
 
-      default: 
+      default:
         fprintf(stderr, "ERROR: invalid arguments\n");
         return EXIT_FAILURE;
     }

@@ -52,7 +52,7 @@ main(void)
     for (k = 0; k < st.st_size; k++)
       if (text[i + k] == '\n')
         break;
-    
+
     m_trie_insert(&tr, &text[i], k, NULL);
     i += k + 1;
   }
@@ -65,5 +65,5 @@ main(void)
   munmap(text, st.st_size);
   close(fd);
 
-  return EXIT_SUCCESS; 
+  return EXIT_SUCCESS;
 }

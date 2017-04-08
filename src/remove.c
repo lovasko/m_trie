@@ -4,7 +4,7 @@
 
 
 /** Depth-first traverse the trie and execute an action on each node.
-  * 
+  *
   * @param[in] trie trie
   * @param[in] root node where to start the traversal
   * @param[in] act  action to perform
@@ -87,7 +87,7 @@ dfs(m_trie* trie, node* root, int(*act)(m_trie*, node*))
   *
   * @return 0
 **/
-static int 
+static int
 mark_to_free(m_trie* trie, node* nd)
 {
   (void)trie;
@@ -98,7 +98,7 @@ mark_to_free(m_trie* trie, node* nd)
 }
 
 /** Deallocate resources for all child nodes marked as to be freed.
-  * 
+  *
   * @param[in] trie trie
   * @param[in] nd   node
   *
@@ -106,7 +106,7 @@ mark_to_free(m_trie* trie, node* nd)
   * @retval 0 no node was freed
   * @retval 1 one or more child nodes were freed
 **/
-static int 
+static int
 free_child_nodes(m_trie* trie, node* nd)
 {
   int keep;

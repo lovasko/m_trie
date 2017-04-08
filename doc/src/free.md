@@ -8,26 +8,25 @@ m_trie (-lmtrie)
 `#include <m_trie.h>`
 
 `int`
-<m_trie_free>(`m_trie*` <trie>)
+<m_trie_free>(`m_trie*` <tr>)
 
 ## DESCRIPTION
-The <m_trie_free> function releases all memory resources held by the <trie>.
+The <m_trie_free> function releases all memory resources held by the <tr>ie.
 It is guaranteed that the instance can be used afterwards, once initialised
 again with a call to <m_trie_init>.
 
 ## TIME COMPLEXITY
-`O`(<n><k>), where <n> is the number of inserted elements and <k> is the
-mapping domain of the hashing function.
+`O`(<n>), where <n> is the overall number of nodes.
 
 ## SPACE COMPLEXITY
-TODO.
+`O`(<k>), where <k> is the longest inserted key.
 
 ## RETURN VALUES
  * M_TRIE_OK:
-   success
+   Success.
 
  * M_TRIE_E_NULL:
-   <trie> is NULL
+   <tr>ie is NULL.
 
 ## SEE ALSO
 m_trie_init(3), m_trie_remove(3)

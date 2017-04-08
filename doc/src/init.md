@@ -8,12 +8,12 @@ m_trie (-lmtrie)
 `#include <m_trie.h>`
 
 `int`
-<m_trie_init>(`m_trie*` <trie>, `int16_t` (<*hash>)(`uint8_t`), `uint8_t` <flags>);
+<m_trie_init>(`m_trie*` <tr>, `int16_t` (<*hash>)(`uint8_t`), `uint8_t` <flags>);
 
 ## DESCRIPTION
-The <m_trie_init> function initialises the <trie> data structure. This
-function does not perform the actual allocation of the structure, which has
-to be done by the user.
+The <m_trie_init> function initialises the <tr>ie data structure. This
+function does not perform the actual allocation of the trie variable itself,
+which has to be done by the user.
 
 The <hash> argument is a pointer to a hashing function. The <m_trie_init>
 function does not need any other information about the hashing function, as it
@@ -31,7 +31,7 @@ there are three supported flags:
    is removed. Note that this might have a significant performance impact.
 
  * M_TRIE_FREE:
-   Call the <free> function on all associated data with removed data blocks.
+   Call the <free(3)> function on all associated values with removed nodes.
 
 
 ## TIME COMPLEXITY

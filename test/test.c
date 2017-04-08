@@ -28,10 +28,15 @@ main(int argc, char* argv[])
 {
   m_trie trie;
   int opt;
+  uint8_t* key;
+  uint32_t len;
 
   CHECK(m_trie_init(&trie, m_trie_hash_lower_alphabet, M_TRIE_OVERWRITE))
 
   while ((opt = getopt(argc, argv, "ai:lnp:r:s:t")) != -1) {
+    key = (uint8_t*)optarg;
+    len = (uint32_t)strlen(optarg);
+
     switch(opt) {
       case 'a':
         CHECK(m_trie_remove_all(&trie))
@@ -39,25 +44,25 @@ main(int argc, char* argv[])
         break;
 
       case 'i':
-        CHECK(m_trie_insert(&trie, optarg, strlen(optarg), NULL))
+        CHECK(m_trie_insert(&trie, key, len, NULL))
         printf ("Inserting \"%s\"\n", optarg);
         break;
 
       case 'l':
-        printf("Maximal length: %zu\n", trie.tr_maxl);
+        printf("Maximal length: %u\n", trie.tr_maxl);
         break;
 
       case 'n':
-        printf("Node count: %zu\n", trie.tr_ncnt);
+        printf("Node count: %llu\n", trie.tr_ncnt);
         break;
 
       case 'p':
-        CHECK(m_trie_remove(&trie, optarg, strlen(optarg), 1))
+        CHECK(m_trie_remove(&trie, key, len, 1))
         printf("Removing prefix \"%s\"\n", optarg);
         break;
 
       case 'r':
-        CHECK(m_trie_remove(&trie, optarg, strlen(optarg), 0))
+        CHECK(m_trie_remove(&trie, key, len, 0))
         printf("Removing \"%s\"\n", optarg);
         break;
 
@@ -68,7 +73,7 @@ main(int argc, char* argv[])
 
       case 's':
         printf("Searching for \"%s\": ", optarg);
-        if (m_trie_search(&trie, optarg, strlen(optarg), NULL) == M_TRIE_OK)
+        if (m_trie_search(&trie, key, len, NULL) == M_TRIE_OK)
           printf("Found\n");
         else
           printf("Not found\n");

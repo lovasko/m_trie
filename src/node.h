@@ -17,8 +17,8 @@ typedef struct node {
   uint32_t      nd_pad;  /**< Structure padding.               */
 } node;
 
-void node_init(m_trie* trie, node** nd);
-void node_chld(m_trie* trie, node** nd);
-void node_free(m_trie* trie, node*  nd);
+void node_init(m_trie* tr, node** nd);
+void node_chld(m_trie* tr, node** nd);
+void node_free(m_trie* tr, node*  nd);
 
 #endif

@@ -27,20 +27,20 @@ static const char* err_msg[] = {
 int
 main(int argc, char* argv[])
 {
-  m_trie trie;
+  m_trie tr;
   int opt;
 
-  CHECK(m_trie_init(&trie, m_trie_hash_lower_alphabet, M_TRIE_OVERWRITE))
+  CHECK(m_trie_init(&tr, m_trie_hash_lower_alphabet, M_TRIE_OVERWRITE))
 
   while ((opt = getopt(argc, argv, "ai:lnp:r:s:t")) != -1) {
     switch(opt) {
       case 'a':
-        CHECK(m_trie_remove_all(&trie))
+        CHECK(m_trie_remove_all(&tr))
         printf("Removing all\n");
         break;
 
       case 'i':
-        CHECK(m_trie_insert(&trie,
+        CHECK(m_trie_insert(&tr,
                             (uint8_t*)optarg,
                             (uint32_t)strlen(optarg),
                             NULL))
@@ -48,15 +48,15 @@ main(int argc, char* argv[])
         break;
 
       case 'l':
-        printf("Maximal length: %" PRIu32 "\n", trie.tr_maxl);
+        printf("Maximal length: %" PRIu32 "\n", tr.tr_maxl);
         break;
 
       case 'n':
-        printf("Node count: %" PRIu64 "\n", trie.tr_ncnt);
+        printf("Node count: %" PRIu64 "\n", tr.tr_ncnt);
         break;
 
       case 'p':
-        CHECK(m_trie_remove(&trie,
+        CHECK(m_trie_remove(&tr,
                             (uint8_t*)optarg,
                             (uint32_t)strlen(optarg),
                             1))
@@ -64,7 +64,7 @@ main(int argc, char* argv[])
         break;
 
       case 'r':
-        CHECK(m_trie_remove(&trie,
+        CHECK(m_trie_remove(&tr,
                             (uint8_t*)optarg,
                             (uint32_t)strlen(optarg),
                             0))
@@ -72,13 +72,13 @@ main(int argc, char* argv[])
         break;
 
       case 't':
-        CHECK(m_trie_trim(&trie))
+        CHECK(m_trie_trim(&tr))
         printf("Trimming \n");
         break;
 
       case 's':
         printf("Searching for \"%s\": ", optarg);
-        if (m_trie_search(&trie,
+        if (m_trie_search(&tr,
                           (uint8_t*)optarg,
                           (uint32_t)strlen(optarg),
                           NULL) == M_TRIE_OK)
@@ -93,7 +93,7 @@ main(int argc, char* argv[])
     }
   }
 
-  CHECK(m_trie_free(&trie))
+  CHECK(m_trie_free(&tr))
 
   return EXIT_SUCCESS;
 }

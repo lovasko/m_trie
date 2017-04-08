@@ -31,17 +31,17 @@ typedef struct m_trie {
 } m_trie;
 
 /* general */
-int m_trie_init(m_trie* trie, int16_t (*hash)(uint8_t), uint8_t flags);
-int m_trie_free(m_trie* trie);
+int m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), uint8_t flags);
+int m_trie_free(m_trie* tr);
 
 /* access */
-int m_trie_search(m_trie* trie, uint8_t* key, uint32_t len, void** val);
-int m_trie_insert(m_trie* trie, uint8_t* key, uint32_t len, void* val);
+int m_trie_search(m_trie* tr, uint8_t* key, uint32_t len, void** val);
+int m_trie_insert(m_trie* tr, uint8_t* key, uint32_t len, void* val);
 
 /* remove */
-int m_trie_remove(m_trie* trie, uint8_t* key, uint32_t len, uint8_t pfix);
-int m_trie_remove_all(m_trie *trie);
-int m_trie_trim(m_trie* trie);
+int m_trie_remove(m_trie* tr, uint8_t* key, uint32_t len, uint8_t pfix);
+int m_trie_remove_all(m_trie *tr);
+int m_trie_trim(m_trie* tr);
 
 /* hash */
 int16_t m_trie_hash_identity(uint8_t key);

@@ -5,26 +5,26 @@
 
 /** Search for a key in the trie.
   *
-  * @param[in]  trie trie
-  * @param[in]  key  key
-  * @param[in]  len  key length
-  * @param[out] val  data associated with the key
+  * @param[in]  tr  trie
+  * @param[in]  key key
+  * @param[in]  len key length
+  * @param[out] val data associated with the key
   *
   * @return status code
-  * @retval M_TRIE_E_NULL      trie and/or key is NULL
+  * @retval M_TRIE_E_NULL      tr and/or key is NULL
   * @retval M_TRIE_E_LENGTH    length is zero
   * @retval M_TRIE_E_INVALID   key contains invalid characters
   * @retval M_TRIE_E_NOT_FOUND key is not in the trie
   * @retval M_TRIE_OK          success
 **/
 int
-m_trie_search(m_trie* trie, uint8_t* key, uint32_t len, void** val)
+m_trie_search(m_trie* tr, uint8_t* key, uint32_t len, void** val)
 {
   node* nd;
   int ret;
 
   /* Locate the inner node of the trie. */
-  ret = locate(trie, key, len, &nd);
+  ret = locate(tr, key, len, &nd);
   if (ret != M_TRIE_OK)
     return ret;
 
@@ -41,20 +41,20 @@ m_trie_search(m_trie* trie, uint8_t* key, uint32_t len, void** val)
 
 /** Insert a value into the trie.
   *
-  * @param[in] trie trie
-  * @param[in] key  key
-  * @param[in] len  key length
-  * @param[in] val  data associated with the key
+  * @param[in] tr  trie
+  * @param[in] key key
+  * @param[in] len key length
+  * @param[in] val data associated with the key
   *
   * @return status code
-  * @retval M_TRIE_E_NULL    trie and/or key is NULL
+  * @retval M_TRIE_E_NULL    tr and/or key is NULL
   * @retval M_TRIE_E_LENGTH  key length is zero
   * @retval M_TRIE_E_INVALID key contains an invalid character
   * @retval M_TRIE_E_EXISTS  key exists (only when overwriting is not allowed)
   * @retval M_TRIE_OK        success
 **/
 int
-m_trie_insert(m_trie* trie, uint8_t* key, uint32_t len, void* val)
+m_trie_insert(m_trie* tr, uint8_t* key, uint32_t len, void* val)
 {
   node* nd;
   int ret;
@@ -62,11 +62,11 @@ m_trie_insert(m_trie* trie, uint8_t* key, uint32_t len, void* val)
   int16_t h;
 
   /* Validate the key. */
-  ret = check(trie, key, len);
+  ret = check(tr, key, len);
   if (ret != M_TRIE_OK)
     return ret;
 
-  nd = trie->tr_root;
+  nd = tr->tr_root;
 
   /* Traverse the key. */
   for (i = 0; i < len; i++) {
@@ -77,12 +77,12 @@ m_trie_insert(m_trie* trie, uint8_t* key, uint32_t len, void* val)
 
     /* Create new subtree. */
     if (nd->nd_chld == NULL)
-      node_chld(trie, &nd);
+      node_chld(tr, &nd);
 
     /* Initialise the needed node. */
-    h = trie->tr_hash(key[i]);
+    h = tr->tr_hash(key[i]);
     if (nd->nd_chld[h] == NULL) {
-      node_init(trie, &nd->nd_chld[h]);
+      node_init(tr, &nd->nd_chld[h]);
       nd->nd_chld[h]->nd_key = key[i];
     }
 
@@ -91,15 +91,15 @@ m_trie_insert(m_trie* trie, uint8_t* key, uint32_t len, void* val)
   }
 
   /* Raise an error if the value can not be overwritten. */
-  if (nd->nd_type == NODE_DATA && (trie->tr_flags & M_TRIE_OVERWRITE))
+  if (nd->nd_type == NODE_DATA && (tr->tr_flags & M_TRIE_OVERWRITE))
     return M_TRIE_E_EXISTS;
 
   nd->nd_type = NODE_DATA;
   nd->nd_data = val;
 
   /* Possibly update the new maximal observed length. */
-  if (len > trie->tr_maxl)
-    trie->tr_maxl = len;
+  if (len > tr->tr_maxl)
+    tr->tr_maxl = len;
 
   return M_TRIE_OK;
 }

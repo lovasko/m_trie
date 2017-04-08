@@ -5,14 +5,14 @@
 
 /** Depth-first traverse the trie and execute an action on each node.
   *
-  * @param[in] trie trie
+  * @param[in] tr   trie
   * @param[in] root node where to start the traversal
   * @param[in] act  action to perform
   *
   * @return new maximal length of a key
 **/
 static uint32_t
-dfs(m_trie* trie, node* root, int(*act)(m_trie*, node*))
+dfs(m_trie* tr, node* root, int(*act)(m_trie*, node*))
 {
   node** stack;
   node* nd;
@@ -21,7 +21,7 @@ dfs(m_trie* trie, node* root, int(*act)(m_trie*, node*))
   int del;
 
   /* Initialise the stack structure. */
-  stack = malloc(sizeof(node*) * (trie->tr_maxl + 1));
+  stack = malloc(sizeof(node*) * (tr->tr_maxl + 1));
   top = 0;
   newl = 0;
   stack[0] = root;
@@ -38,7 +38,7 @@ dfs(m_trie* trie, node* root, int(*act)(m_trie*, node*))
     /* If we have processed all child nodes. */
     if (nd->nd_done == 1) {
       /* Perform the action on the node. */
-      del = act(trie, nd);
+      del = act(tr, nd);
 
       /* Remove the node from the stack. */
       top--;
@@ -51,12 +51,12 @@ dfs(m_trie* trie, node* root, int(*act)(m_trie*, node*))
     } else {
       if (nd->nd_chld != NULL) {
         /* Advance to the next existing child node. */
-        for (; nd->nd_cidx < trie->tr_ccnt-1; nd->nd_cidx++)
+        for (; nd->nd_cidx < tr->tr_ccnt-1; nd->nd_cidx++)
           if (nd->nd_chld[nd->nd_cidx] != NULL)
             break;
 
         /* Mark the node done if all its child nodes were traversed. */
-        if (nd->nd_cidx == trie->tr_ccnt-1 && nd->nd_chld[nd->nd_cidx] == NULL)
+        if (nd->nd_cidx == tr->tr_ccnt-1 && nd->nd_chld[nd->nd_cidx] == NULL)
           nd->nd_done = 1;
 
         /* Add the next node to process to the stack. */
@@ -67,7 +67,7 @@ dfs(m_trie* trie, node* root, int(*act)(m_trie*, node*))
           top++;
 
           /* Move the pointer to the next node if possible. */
-          if (nd->nd_cidx == trie->tr_ccnt-1)
+          if (nd->nd_cidx == tr->tr_ccnt-1)
             nd->nd_done = 1;
           else
             nd->nd_cidx++;
@@ -82,15 +82,15 @@ dfs(m_trie* trie, node* root, int(*act)(m_trie*, node*))
 
 /** Mark a node to be freed during the garbage-collection procedure.
   *
-  * @param[in] trie unused
-  * @param[in] nd   node
+  * @param[in] tr unused
+  * @param[in] nd node
   *
   * @return 0
 **/
 static int
-mark_to_free(m_trie* trie, node* nd)
+mark_to_free(m_trie* tr, node* nd)
 {
-  (void)trie;
+  (void)tr;
   nd->nd_type = NODE_TO_FREE;
 
   /* Marking nodes to be freed never actually free any node. */
@@ -99,15 +99,15 @@ mark_to_free(m_trie* trie, node* nd)
 
 /** Deallocate resources for all child nodes marked as to be freed.
   *
-  * @param[in] trie trie
-  * @param[in] nd   node
+  * @param[in] tr trie
+  * @param[in] nd node
   *
   * @return overall free decision
   * @retval 0 no node was freed
   * @retval 1 one or more child nodes were freed
 **/
 static int
-free_child_nodes(m_trie* trie, node* nd)
+free_child_nodes(m_trie* tr, node* nd)
 {
   int keep;
   uint8_t i;
@@ -116,12 +116,12 @@ free_child_nodes(m_trie* trie, node* nd)
 
   /* Traverse all child nodes. */
   if (nd->nd_chld != NULL) {
-    for (i = 0; i < trie->tr_ccnt; i++) {
+    for (i = 0; i < tr->tr_ccnt; i++) {
       if (nd->nd_chld[i] != NULL) {
 
         /* Free all child nodes that request it. */
         if (nd->nd_chld[i]->nd_type == NODE_TO_FREE) {
-          node_free(trie, nd->nd_chld[i]);
+          node_free(tr, nd->nd_chld[i]);
           nd->nd_chld[i] = NULL;
         } else {
           /* Keep this node if some of its child nodes were not marked
@@ -143,12 +143,12 @@ free_child_nodes(m_trie* trie, node* nd)
 
 /** Remove a key from the trie.
   *
-  * @param[in] trie trie
-  * @param[in] key  key
-  * @param[in] len  key length
+  * @param[in] tr  trie
+  * @param[in] key key
+  * @param[in] len key length
   *
   * @return status code
-  * @retval M_TRIE_E_NULL      trie and/or key is NULL
+  * @retval M_TRIE_E_NULL      tr and/or key is NULL
   * @retval M_TRIE_E_LENGTH    key length is zero
   * @retval M_TRIE_E_INVALID   key contains invalid characters
   * @retval M_TRIE_E_NOT_FOUND key is not in tr
@@ -156,24 +156,24 @@ free_child_nodes(m_trie* trie, node* nd)
   * @retval M_TRIE_OK          success
 **/
 int
-m_trie_remove(m_trie* trie, uint8_t* key, uint32_t len, uint8_t pfix)
+m_trie_remove(m_trie* tr, uint8_t* key, uint32_t len, uint8_t pfix)
 {
   node* nd;
   int ret;
 
   /* Locate the inner node of the trie. */
-  ret = locate(trie, key, len, &nd);
+  ret = locate(tr, key, len, &nd);
   if (ret != M_TRIE_OK)
     return ret;
 
   /* Run a different procedure for prefix and normal removal modes. */
   if (pfix) {
     /* Traverse the trie to mark all subtree nodes for removal. */
-    dfs(trie, nd, mark_to_free);
+    dfs(tr, nd, mark_to_free);
 
   } else {
     /* Optionally deallocate the data associated with the node. */
-    if (trie->tr_flags & M_TRIE_FREE)
+    if (tr->tr_flags & M_TRIE_FREE)
       free(nd->nd_data);
 
     /* Mark the node to be up for removal, so that subsequent trim will
@@ -183,32 +183,32 @@ m_trie_remove(m_trie* trie, uint8_t* key, uint32_t len, uint8_t pfix)
   }
 
   /* Optionally run the garbage-collection procedure. */
-  if (trie->tr_flags & M_TRIE_CLEANUP)
-    m_trie_trim(trie);
+  if (tr->tr_flags & M_TRIE_CLEANUP)
+    m_trie_trim(tr);
 
   return M_TRIE_OK;
 }
 
 /** Remove all keys from the trie.
   *
-  * @param[in] trie trie
+  * @param[in] tr trie
   *
   * @returns status code
-  * @retval M_TRIE_E_NULL trie is NULL
+  * @retval M_TRIE_E_NULL tr is NULL
   * @retval M_TRIE_OK     success
 **/
 int
-m_trie_remove_all(m_trie *trie)
+m_trie_remove_all(m_trie *tr)
 {
-  if (trie == NULL)
+  if (tr == NULL)
     return M_TRIE_E_NULL;
 
   /* Mark all nodes of the tree to be up for removal. */
-  dfs(trie, trie->tr_root, mark_to_free);
+  dfs(tr, tr->tr_root, mark_to_free);
 
   /* Optionally run the garbage-collection procedure. */
-  if (trie->tr_flags & M_TRIE_CLEANUP)
-    m_trie_trim(trie);
+  if (tr->tr_flags & M_TRIE_CLEANUP)
+    m_trie_trim(tr);
 
   return M_TRIE_OK;
 }
@@ -217,22 +217,22 @@ m_trie_remove_all(m_trie *trie)
   * Such state can arise after one or more calls to one of the
   * m_trie_remove and m_trie_remove_all functions.
   *
-  * @param[in] trie trie
+  * @param[in] tr trie
   *
   * @return status code
-  * @retval M_TRIE_E_NULL trie is NULL
+  * @retval M_TRIE_E_NULL tr is NULL
   * @retval M_TRIE_OK     success
 **/
 int
-m_trie_trim(m_trie* trie)
+m_trie_trim(m_trie* tr)
 {
   uint32_t maxl;
 
-  if (trie == NULL)
+  if (tr == NULL)
     return M_TRIE_E_NULL;
 
-  maxl = dfs(trie, trie->tr_root, free_child_nodes);
-  trie->tr_maxl = maxl + 1;
+  maxl = dfs(tr, tr->tr_root, free_child_nodes);
+  tr->tr_maxl = maxl + 1;
 
   return M_TRIE_OK;
 }

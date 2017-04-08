@@ -5,7 +5,7 @@
 #include "node.h"
 
 
-int check(m_trie* trie, uint8_t* key, uint32_t len);
-int locate(m_trie* trie, uint8_t* key, uint32_t len, node** nd);
+int check(m_trie* tr, uint8_t* key, uint32_t len);
+int locate(m_trie* tr, uint8_t* key, uint32_t len, node** nd);
 
 #endif

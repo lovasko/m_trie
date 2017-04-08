@@ -40,7 +40,7 @@ install:
 	cp src/m_trie.h $(INC_DIR)
 
 test:
-	(cd test ; ./test.sh)
+	(cd test ; bash test.sh)
 
 clean:
 	rm obj/*.o

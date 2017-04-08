@@ -25,14 +25,14 @@ main(int argc, char* argv[])
 
   m_trie_init(&tr, m_trie_hash_alphabet, 0);
   for (i = 1; i < argc; i++)
-    m_trie_insert(&tr, argv[i], strlen(argv[i]), NULL);
+    m_trie_insert(&tr, (uint8_t*)argv[i], (uint32_t)strlen(argv[i]), NULL);
 
   while (1) {
     scanf("%s", inp);
     if (strcmp(inp, "!") == 0)
       break;
 
-    ret = m_trie_search(&tr, inp, strlen(inp), NULL);
+    ret = m_trie_search(&tr, (uint8_t*)inp, (uint32_t)strlen(inp), NULL);
     printf("%s\n", ret == M_TRIE_OK ? "yes" : "no");
   }
 

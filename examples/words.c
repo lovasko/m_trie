@@ -36,7 +36,7 @@ main(void)
   }
 
   /* Load the file's content into the memory. */
-  text = mmap(NULL, st.st_size, PROT_READ, MAP_FILE | MAP_PRIVATE, fd, 0);
+  text = mmap(NULL, (size_t)st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
   if (text == MAP_FAILED) {
     perror("mmap");
     return EXIT_FAILURE;
@@ -53,7 +53,7 @@ main(void)
       if (text[i + k] == '\n')
         break;
 
-    m_trie_insert(&tr, &text[i], k, NULL);
+    m_trie_insert(&tr, (uint8_t*)&text[i], (uint32_t)k, NULL);
     i += k + 1;
   }
   gettimeofday(&end, NULL);
@@ -62,7 +62,7 @@ main(void)
   printf("Time taken: %ldus\n", ((end.tv_sec - start.tv_sec) * 1000000L) +
                                 (end.tv_usec - start.tv_usec));
 
-  munmap(text, st.st_size);
+  munmap(text, (size_t)st.st_size);
   close(fd);
 
   return EXIT_SUCCESS;

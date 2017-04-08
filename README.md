@@ -6,6 +6,49 @@ tree data structure for the C89 language. The data structure stores
 key/value pairs, where *key* is an array of bytes and *value* is an
 arbitrary pointer to the associated data.
 
+## Example
+The following example inserts all command-line arguments into the
+trie and lets the user search for their presence:
+```c
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <m_trie.h>
+
+int
+main(int argc, char* argv[])
+{
+  m_trie tr;
+  char inp[256];
+  int i;
+  int ret;
+
+  m_trie_init(&tr, m_trie_hash_alphabet, 0);
+  for (i = 1; i < argc; i++)
+    m_trie_insert(&tr, argv[i], strlen(argv[i]), NULL);
+
+  while (1) {
+    scanf("%s", inp);
+    if (strcmp(inp, "!") == 0)
+      break;
+
+    ret = m_trie_search(&tr, inp, strlen(inp), NULL);
+    printf("%s\n", ret == M_TRIE_OK ? "yes" : "no");
+  }
+
+  return EXIT_SUCCESS;
+}
+```
+
+Compile with:
+`clang -Wall -Wextra -Weverything -ansi -pedantic example.c -lmtrie`
+
+Please note that this example lacks error-checking for the sake of
+brevity. All production code _should_ check for return values of all
+`m_trie` functions.
+
+More examples can be found in the `examples/` folder.
+
 ## API
 ### General
 Before calling any other function, the `m_trie` object needs to be
@@ -30,13 +73,13 @@ structure.
 Call the `free(3)` function on all value data pointers once the associated
 key's removal is requested.
 
-To free all resources held by the data structure, call the `m_trie_free`
+To free _all_ resources held by the data structure, call the `m_trie_free`
 function.
 
 Prototypes:
 ```c
-int m_trie_init(m_trie* trie, short(*hash)(char), int flags);
-int m_trie_free(m_trie* trie);
+int m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), uint8_t flags);
+int m_trie_free(m_trie* tr);
 ```
 
 ### Access
@@ -49,18 +92,20 @@ the function is used to report potential errors.
 
 Prototypes:
 ```c
-int m_trie_insert(m_trie* trie, char* key, size_t len, void* val);
-int m_trie_search(m_trie* trie, char* key, size_t len, void** val);
+int m_trie_insert(m_trie* tr, uint8_t* key, uint32_t len, void* val);
+int m_trie_search(m_trie* tr, uint8_t* key, uint32_t len, void** val);
 ```
 
 ### Removing
-The library offers three function to remove keys (an their associated
+The library offers two functions to remove keys (an their associated
 values): `m_trie_remove` is a direct counterpart to the `m_trie_insert`
-function. It is important to note that the `m_trie_remove` function *does
-not* perform deallocation of memory and simply marks node as if it did not
-contain any data. This decision was taken due to performance reasons,
-where cascading freeing of memory could pose significant memory delays and
-therefore uncontrollable jitter in certain scenarios.
+function - it acceps a key and it's length and flags the corresponding
+data node for future removal. It is important to note that the
+`m_trie_remove` function *does not* perform deallocation of memory and
+simply marks node as if it did not contain any data. This decision was
+taken due to performance reasons, where cascading freeing of memory could
+pose significant memory delays and therefore uncontrollable jitter in
+certain scenarios.
 
 The second function, `m_trie_remove_prefix`, removes all keys that start
 with the specified prefix part of the key. The key itself might not
@@ -69,21 +114,26 @@ indicate a previously inserted key, e.g. it is possible to call the
 keys such as `"california"` and `"carpool"`, even though `"ca"` itself was
 not in the trie.
 
-The last removal function, `m_trie_remove_all` simply marks all inserted
-keys to be non-existent, so that an immediate call to the `m_trie_search`
-function would not succeed. It is still possible to use the `m_trie`
-instance afterwards, without a need to call `m_trie_init`. All internal
-structures remain allocated, which can serve as a performance feature in
-certain scenarios.
+The second removal function, `m_trie_remove_all`, simply marks all already
+inserted keys to be non-existent, so that an immediate call to the
+`m_trie_search` function with any argument would not succeed. It is still
+possible to use the `m_trie` instance afterwards, without needing to call
+`m_trie_init`. All internal structures remain allocated, which can serve
+as a performance feature in certain scenarios.
 
-In . This function is automatically run after all `m_trie_remove*`
+### Modifying behaviour
+This function is automatically run after all `m_trie_remove*`
 functions, if he `M_TRIE_FREE` flag was specified at `m_trie_init` call.
 
 Prototypes:
 ```c
-int m_trie_remove(m_trie* trie, char* key, size_t len);
-int m_trie_remove_prefix(m_trie* trie, char* key, size_t len);
+int m_trie_remove(m_trie* trie, uint8_t* key, uint32_t len, uint8_t pfix);
 int m_trie_remove_all(m_trie* trie);
+```
+
+## Garbage-collection
+Prototype:
+```c
 int m_trie_trim(m_trie* trie);
 ```
 
@@ -105,13 +155,13 @@ lower-case letters of English alphabet `m_trie_hash_lower_alphabet`.
 
 Prototypes:
  ```c
-short m_trie_hash_identity(char key);
-short m_trie_hash_alphabet(char key);
-short m_trie_hash_digits(char key);
-short m_trie_hash_base64(char key);
-short m_trie_hash_alphanumeric(char key);
-short m_trie_hash_lower_alphabet(char key);
-short m_trie_hash_upper_alphabet(char key);
+int16_t m_trie_hash_identity(uint8_t key);
+int16_t m_trie_hash_alphabet(uint8_t key);
+int16_t m_trie_hash_digits(uint8_t key);
+int16_t m_trie_hash_base64(uint8_t key);
+int16_t m_trie_hash_alphanumeric(uint8_t key);
+int16_t m_trie_hash_lower_alphabet(uint8_t key);
+int16_t m_trie_hash_upper_alphabet(uint8_t key);
  ```
 
 #### User-supplied hash functions
@@ -120,40 +170,35 @@ obey the rules described above. An example of a hash function that accepts
 only characters `'0'` and `'1'`:
 
 ```c
-short
-hash_01(char c)
+int16_t
+hash_01(uint8_t c)
 {
-	if (c == '0') return 0;
-	if (c == '1') return 1;
+  if (c == 48) return 0;
+  if (c == 49) return 1;
 
-	return -1;
+  return -1;
 }
 ```
 
-## Algorithmic complexity
+## Time & space complexity
 The table below makes an assumption that the hashing function operates in
 both constant time and constant space.
 
-| Function              | Time     | Space    |
-|-----------------------|----------|----------|
-|`m_trie_init`          | `O(a)`   | `O(1)`   |
-|`m_trie_free`          | `O(k*a)` | `O(k*a)` |
-|`m_trie_insert`        | `O(k)`   | `O(k)`   |
-|`m_trie_search`        | `O(k)`   | `O(1)`   |
-|`m_trie_remove`        | `O(k)`   | `O(1)`   |
-|`m_trie_remove_prefix` | `O(k*a)` | `O(k*a)` |
-|`m_trie_remove_all`    | `O(k*a)` | `O(k*a)` |
-|`m_trie_trim`          | `O(k*a)` | `O(k*a)` |
-|`m_trie_hash_*`        | `O(1)`   | `O(1)`   |
+| Function              | Time   | Space  |
+|-----------------------|--------|--------|
+|`m_trie_init`          | `O(a)` | `O(1)` |
+|`m_trie_free`          | `O(n)` | `O(k)` |
+|`m_trie_insert`        | `O(k)` | `O(k)` |
+|`m_trie_search`        | `O(k)` | `O(1)` |
+|`m_trie_remove`        | `O(k)` | `O(1)` |
+|`m_trie_remove` (pfix) | `O(n)` | `O(k)` |
+|`m_trie_remove_all`    | `O(n)` | `O(k)` |
+|`m_trie_trim`          | `O(n)` | `O(k)` |
+|`m_trie_hash_*`        | `O(1)` | `O(1)` |
 
 Where:
 * `k` is the length of the longest key
-* `a` is the number of accepted inputs by the hash function
-
-Note that *none* of time nor space complexities depend on the variable
-`n`, which is the number of inserted key/value pairs. This is a crucial
-feature of the prefix tree data structure and is appreciated in this
-implementation.
+* `n` is the overall number of allocated trie nodes
 
 ## Documentation
 Each function that is part of the public API of the library has its own
@@ -172,8 +217,6 @@ library's `Makefile`.
 ## Supported platforms
  * FreeBSD 10.0 with Clang 3.3
  * OS X 10.9.2 with Clang 3.5
- * Linux 3.14 with GCC 5.0
- * Linux 3.14 with Clang ...
 
 If a platform does not appear to be in the previous list, it does not mean
 that `m_trie` will not work in such environment. In fact the opposite is
@@ -185,6 +228,11 @@ It only means that nobody tested it - you are encouraged to do so and
 report either success or failure to the author.
 
 ## Build & install
+The `m_trie` library has zero dependencies and requires only a
+C89-compatible compiler.
+
+In order to compile, test and install the library run the following 4
+steps (some of which may require superuser privileges):
 ```
 $ make
 $ make test

@@ -98,8 +98,8 @@ int m_trie_search(m_trie* tr, uint8_t* key, uint32_t len, void** val);
 
 ### Removing
 The library offers two functions to remove keys (an their associated
-values): `m_trie_remove` is a direct counterpart to the `m_trie_insert`
-function - it acceps a key and it's length and flags the corresponding
+values): `m_trie_remove`, a direct counterpart to the `m_trie_insert`
+function. It accepts a key and it's length and marks the corresponding
 data node for future removal. It is important to note that the
 `m_trie_remove` function *does not* perform deallocation of memory and
 simply marks node as if it did not contain any data. This decision was
@@ -107,12 +107,13 @@ taken due to performance reasons, where cascading freeing of memory could
 pose significant memory delays and therefore uncontrollable jitter in
 certain scenarios.
 
-The second function, `m_trie_remove_prefix`, removes all keys that start
-with the specified prefix part of the key. The key itself might not
-indicate a previously inserted key, e.g. it is possible to call the
-`m_trie_remove_prefix` function with key prefix `"ca"` and it would delete
-keys such as `"california"` and `"carpool"`, even though `"ca"` itself was
-not in the trie.
+The last argument of the `m_trie_remove` function is it's mode: either `0`
+for normal or `1` for prefix. If the prefix mode is selected, the function
+removes all keys that start with the specified key. The key itself might
+not indicate a previously inserted key, e.g. it is possible to call the
+`m_trie_remove` function in the prefix mode with key `"ca"` and it would
+delete keys such as `"california"` and `"carpool"`, even though `"ca"`
+itself was not in the trie.
 
 The second removal function, `m_trie_remove_all`, simply marks all already
 inserted keys to be non-existent, so that an immediate call to the
@@ -121,20 +122,23 @@ possible to use the `m_trie` instance afterwards, without needing to call
 `m_trie_init`. All internal structures remain allocated, which can serve
 as a performance feature in certain scenarios.
 
-### Modifying behaviour
-This function is automatically run after all `m_trie_remove*`
-functions, if he `M_TRIE_FREE` flag was specified at `m_trie_init` call.
-
 Prototypes:
 ```c
-int m_trie_remove(m_trie* trie, uint8_t* key, uint32_t len, uint8_t pfix);
-int m_trie_remove_all(m_trie* trie);
+int m_trie_remove(m_trie* tr, uint8_t* key, uint32_t len, uint8_t pfix);
+int m_trie_remove_all(m_trie* tr);
 ```
 
 ## Garbage-collection
+As mentioned above, none of the removal functions actually deallocate
+resources, in order to have a more predictable run-time. The
+garbage-collection can be performed by the `m_trie_trim` function that
+traverses the data structure and frees the unused memory blocks. The
+performance aspect of this procedure depends on how often this function is
+called and may be significant.
+
 Prototype:
 ```c
-int m_trie_trim(m_trie* trie);
+int m_trie_trim(m_trie* tr);
 ```
 
 ### Hash functions

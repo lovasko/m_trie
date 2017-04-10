@@ -34,4 +34,4 @@ man/m_trie_hash.3m: src/hash.md
 	$(RONN) $(RFLAGS) <src/hash.md >man/m_trie_hash.3m
 
 clean:
-	rm -r ./man/*.3
+	rm -r ./man/*.3m

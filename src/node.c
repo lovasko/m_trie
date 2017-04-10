@@ -1,6 +1,7 @@
 #include "m_trie.h"
 #include "node.h"
 
+
 /** Initialise a trie node.
   * NOTE: this function is for internal use only.
   *

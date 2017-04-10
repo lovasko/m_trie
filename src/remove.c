@@ -143,9 +143,10 @@ free_child_nodes(m_trie* tr, node* nd)
 
 /** Remove a key from the trie.
   *
-  * @param[in] tr  trie
-  * @param[in] key key
-  * @param[in] len key length
+  * @param[in] tr   trie
+  * @param[in] key  key
+  * @param[in] len  key length
+  * @param[in] pfix prefix mode
   *
   * @return status code
   * @retval M_TRIE_E_NULL      tr and/or key is NULL

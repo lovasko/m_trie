@@ -1,4 +1,5 @@
 # m_trie
+[![Build Status](https://travis-ci.org/lovasko/m_trie.svg?branch=master)](https://travis-ci.org/lovasko/m_trie)
 
 ## Introduction
 The `m_trie` library is a general-purpose implementation of the prefix

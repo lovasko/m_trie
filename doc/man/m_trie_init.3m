@@ -1,0 +1,63 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "M_TRIE_INIT" "3M" "April 2017" "lovasko" "m_trie"
+.
+.SH "NAME"
+\fBm_trie_init\fR \- initialise the trie
+.
+.SH "LIBRARY"
+m_trie (\-lmtrie)
+.
+.SH "SYNOPSIS"
+\fB#include <m_trie\.h>\fR
+.
+.P
+\fBint\fR \fIm_trie_init\fR(\fBm_trie*\fR \fItr\fR, \fBint16_t\fR (\fI*hash\fR)(\fBuint8_t\fR), \fBuint8_t\fR \fIflags\fR);
+.
+.SH "DESCRIPTION"
+The \fIm_trie_init\fR function initialises the \fItr\fRie data structure\. This function does not perform the actual allocation of the \fItr\fRie variable itself, which has to be done by the user\.
+.
+.P
+The \fIhash\fR argument is a pointer to a hashing function\. The \fIm_trie_init\fR function does not need any other information about the hashing function, as it tests it on every possible input and performs internal computations on the set of results\.
+.
+.P
+The \fIflags\fR argument specifies the behaviour of the data structure\. As of now, there are three supported flags:
+.
+.TP
+M_TRIE_OVERWRITE
+Inserting an identical key twice will result in the previously associated data to be overwritten\. Such behaviour is prevented by default\.
+.
+.TP
+M_TRIE_CLEANUP
+Ensure that the garbage\-collection procedure is run every time when a node is removed\. Note that this might have a significant performance impact\.
+.
+.TP
+M_TRIE_FREE
+Call the \fIfree(3)\fR function on all associated values with removed nodes\.
+.
+.SH "TIME COMPLEXITY"
+\fBO\fR(1)\.
+.
+.SH "SPACE COMPLEXITY"
+\fBO\fR(1)\.
+.
+.SH "RETURN VALUES"
+.
+.TP
+M_TRIE_OK
+Success\.
+.
+.TP
+M_TRIE_E_NULL
+\fItr\fR and/or \fIhash\fR are NULL\.
+.
+.TP
+M_TRIE_E_INVALID
+\fIhash\fR function is valid for zero bytes\.
+.
+.SH "AUTHOR"
+Daniel Lovasko \fIdaniel\.lovasko@gmail\.com\fR
+.
+.SH "SEE ALSO"
+m_trie_insert(3), m_trie_free(3), m_trie_hash(3)

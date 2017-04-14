@@ -7,26 +7,25 @@ m_trie (-lmtrie)
 ## SYNOPSIS
 `#include <m_trie.h>`
 
-`int`   
-<m_trie_trim>(`m_trie*` <trie>)
+`int` <m_trie_trim>(`m_trie*` *tr*);
 
 ## DESCRIPTION
 The <m_trie_trim> function deallocates all resources that are no longer needed
-by the <trie>. 
+by the *tr*ie. Such situation can arise after one or more calls to one of the
+<m_trie_remove*> functions.
 
 ## TIME COMPLEXITY
-`O`(<lh>), where <l> is the length of the longest key that was inserted in the
-<trie> and <h> is the number of accepted bytes by the hash function.
+`O`(<n>), where <n> is the overall number of allocated *tr*ie nodes.
 
 ## SPACE COMPLEXITY
-TODO.
+`O`(<k>), where <k> is the length of the longest key in the *tr*ie.
 
 ## RETURN VALUES
  * M_TRIE_OK:
-   success
+   Success.
 
  * M_TRIE_E_NULL:
-   <trie> is `NULL`
+   *tr* is `NULL`.
 
 ## SEE ALSO
 m_trie_remove(3), m_trie_free(3)

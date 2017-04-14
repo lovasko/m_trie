@@ -1,0 +1,38 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "M_TRIE_TRIM" "3" "April 2017" "lovasko" "m_trie"
+.
+.SH "NAME"
+\fBm_trie_trim\fR \- deallocate unused resources
+.
+.SH "LIBRARY"
+m_trie (\-lmtrie)
+.
+.SH "SYNOPSIS"
+\fB#include <m_trie\.h>\fR
+.
+.P
+\fBint\fR \fIm_trie_trim\fR(\fBm_trie*\fR \fItr\fR);
+.
+.SH "DESCRIPTION"
+The \fIm_trie_trim\fR function deallocates all resources that are no longer needed by the \fItr\fRie\. Such situation can arise after one or more calls to one of the \fIm_trie_remove*\fR functions\.
+.
+.SH "TIME COMPLEXITY"
+\fBO\fR(\fIn\fR), where \fIn\fR is the overall number of allocated \fItr\fRie nodes\.
+.
+.SH "SPACE COMPLEXITY"
+\fBO\fR(\fIk\fR), where \fIk\fR is the length of the longest key in the \fItr\fRie\.
+.
+.SH "RETURN VALUES"
+.
+.TP
+M_TRIE_OK
+Success\.
+.
+.TP
+M_TRIE_E_NULL
+\fItr\fR is \fBNULL\fR\.
+.
+.SH "SEE ALSO"
+m_trie_remove(3), m_trie_free(3)

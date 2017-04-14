@@ -1,0 +1,50 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "M_TRIE_SEARCH" "3" "April 2017" "lovasko" "m_trie"
+.
+.SH "NAME"
+\fBm_trie_search\fR \- search for a key in the trie
+.
+.SH "LIBRARY"
+m_trie (\-lmtrie)
+.
+.SH "SYNOPSIS"
+\fB#include <m_trie\.h>\fR
+.
+.P
+\fBint\fR \fIm_trie_search\fR(\fBm_trie*\fR \fItr\fR, \fBuint8_t*\fR \fIkey\fR, \fBuint32_t\fR \fIlen\fR, \fBvoid**\fR \fIval\fR);
+.
+.SH "DESCRIPTION"
+The \fIm_trie_search\fR function performs a lookup for the specified \fIkey\fR in the \fItr\fRie and returns the associated \fIval\fRue\.
+.
+.SH "TIME COMPLEXITY"
+\fBO\fR(\fIk\fR), where \fIk\fR is the length of the longest key in the \fItr\fRie\.
+.
+.SH "SPACE COMPLEXITY"
+\fBO\fR(\fI1\fR)\.
+.
+.SH "RETURN VALUES"
+.
+.TP
+M_TRIE_OK
+Success\.
+.
+.TP
+M_TRIE_E_NULL
+\fItr\fRie and/or \fIkey\fR are \fBNULL\fR\.
+.
+.TP
+M_TRIE_E_INVALID
+\fIkey\fR contains one or more invalid characters\.
+.
+.TP
+M_TRIE_E_NOT_FOUND
+\fIkey\fR was not found in the \fItr\fRie\.
+.
+.TP
+M_TRIE_E_LENGTH
+\fIlen\fR is zero\.
+.
+.SH "SEE ALSO"
+m_trie_insert(3), m_trie_hash(3)

@@ -3,7 +3,7 @@
 #include "node.h"
 
 
-/** Search for a key in the trie.
+/** Search for a value in the trie based on a key.
   *
   * @param[in]  tr  trie
   * @param[in]  key key
@@ -12,8 +12,8 @@
   *
   * @return status code
   * @retval M_TRIE_E_NULL      tr and/or key is NULL
-  * @retval M_TRIE_E_LENGTH    length is zero
-  * @retval M_TRIE_E_INVALID   key contains invalid characters
+  * @retval M_TRIE_E_LENGTH    len is zero
+  * @retval M_TRIE_E_INVALID   key contains one or more invalid characters
   * @retval M_TRIE_E_NOT_FOUND key is not in the trie
   * @retval M_TRIE_OK          success
 **/
@@ -39,7 +39,7 @@ m_trie_search(m_trie* tr, uint8_t* key, uint32_t len, void** val)
   return M_TRIE_OK;
 }
 
-/** Insert a value into the trie.
+/** Insert a value into the trie identified by a key.
   *
   * @param[in] tr  trie
   * @param[in] key key
@@ -49,8 +49,8 @@ m_trie_search(m_trie* tr, uint8_t* key, uint32_t len, void** val)
   * @return status code
   * @retval M_TRIE_E_NULL    tr and/or key is NULL
   * @retval M_TRIE_E_LENGTH  key length is zero
-  * @retval M_TRIE_E_INVALID key contains an invalid character
-  * @retval M_TRIE_E_EXISTS  key exists (only when overwriting is not allowed)
+  * @retval M_TRIE_E_INVALID key contains one or more invalid characters
+  * @retval M_TRIE_E_EXISTS  key already exists
   * @retval M_TRIE_OK        success
 **/
 int
@@ -71,7 +71,7 @@ m_trie_insert(m_trie* tr, uint8_t* key, uint32_t len, void* val)
   /* Traverse the key. */
   for (i = 0; i < len; i++) {
 
-    /* Remove the removal mark from the node. */
+    /* Clear the removal mark from the node. */
     if (nd->nd_type == NODE_TO_FREE)
       nd->nd_type = NODE_REGULAR;
 
@@ -79,7 +79,7 @@ m_trie_insert(m_trie* tr, uint8_t* key, uint32_t len, void* val)
     if (nd->nd_chld == NULL)
       node_chld(tr, &nd);
 
-    /* Initialise the needed node. */
+    /* Initialise the requested node. */
     h = tr->tr_hash(key[i]);
     if (nd->nd_chld[h] == NULL) {
       node_init(tr, &nd->nd_chld[h]);
@@ -97,7 +97,7 @@ m_trie_insert(m_trie* tr, uint8_t* key, uint32_t len, void* val)
   nd->nd_type = NODE_DATA;
   nd->nd_data = val;
 
-  /* Possibly update the new maximal observed length. */
+  /* Update the new maximal observed length. */
   if (len > tr->tr_maxl)
     tr->tr_maxl = len;
 

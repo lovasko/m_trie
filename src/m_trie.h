@@ -27,9 +27,9 @@ typedef struct m_trie {
   int16_t (*tr_hash)(uint8_t); /**< Tree-level hash function.        */
   uint64_t  tr_ncnt;           /**< Overall node count.              */
   uint32_t  tr_maxl;           /**< Length of the longest key.       */
-  uint8_t   tr_ccnt;           /**< Maximal children count per node. */
+  uint16_t  tr_ccnt;           /**< Maximal children count per node. */
   uint8_t   tr_flags;          /**< Behaviour flags.                 */
-  uint8_t   tr_pad[2];         /**< Structure padding.               */
+  uint8_t   tr_pad;            /**< Structure padding.               */
 } m_trie;
 
 /* General. */

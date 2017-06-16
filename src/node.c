@@ -30,7 +30,7 @@ node_init(m_trie* tr, node** nd)
 void
 node_chld(m_trie* tr, node** nd)
 {
-  uint8_t i;
+  uint16_t i;
 
   (*nd)->nd_chld = malloc(sizeof(node*) * (size_t)tr->tr_ccnt);
   for (i = 0; i < tr->tr_ccnt; i++)

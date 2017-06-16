@@ -110,7 +110,7 @@ static int
 free_child_nodes(m_trie* tr, node* nd)
 {
   int keep;
-  uint8_t i;
+  uint16_t i;
 
   keep = 0;
 

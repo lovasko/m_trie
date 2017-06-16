@@ -18,7 +18,7 @@
 int
 m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), uint8_t flags)
 {
-  uint8_t i;
+  uint16_t i;
 
   if (tr == NULL || hash == NULL)
     return M_TRIE_E_NULL;
@@ -31,8 +31,8 @@ m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), uint8_t flags)
   /* Compute the children count, by counting the number of positive
    * answers from the hash function. */
   tr->tr_ccnt = 0;
-  for (i = 0; i < 255; i++)
-    if (hash(i) >= 0)
+  for (i = 0; i < 256; i++)
+    if (hash((uint8_t)i) >= 0)
       tr->tr_ccnt++;
 
   /* Refuse hash functions that accept no inputs. */

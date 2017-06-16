@@ -73,7 +73,7 @@ main(int argc, char* argv[])
 
       case 't':
         CHECK(m_trie_trim(&tr))
-        printf("Trimming \n");
+        printf("Trimming\n");
         break;
 
       case 's':

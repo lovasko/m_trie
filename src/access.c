@@ -101,5 +101,8 @@ m_trie_insert(m_trie* tr, uint8_t* key, uint32_t len, void* val)
   if (len > tr->tr_maxl)
     tr->tr_maxl = len;
 
+  /* Update the number of stored keys. */
+  tr->tr_kcnt++;
+
   return M_TRIE_OK;
 }

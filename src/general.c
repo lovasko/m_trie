@@ -5,15 +5,15 @@
 
 
 /** Initialise the trie.
-  *
-  * @param[in] tr    trie
-  * @param[in] hash  hash function
-  * @param[in] flags behaviour flags
-  *
-  * @return status code
-  * @retval M_TRIE_E_NULL    tr and/or hash is NULL
-  * @retval M_TRIE_E_INVALID hash accepts no inputs
-  * @retval M_TRIE_OK        success
+ *
+ * @param[in] tr    trie
+ * @param[in] hash  hash function
+ * @param[in] flags behaviour flags
+ *
+ * @return status code
+ * @retval M_TRIE_E_NULL    tr and/or hash is NULL
+ * @retval M_TRIE_E_INVALID hash accepts no inputs
+ * @retval M_TRIE_OK        success
 **/
 int
 m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), uint8_t flags)
@@ -24,9 +24,10 @@ m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), uint8_t flags)
     return M_TRIE_E_NULL;
 
   tr->tr_flags = flags;
-  tr->tr_hash = hash;
-  tr->tr_ncnt = 0;
-  tr->tr_maxl = 0;
+  tr->tr_hash  = hash;
+  tr->tr_kcnt  = 0;
+  tr->tr_ncnt  = 0;
+  tr->tr_maxl  = 0;
 
   /* Compute the children count, by counting the number of positive
    * answers from the hash function. */
@@ -46,13 +47,13 @@ m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), uint8_t flags)
 }
 
 /** Free all memory resources held by the trie. Subsequent initialisation
-  * and use of the trie is allowed.
-  *
-  * @param[in] tr trie
-  *
-  * @return status code
-  * @retval M_TRIE_E_NULL tr is NULL
-  * @retval M_TRIE_OK     success
+ * and use of the trie is allowed.
+ *
+ * @param[in] tr trie
+ *
+ * @return status code
+ * @retval M_TRIE_E_NULL tr is NULL
+ * @retval M_TRIE_OK     success
 **/
 int
 m_trie_free(m_trie* tr)
@@ -66,5 +67,24 @@ m_trie_free(m_trie* tr)
   node_free(tr, (node*)tr->tr_root);
   memset(tr, 0, sizeof(m_trie));
 
+  return M_TRIE_OK;
+}
+
+/** Retrieve the number of stored keys in the trie.
+ *
+ * @param[in]  tr  trie
+ * @param[out] cnt number of keys
+ *
+ * @return status code
+ * @retval M_TRIE_E_NULL tr and/or cnt are NULL
+ * @retval M_TRIE_OK     success
+**/
+int
+m_trie_count(m_trie* tr, uint64_t* cnt)
+{
+  if (tr == NULL || cnt == NULL)
+    return M_TRIE_E_NULL;
+
+  *cnt = tr->tr_kcnt;
   return M_TRIE_OK;
 }

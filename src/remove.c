@@ -91,6 +91,11 @@ static int
 mark_to_free(m_trie* tr, node* nd)
 {
   (void)tr;
+
+  /* Update the number of stored keys. */
+  if (nd->nd_type == NODE_DATA)
+    tr->tr_kcnt--;
+
   nd->nd_type = NODE_TO_FREE;
 
   /* Marking nodes to be freed never actually free any node. */
@@ -181,6 +186,9 @@ m_trie_remove(m_trie* tr, uint8_t* key, uint32_t len, uint8_t pfix)
      * delete it. */
     nd->nd_type = NODE_TO_FREE;
     nd->nd_data = NULL;
+
+    /* Update the number of stored keys. */
+    tr->tr_kcnt--;
   }
 
   /* Optionally run the garbage-collection procedure. */

@@ -38,3 +38,6 @@ run_test 21 '-i boat -a -t -i boat -s boat'                   Found
 run_test 22 '-i a -i b -i c -a -t -n'                         1
 run_test 23 '-i caravan -i carpool -p car -t -n'              1
 run_test 24 '-i caravan -i carpool -i ca -p car -t -n'        3
+run_test 25 '-i caravan -i carpool -k'                        2
+run_test 26 '-i caravan -i carpool -i boat -p car -k'         1
+run_test 27 '-i abc -i def -i ghi -i jkl -a -k'               0

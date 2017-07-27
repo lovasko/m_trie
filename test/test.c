@@ -32,7 +32,7 @@ main(int argc, char* argv[])
 
   CHECK(m_trie_init(&tr, m_trie_hash_lower_alphabet, M_TRIE_OVERWRITE))
 
-  while ((opt = getopt(argc, argv, "ai:lnp:r:s:t")) != -1) {
+  while ((opt = getopt(argc, argv, "ai:klnp:r:s:t")) != -1) {
     switch(opt) {
       case 'a':
         CHECK(m_trie_remove_all(&tr))
@@ -45,6 +45,10 @@ main(int argc, char* argv[])
                             (uint32_t)strlen(optarg),
                             NULL))
         printf ("Inserting \"%s\"\n", optarg);
+        break;
+
+      case 'k':
+        printf("Number of keys: %" PRIu64 "\n", tr.tr_kcnt);
         break;
 
       case 'l':

@@ -72,7 +72,6 @@ m_trie_free(m_trie* tr)
    * process is performed. */
   tr->tr_flags |= M_TRIE_CLEANUP;
   m_trie_remove_all(tr);
-
   node_free(tr, (node*)tr->tr_root);
   
   /* Reset the internal state. */

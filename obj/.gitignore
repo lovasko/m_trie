@@ -1,1 +1,6 @@
-*.o
+access.o
+common.o
+general.o
+hash.o
+node.o
+remove.o

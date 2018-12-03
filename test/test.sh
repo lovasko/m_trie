@@ -5,6 +5,8 @@
 # Distributed under the terms of the 2-clause BSD License. The full
 # license is in the file LICENSE, distributed as part of this software.
 
+set -e
+
 function run_test {
   printf "Running test #${1} ... "
   RESULT=$(./test $2)

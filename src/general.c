@@ -5,7 +5,6 @@
 // license is in the file LICENSE, distributed as part of this software.
 
 #include <stdint.h>
-#include <string.h>
 
 #include "m_trie.h"
 #include "node.h"
@@ -72,7 +71,15 @@ m_trie_free(m_trie* tr)
   m_trie_trim(tr);
 
   node_free(tr, (node*)tr->tr_root);
-  memset(tr, 0, sizeof(m_trie));
+  
+  /* Reset the internal state. */
+  tr->tr_root  = NULL;
+  tr->tr_hash  = NULL;
+  tr->tr_ncnt  = 0;
+  tr->tr_kcnt  = 0;
+  tr->tr_maxl  = 0;
+  tr->tr_ccnt  = 0;
+  tr->tr_flags = 0;
 
   return M_TRIE_OK;
 }

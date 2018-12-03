@@ -43,10 +43,10 @@ test:
 	(cd test ; bash test.sh)
 
 clean:
-	rm bin/libmtrie.so
-	rm obj/access.o
-	rm obj/common.o
-	rm obj/general.o
-	rm obj/hash.o
-	rm obj/node.o
-	rm obj/remove.o
+	rm -f bin/libmtrie.so
+	rm -f obj/access.o
+	rm -f obj/common.o
+	rm -f obj/general.o
+	rm -f obj/hash.o
+	rm -f obj/node.o
+	rm -f obj/remove.o

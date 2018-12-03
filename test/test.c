@@ -33,7 +33,7 @@ static const char* err_msg[] = {
 int
 main(int argc, char* argv[])
 {
-  m_trie tr;
+  struct m_trie tr;
   int opt;
 
   CHECK(m_trie_init(&tr, m_trie_hash_lower_alphabet, M_TRIE_OVERWRITE))

@@ -25,12 +25,12 @@
 /// @param[in]  len key length
 /// @param[out] val data associated with the key (can be NULL)
 int
-m_trie_search(const m_trie* tr,
+m_trie_search(const struct m_trie* tr,
               const uint8_t* key,
               const uint32_t len,
               void** val)
 {
-  node* nd;
+  struct node* nd;
   int ret;
 
   // Locate the inner node of the trie.
@@ -62,12 +62,12 @@ m_trie_search(const m_trie* tr,
 /// @param[in] len key length
 /// @param[in] val data associated with the key (can be NULL)
 int
-m_trie_insert(m_trie* tr,
+m_trie_insert(struct m_trie* tr,
               const uint8_t* key,
               const uint32_t len,
               void* val)
 {
-  node* nd;
+  struct node* nd;
   int ret;
   uint32_t i;
   int16_t h;

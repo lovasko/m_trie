@@ -27,7 +27,7 @@
 #define M_TRIE_FREE      4
 
 /// Prefix tree.
-typedef struct m_trie {
+struct m_trie {
   void*     tr_root;           ///< Root tree node.
   int16_t (*tr_hash)(uint8_t); ///< Tree-level hash function.
   uint64_t  tr_ncnt;           ///< Overall node count.
@@ -36,32 +36,32 @@ typedef struct m_trie {
   uint16_t  tr_ccnt;           ///< Maximal children count per node.
   uint8_t   tr_flags;          ///< Behaviour flags.
   uint8_t   tr_pad;            ///< Structure padding.
-} m_trie;
+};
 
 // General.
-int m_trie_init(m_trie* tr,
+int m_trie_init(struct m_trie* tr,
                 int16_t (*hash)(const uint8_t),
                 const uint8_t flags);
-int m_trie_free(m_trie* tr);
-int m_trie_count(const m_trie* tr, uint64_t* cnt);
+int m_trie_free(struct m_trie* tr);
+int m_trie_count(const struct m_trie* tr, uint64_t* cnt);
 
 // Access.
-int m_trie_search(const m_trie* tr,
+int m_trie_search(const struct m_trie* tr,
                   const uint8_t* key,
                   const uint32_t len,
                   void** val);
-int m_trie_insert(m_trie* tr,
+int m_trie_insert(struct m_trie* tr,
                   const uint8_t* key,
                   const uint32_t len,
                   void* val);
 
 // Removal.
-int m_trie_remove(m_trie* tr,
+int m_trie_remove(struct m_trie* tr,
                   const uint8_t* key,
                   const uint32_t len,
                   const uint8_t pfix);
-int m_trie_remove_all(m_trie *tr);
-int m_trie_trim(m_trie* tr);
+int m_trie_remove_all(struct m_trie *tr);
+int m_trie_trim(struct m_trie* tr);
 
 // Hashing.
 int16_t m_trie_hash_identity(const uint8_t key);

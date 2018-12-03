@@ -18,11 +18,11 @@
 /// @param[in]  tr trie
 /// @param[out] nd node
 void
-node_init(m_trie* tr, node** nd)
+node_init(struct m_trie* tr, struct node** nd)
 {
   tr->tr_ncnt++;
 
-  *nd = malloc(sizeof(node));
+  *nd = malloc(sizeof(struct node));
   (*nd)->nd_data = NULL;
   (*nd)->nd_type = NODE_REGULAR;
   (*nd)->nd_chld = NULL;
@@ -36,11 +36,11 @@ node_init(m_trie* tr, node** nd)
 /// @param[in] tr trie
 /// @param[in] nd node
 void
-node_chld(const m_trie* tr, node** nd)
+node_chld(const struct m_trie* tr, struct node** nd)
 {
   uint16_t i;
 
-  (*nd)->nd_chld = malloc(sizeof(node*) * (size_t)tr->tr_ccnt);
+  (*nd)->nd_chld = malloc(sizeof(struct node*) * (size_t)tr->tr_ccnt);
   for (i = 0; i < tr->tr_ccnt; i++)
     (*nd)->nd_chld[i] = NULL;
 }
@@ -51,7 +51,7 @@ node_chld(const m_trie* tr, node** nd)
 /// @param[in] tr trie
 /// @param[in] nd node
 void
-node_free(m_trie* tr, node* nd)
+node_free(struct m_trie* tr, struct node* nd)
 {
   tr->tr_ncnt--;
 

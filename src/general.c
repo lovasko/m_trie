@@ -21,7 +21,7 @@
 /// @param[in] hash  hash function
 /// @param[in] flags behaviour flags
 int
-m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), const uint8_t flags)
+m_trie_init(struct m_trie* tr, int16_t (*hash)(uint8_t), const uint8_t flags)
 {
   uint16_t i;
 
@@ -46,7 +46,7 @@ m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), const uint8_t flags)
     return M_TRIE_E_INVALID;
 
   // Initialise the root node.
-  node_init(tr, (node**)&tr->tr_root);
+  node_init(tr, (struct node**)&tr->tr_root);
 
   return M_TRIE_OK;
 }
@@ -59,7 +59,7 @@ m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), const uint8_t flags)
 ///
 /// @param[in] tr trie
 int
-m_trie_free(m_trie* tr)
+m_trie_free(struct m_trie* tr)
 {
   if (tr == NULL)
     return M_TRIE_E_NULL;
@@ -68,7 +68,7 @@ m_trie_free(m_trie* tr)
   // process is performed.
   tr->tr_flags |= M_TRIE_CLEANUP;
   m_trie_remove_all(tr);
-  node_free(tr, (node*)tr->tr_root);
+  node_free(tr, (struct node*)tr->tr_root);
   
   // Reset the internal state.
   tr->tr_root  = NULL;
@@ -90,7 +90,7 @@ m_trie_free(m_trie* tr)
 /// @param[in]  tr  trie
 /// @param[out] cnt number of keys
 int
-m_trie_count(const m_trie* tr, uint64_t* cnt)
+m_trie_count(const struct m_trie* tr, uint64_t* cnt)
 {
   if (tr == NULL || cnt == NULL)
     return M_TRIE_E_NULL;

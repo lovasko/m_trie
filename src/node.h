@@ -16,7 +16,7 @@
 #define NODE_TO_FREE 2
 
 /// Prefix tree internal node.
-typedef struct node {
+struct node {
   void*         nd_data; ///< Stored value.
   struct node** nd_chld; ///< Children nodes.
   uint8_t       nd_key;  ///< Hash function key.
@@ -24,10 +24,10 @@ typedef struct node {
   uint8_t       nd_cidx; ///< Index into array of children.
   uint8_t       nd_done; ///< Indicator of finished traversal.
   uint32_t      nd_pad;  ///< Structure padding.
-} node;
+};
 
-void node_init(m_trie* tr, node** nd);
-void node_chld(const m_trie* tr, node** nd);
-void node_free(m_trie* tr, node*  nd);
+void node_init(struct m_trie* tr, struct node** nd);
+void node_chld(const struct m_trie* tr, struct node** nd);
+void node_free(struct m_trie* tr, struct node* nd);
 
 #endif

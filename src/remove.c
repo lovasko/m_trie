@@ -19,16 +19,18 @@
 /// @param[in] root node where to start the traversal
 /// @param[in] act  action to perform
 static uint32_t
-dfs(m_trie* tr, node* root, int(*act)(m_trie*, node*))
+dfs(struct m_trie* tr,
+    struct node* root,
+    int(*act)(struct m_trie*, struct node*))
 {
-  node** stack;
-  node* nd;
+  struct node** stack;
+  struct node* nd;
   int64_t top;
   uint32_t newl;
   int del;
 
   // Initialise the stack structure.
-  stack = malloc(sizeof(node*) * (tr->tr_maxl + 1));
+  stack = malloc(sizeof(struct node*) * (tr->tr_maxl + 1));
   top = 0;
   newl = 0;
   stack[0] = root;
@@ -93,7 +95,7 @@ dfs(m_trie* tr, node* root, int(*act)(m_trie*, node*))
 /// @param[in] tr unused
 /// @param[in] nd node
 static int
-mark_to_free(m_trie* tr, node* nd)
+mark_to_free(struct m_trie* tr, struct node* nd)
 {
   (void)tr;
 
@@ -115,7 +117,7 @@ mark_to_free(m_trie* tr, node* nd)
 /// @param[in] tr trie
 /// @param[in] nd node
 static int
-free_child_nodes(m_trie* tr, node* nd)
+free_child_nodes(struct m_trie* tr, struct node* nd)
 {
   int keep;
   uint16_t i;
@@ -163,9 +165,12 @@ free_child_nodes(m_trie* tr, node* nd)
 /// @param[in] len  key length
 /// @param[in] pfix prefix mode
 int
-m_trie_remove(m_trie* tr, const uint8_t* key, const uint32_t len, const uint8_t pfix)
+m_trie_remove(struct m_trie* tr,
+              const uint8_t* key,
+              const uint32_t len,
+              const uint8_t pfix)
 {
-  node* nd;
+  struct node* nd;
   int ret;
 
   // Locate the inner node of the trie.
@@ -205,7 +210,7 @@ m_trie_remove(m_trie* tr, const uint8_t* key, const uint32_t len, const uint8_t 
 ///
 /// @param[in] tr trie
 int
-m_trie_remove_all(m_trie *tr)
+m_trie_remove_all(struct m_trie *tr)
 {
   if (tr == NULL)
     return M_TRIE_E_NULL;
@@ -229,7 +234,7 @@ m_trie_remove_all(m_trie *tr)
 ///
 /// @param[in] tr trie
 int
-m_trie_trim(m_trie* tr)
+m_trie_trim(struct m_trie* tr)
 {
   uint32_t maxl;
 

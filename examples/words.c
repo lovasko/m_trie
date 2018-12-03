@@ -22,7 +22,7 @@ main(void)
   char* text;
   struct stat st;
   int fd;
-  m_trie tr;
+  struct m_trie tr;
   int64_t i;
   int64_t k;
   struct timeval start;

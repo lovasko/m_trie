@@ -11,7 +11,10 @@
 #include "node.h"
 
 
-int check(const m_trie* tr, const uint8_t* key, const uint32_t len);
-int locate(const m_trie* tr, const uint8_t* key, const uint32_t len, node** nd);
+int check(const struct m_trie* tr, const uint8_t* key, const uint32_t len);
+int locate(const struct m_trie* tr,
+           const uint8_t* key,
+           const uint32_t len,
+           struct node** nd);
 
 #endif

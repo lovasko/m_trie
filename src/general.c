@@ -67,8 +67,10 @@ m_trie_free(m_trie* tr)
   if (tr == NULL)
     return M_TRIE_E_NULL;
 
+  /* Mark all tree nodes for removal and ensure that the garbage-collection
+   * process is performed. */
+  tr->tr_flags |= M_TRIE_CLEANUP;
   m_trie_remove_all(tr);
-  m_trie_trim(tr);
 
   node_free(tr, (node*)tr->tr_root);
   

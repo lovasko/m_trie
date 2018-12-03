@@ -18,7 +18,7 @@ function run_test {
   fi
 }
 
-clang -Wall -Wextra -Weverything test.c -o test -lmtrie
+cc -D_XOPEN_SOURCE -Wall -Wextra -Werror -std=c99 -O3 test.c -o test -lmtrie
 
 run_test 01 '-i caravan -s caravan'                           Found
 run_test 02 '-i caravan -s carpool'                           'Not found'

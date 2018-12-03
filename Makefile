@@ -1,5 +1,5 @@
-CC=clang
-WARNINGS=-Wall -Wextra -Weverything -Wno-documentation-unknown-command
+CC=cc
+WARNINGS=-Wall -Wextra -Werror
 STANDARDS=-ansi -pedantic
 CFLAGS=-g -O3 -fPIC $(WARNINGS) $(STANDARDS)
 LDFLAGS=-fPIC

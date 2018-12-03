@@ -11,17 +11,15 @@
 #include "node.h"
 
 
-/** Initialise the trie.
- *
- * @param[in] tr    trie
- * @param[in] hash  hash function
- * @param[in] flags behaviour flags
- *
- * @return status code
- * @retval M_TRIE_E_NULL    tr and/or hash is NULL
- * @retval M_TRIE_E_INVALID hash accepts no inputs
- * @retval M_TRIE_OK        success
-**/
+/// Initialise the trie.
+/// @return status code
+/// @retval M_TRIE_E_NULL    tr and/or hash is NULL
+/// @retval M_TRIE_E_INVALID hash accepts no inputs
+/// @retval M_TRIE_OK        success
+///
+/// @param[in] tr    trie
+/// @param[in] hash  hash function
+/// @param[in] flags behaviour flags
 int
 m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), uint8_t flags)
 {
@@ -36,45 +34,43 @@ m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), uint8_t flags)
   tr->tr_ncnt  = 0;
   tr->tr_maxl  = 0;
 
-  /* Compute the children count, by counting the number of positive
-   * answers from the hash function. */
+  // Compute the children count, by counting the number of positive answers
+  // from the hash function.
   tr->tr_ccnt = 0;
   for (i = 0; i < 256; i++)
     if (hash((uint8_t)i) >= 0)
       tr->tr_ccnt++;
 
-  /* Refuse hash functions that accept no inputs. */
+  // Refuse hash functions that accept no inputs.
   if (tr->tr_ccnt == 0)
     return M_TRIE_E_INVALID;
 
-  /* Initialise the root node. */
+  // Initialise the root node.
   node_init(tr, (node**)&tr->tr_root);
 
   return M_TRIE_OK;
 }
 
-/** Free all memory resources held by the trie. Subsequent initialisation
- * and use of the trie is allowed.
- *
- * @param[in] tr trie
- *
- * @return status code
- * @retval M_TRIE_E_NULL tr is NULL
- * @retval M_TRIE_OK     success
-**/
+/// Free all memory resources held by the trie. Subsequent initialisation
+/// and use of the trie is allowed.
+/// @return status code
+/// @retval M_TRIE_E_NULL tr is NULL
+/// @retval M_TRIE_OK     success
+///
+/// @param[in] tr trie
 int
 m_trie_free(m_trie* tr)
 {
   if (tr == NULL)
     return M_TRIE_E_NULL;
 
-  /* Mark all tree nodes for removal and ensure that the garbage-collection
-   * process is performed. */
+  // Mark all tree nodes for removal and ensure that the garbage-collection
+  // process is performed.
   tr->tr_flags |= M_TRIE_CLEANUP;
   m_trie_remove_all(tr);
   node_free(tr, (node*)tr->tr_root);
   
-  /* Reset the internal state. */
+  // Reset the internal state.
   tr->tr_root  = NULL;
   tr->tr_hash  = NULL;
   tr->tr_ncnt  = 0;
@@ -86,15 +82,13 @@ m_trie_free(m_trie* tr)
   return M_TRIE_OK;
 }
 
-/** Retrieve the number of stored keys in the trie.
- *
- * @param[in]  tr  trie
- * @param[out] cnt number of keys
- *
- * @return status code
- * @retval M_TRIE_E_NULL tr and/or cnt are NULL
- * @retval M_TRIE_OK     success
-**/
+/// Retrieve the number of stored keys in the trie.
+/// @return status code
+/// @retval M_TRIE_E_NULL tr and/or cnt are NULL
+/// @retval M_TRIE_OK     success
+///
+/// @param[in]  tr  trie
+/// @param[out] cnt number of keys
 int
 m_trie_count(m_trie* tr, uint64_t* cnt)
 {

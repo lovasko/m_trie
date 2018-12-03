@@ -4,25 +4,25 @@
 // Distributed under the terms of the 2-clause BSD License. The full
 // license is in the file LICENSE, distributed as part of this software.
 
+#include <stdint.h>
+
 #include "m_trie.h"
 
 
-/** Identity hash function.
-  *
-  * @param[in] key key
-  * @return type-adjusted key
-**/
+/// Identity hash function.
+/// @return type-adjusted key
+///
+/// @param[in] key key
 int16_t
 m_trie_hash_identity(uint8_t key)
 {
   return (int16_t)key;
 }
 
-/** Hash function that accepts both upper and lower alphabet characters.
-  *
-  * @param[in] key key
-  * @return hashed letter
-**/
+/// Hash function that accepts both upper and lower alphabet characters.
+/// @return hashed letter
+///
+/// @param[in] key key
 int16_t
 m_trie_hash_alphabet(uint8_t key)
 {
@@ -35,11 +35,10 @@ m_trie_hash_alphabet(uint8_t key)
   return -1;
 }
 
-/** Hash function that accepts only decimal digits.
-  *
-  * @param[in] key key
-  * @return hashed digit
-**/
+/// Hash function that accepts only decimal digits.
+/// @return hashed digit
+///
+/// @param[in] key key
 int16_t
 m_trie_hash_digits(uint8_t key)
 {
@@ -49,11 +48,10 @@ m_trie_hash_digits(uint8_t key)
   return -1;
 }
 
-/** Hash function that accepts only characters used in the Base64 encoding.
-  *
-  * @param[in] key key
-  * @return hashed Base64 character
-**/
+/// Hash function that accepts only characters used in the Base64 encoding.
+/// @return hashed Base64 character
+///
+/// @param[in] key key
 int16_t
 m_trie_hash_base64(uint8_t key)
 {
@@ -72,11 +70,10 @@ m_trie_hash_base64(uint8_t key)
   return -1;
 }
 
-/** Hash function that accepts both decimal digits and lower/upper alphabet.
-  *
-  * @param[in] key key
-  * @return hashed alphanumeric character
-**/
+/// Hash function that accepts both decimal digits and lower/upper alphabet.
+/// @return hashed alphanumeric character
+///
+/// @param[in] key key
 int16_t
 m_trie_hash_alphanumeric(uint8_t key)
 {
@@ -92,11 +89,10 @@ m_trie_hash_alphanumeric(uint8_t key)
   return -1;
 }
 
-/** Hash function that accepts only lower-case alphabet letters.
-  *
-  * @param[in] key key
-  * @return hashed lower letter
-**/
+/// Hash function that accepts only lower-case alphabet letters.
+/// @return hashed lower letter
+///
+/// @param[in] key key
 int16_t
 m_trie_hash_lower_alphabet(uint8_t key)
 {
@@ -106,11 +102,10 @@ m_trie_hash_lower_alphabet(uint8_t key)
   return -1;
 }
 
-/** Hash function that accepts only upper-case alphabet letters.
-  *
-  * @param[in] key key
-  * @return hashed upper letter
-**/
+/// Hash function that accepts only upper-case alphabet letters.
+/// @return hashed upper letter
+///
+/// @param[in] key key
 int16_t
 m_trie_hash_upper_alphabet(uint8_t key)
 {

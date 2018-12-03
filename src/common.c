@@ -11,19 +11,17 @@
 #include "common.h"
 
 
-/** Check the sanity of the user input.
-  * NOTE: this function is for internal use only.
-  *
-  * @param[in] tr  trie
-  * @param[in] key key
-  * @param[in] len key length
-  *
-  * @return status code
-  * @retval M_TRIE_E_NULL    tr and/or key is NULL
-  * @retval M_TRIE_E_LENGTH  key length is zero
-  * @retval M_TRIE_E_INVALID key contains invalid characters
-  * @retval M_TRIE_OK        success
-**/
+/// Check the sanity of the user input.
+/// NOTE: this function is for internal use only.
+/// @return status code
+/// @retval M_TRIE_E_NULL    tr and/or key is NULL
+/// @retval M_TRIE_E_LENGTH  key length is zero
+/// @retval M_TRIE_E_INVALID key contains invalid characters
+/// @retval M_TRIE_OK        success
+///
+/// @param[in] tr  trie
+/// @param[in] key key
+/// @param[in] len key length
 int
 check(m_trie* tr, uint8_t* key, uint32_t len)
 {
@@ -35,8 +33,7 @@ check(m_trie* tr, uint8_t* key, uint32_t len)
   if (len == 0)
     return M_TRIE_E_LENGTH;
 
-  /* The hash function must return valid value for all
-   * elements of the key. */
+  // The hash function must return valid value for all elements of the key.
   for (i = 0; i < len; i++)
     if (tr->tr_hash(key[i]) < 0)
       return M_TRIE_E_INVALID;
@@ -44,21 +41,19 @@ check(m_trie* tr, uint8_t* key, uint32_t len)
   return M_TRIE_OK;
 }
 
-/** Locate a node within the trie based on a key.
-  * NOTE: this function is for internal use only.
-  *
-  * @param[in]  tr  trie
-  * @param[in]  key key
-  * @param[in]  len key length
-  * @param[out] out found node
-  *
-  * @return status code
-  * @retval M_TRIE_E_NULL      tr and/or key is NULL
-  * @retval M_TRIE_E_LENGTH    key length is zero
-  * @retval M_TRIE_E_INVALID   key contains invalid characters
-  * @retval M_TRIE_E_NOT_FOUND key is not stored in the trie
-  * @retval M_TRIE_OK          success
-**/
+/// Locate a node within the trie based on a key.
+/// NOTE: this function is for internal use only.
+/// @return status code
+/// @retval M_TRIE_E_NULL      tr and/or key is NULL
+/// @retval M_TRIE_E_LENGTH    key length is zero
+/// @retval M_TRIE_E_INVALID   key contains invalid characters
+/// @retval M_TRIE_E_NOT_FOUND key is not stored in the trie
+/// @retval M_TRIE_OK          success
+///
+/// @param[in]  tr  trie
+/// @param[in]  key key
+/// @param[in]  len key length
+/// @param[out] out found node
 int
 locate(m_trie* tr, uint8_t* key, uint32_t len, node** out)
 {
@@ -66,17 +61,16 @@ locate(m_trie* tr, uint8_t* key, uint32_t len, node** out)
   int ret;
   uint32_t i;
 
-  /* Validate the key. */
+  // Validate the key.
   ret = check(tr, key, len);
   if (ret != M_TRIE_OK)
     return ret;
 
   nd = tr->tr_root;
 
-  /* Follow the elements of the key. */
+  // Follow the elements of the key.
   for (i = 0; i < len; i++)
-    if (nd->nd_chld == NULL
-     || (nd = nd->nd_chld[tr->tr_hash(key[i])]) == NULL)
+    if (nd->nd_chld == NULL || (nd = nd->nd_chld[tr->tr_hash(key[i])]) == NULL)
       return M_TRIE_E_NOT_FOUND;
 
   *out = nd;

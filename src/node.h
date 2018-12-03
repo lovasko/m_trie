@@ -10,20 +10,20 @@
 #include <stdint.h>
 
 
-/* Node type identifiers. */
+// Node type identifiers.
 #define NODE_DATA    0
 #define NODE_REGULAR 1
 #define NODE_TO_FREE 2
 
-/** Trie internal node. */
+/// Prefix tree internal node.
 typedef struct node {
-  void*         nd_data; /**< Stored value.                    */
-  struct node** nd_chld; /**< Children nodes.                  */
-  uint8_t       nd_key;  /**< Hash function key.               */
-  uint8_t       nd_type; /**< One of the NODE_* values.        */
-  uint8_t       nd_cidx; /**< Index into array of children.    */
-  uint8_t       nd_done; /**< Indicator of finished traversal. */
-  uint32_t      nd_pad;  /**< Structure padding.               */
+  void*         nd_data; ///< Stored value.
+  struct node** nd_chld; ///< Children nodes.
+  uint8_t       nd_key;  ///< Hash function key.
+  uint8_t       nd_type; ///< One of the NODE_* values.
+  uint8_t       nd_cidx; ///< Index into array of children.
+  uint8_t       nd_done; ///< Indicator of finished traversal.
+  uint32_t      nd_pad;  ///< Structure padding.
 } node;
 
 void node_init(m_trie* tr, node** nd);

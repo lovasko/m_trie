@@ -28,20 +28,20 @@ main(void)
   struct timeval start;
   struct timeval end;
 
-  /* Open the dictionary for reading. */
+  // Open the dictionary for reading.
   fd = open("/usr/share/dict/words", O_RDONLY);
   if (fd < 0) {
     perror("open");
     return EXIT_FAILURE;
   }
 
-  /* Obtain the size of the file. */
+  // Obtain the size of the file.
   if (fstat(fd, &st) == -1) {
     perror("fstat");
     return EXIT_FAILURE;
   }
 
-  /* Load the file's content into the memory. */
+  // Load the file's content into the memory.
   text = mmap(NULL, (size_t)st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
   if (text == MAP_FAILED) {
     perror("mmap");
@@ -51,10 +51,10 @@ main(void)
   m_trie_init(&tr, m_trie_hash_alphabet, 0);
   i = 0;
 
-  /* Scan through all words and insert them into the trie. */
+  // Scan through all words and insert them into the trie.
   gettimeofday(&start, NULL);
   while (i < st.st_size) {
-    /* Find the end of the current word. */
+    // Find the end of the current word.
     for (k = 0; k < st.st_size; k++)
       if (text[i + k] == '\n')
         break;
@@ -64,7 +64,7 @@ main(void)
   }
   gettimeofday(&end, NULL);
 
-  /* Compute and print the time taken to build the data structure. */
+  // Compute and print the time taken to build the data structure.
   printf("Time taken: %ldus\n", ((end.tv_sec - start.tv_sec) * 1000000L) +
                                 (end.tv_usec - start.tv_usec));
 

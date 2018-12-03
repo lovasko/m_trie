@@ -7,7 +7,6 @@
 #ifndef M_TRIE_H
 #define M_TRIE_H
 
-#include <stdlib.h>
 #include <stdint.h>
 
 

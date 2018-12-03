@@ -7,6 +7,9 @@
 #ifndef M_TRIE_NODE_H
 #define M_TRIE_NODE_H
 
+#include <stdint.h>
+
+
 /* Node type identifiers. */
 #define NODE_DATA    0
 #define NODE_REGULAR 1

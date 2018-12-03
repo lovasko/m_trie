@@ -6,8 +6,6 @@ LDFLAGS=-fPIC
 LIB_DIR=/usr/lib
 INC_DIR=/usr/include
 
-.PHONY: test
-
 all: bin/libmtrie.so
 
 bin/libmtrie.so: obj/access.o  \

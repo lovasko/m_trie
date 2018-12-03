@@ -3,7 +3,7 @@
 
 ## Introduction
 The `m_trie` library is a general-purpose implementation of the prefix
-tree data structure for the C89 language. The data structure stores
+tree data structure for the C99 language. The data structure stores
 key/value pairs, where *key* is an array of bytes and *value* is an
 arbitrary pointer to the associated data.
 
@@ -42,7 +42,7 @@ main(int argc, char* argv[])
 ```
 
 Compile with:
-`clang -Wall -Wextra -Weverything -ansi -pedantic example.c -lmtrie`
+`cc -Wall -Wextra -Werror -std=c99 example.c -lmtrie`
 
 Please note that this example lacks error-checking for the sake of
 brevity. All production code _should_ check for return values of all
@@ -220,21 +220,16 @@ The process can be invoked by triggering the `test` target of the
 library's `Makefile`.
 
 ## Supported platforms
- * FreeBSD 10.0 with Clang 3.3
- * OS X 10.9.2 with Clang 3.5
+The library should compile under all C99 environments and standards-compliant
+compilers. This means that the library is expected to compile an work under
+Linux, FreeBSD, OpenBSD, NetBSD, macOS, Windows, Haiku, Plan9 and more. Please
+report any problems regarding a particular platform to the author.
 
-If a platform does not appear to be in the previous list, it does not mean
-that `m_trie` will not work in such environment. In fact the opposite is
-probably true - the library was written with absolute portability in mind
-and closely adheres to language and operating system environment
-standards.
-
-It only means that nobody tested it - you are encouraged to do so and
-report either success or failure to the author.
+The library is known to compile with Clang, GCC, and MSVC compilers.
 
 ## Build & install
 The `m_trie` library has zero dependencies and requires only a
-C89-compatible compiler.
+C99-compatible compiler.
 
 In order to compile, test and install the library run the following 4
 steps (some of which may require superuser privileges):

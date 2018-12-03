@@ -36,7 +36,7 @@ node_init(m_trie* tr, node** nd)
 /// @param[in] tr trie
 /// @param[in] nd node
 void
-node_chld(m_trie* tr, node** nd)
+node_chld(const m_trie* tr, node** nd)
 {
   uint16_t i;
 

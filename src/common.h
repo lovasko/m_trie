@@ -11,7 +11,7 @@
 #include "node.h"
 
 
-int check(m_trie* tr, uint8_t* key, uint32_t len);
-int locate(m_trie* tr, uint8_t* key, uint32_t len, node** nd);
+int check(const m_trie* tr, const uint8_t* key, const uint32_t len);
+int locate(const m_trie* tr, const uint8_t* key, const uint32_t len, node** nd);
 
 #endif

@@ -27,7 +27,7 @@ typedef struct node {
 } node;
 
 void node_init(m_trie* tr, node** nd);
-void node_chld(m_trie* tr, node** nd);
+void node_chld(const m_trie* tr, node** nd);
 void node_free(m_trie* tr, node*  nd);
 
 #endif

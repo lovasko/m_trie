@@ -25,7 +25,10 @@
 /// @param[in]  len key length
 /// @param[out] val data associated with the key (can be NULL)
 int
-m_trie_search(m_trie* tr, uint8_t* key, uint32_t len, void** val)
+m_trie_search(const m_trie* tr,
+              const uint8_t* key,
+              const uint32_t len,
+              void** val)
 {
   node* nd;
   int ret;
@@ -59,7 +62,10 @@ m_trie_search(m_trie* tr, uint8_t* key, uint32_t len, void** val)
 /// @param[in] len key length
 /// @param[in] val data associated with the key (can be NULL)
 int
-m_trie_insert(m_trie* tr, uint8_t* key, uint32_t len, void* val)
+m_trie_insert(m_trie* tr,
+              const uint8_t* key,
+              const uint32_t len,
+              void* val)
 {
   node* nd;
   int ret;

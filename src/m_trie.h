@@ -39,26 +39,37 @@ typedef struct m_trie {
 } m_trie;
 
 // General.
-int m_trie_init(m_trie* tr, int16_t (*hash)(uint8_t), uint8_t flags);
+int m_trie_init(m_trie* tr,
+                int16_t (*hash)(const uint8_t),
+                const uint8_t flags);
 int m_trie_free(m_trie* tr);
-int m_trie_count(m_trie* tr, uint64_t* cnt);
+int m_trie_count(const m_trie* tr, uint64_t* cnt);
 
 // Access.
-int m_trie_search(m_trie* tr, uint8_t* key, uint32_t len, void** val);
-int m_trie_insert(m_trie* tr, uint8_t* key, uint32_t len, void* val);
+int m_trie_search(const m_trie* tr,
+                  const uint8_t* key,
+                  const uint32_t len,
+                  void** val);
+int m_trie_insert(m_trie* tr,
+                  const uint8_t* key,
+                  const uint32_t len,
+                  void* val);
 
 // Removal.
-int m_trie_remove(m_trie* tr, uint8_t* key, uint32_t len, uint8_t pfix);
+int m_trie_remove(m_trie* tr,
+                  const uint8_t* key,
+                  const uint32_t len,
+                  const uint8_t pfix);
 int m_trie_remove_all(m_trie *tr);
 int m_trie_trim(m_trie* tr);
 
 // Hashing.
-int16_t m_trie_hash_identity(uint8_t key);
-int16_t m_trie_hash_alphabet(uint8_t key);
-int16_t m_trie_hash_digits(uint8_t key);
-int16_t m_trie_hash_base64(uint8_t key);
-int16_t m_trie_hash_alphanumeric(uint8_t key);
-int16_t m_trie_hash_lower_alphabet(uint8_t key);
-int16_t m_trie_hash_upper_alphabet(uint8_t key);
+int16_t m_trie_hash_identity(const uint8_t key);
+int16_t m_trie_hash_alphabet(const uint8_t key);
+int16_t m_trie_hash_digits(const uint8_t key);
+int16_t m_trie_hash_base64(const uint8_t key);
+int16_t m_trie_hash_alphanumeric(const uint8_t key);
+int16_t m_trie_hash_lower_alphabet(const uint8_t key);
+int16_t m_trie_hash_upper_alphabet(const uint8_t key);
 
 #endif

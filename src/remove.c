@@ -163,7 +163,7 @@ free_child_nodes(m_trie* tr, node* nd)
 /// @param[in] len  key length
 /// @param[in] pfix prefix mode
 int
-m_trie_remove(m_trie* tr, uint8_t* key, uint32_t len, uint8_t pfix)
+m_trie_remove(m_trie* tr, const uint8_t* key, const uint32_t len, const uint8_t pfix)
 {
   node* nd;
   int ret;

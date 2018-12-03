@@ -6,7 +6,7 @@
 
 CC=cc
 WARNINGS=-Wall -Wextra -Werror
-STANDARDS=-ansi -pedantic
+STANDARDS=-std=c99
 CFLAGS=-g -O3 -fPIC $(WARNINGS) $(STANDARDS)
 LDFLAGS=-fPIC
 LIB_DIR=/usr/lib

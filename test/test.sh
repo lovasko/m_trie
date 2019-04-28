@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (c) 2015-2018 Daniel Lovasko
+# Copyright (c) 2015-2019 Daniel Lovasko
 # All Rights Reserved
 #
 # Distributed under the terms of the 2-clause BSD License. The full

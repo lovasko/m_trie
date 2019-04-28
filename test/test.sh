@@ -9,7 +9,7 @@ set -e
 
 function run_test {
   printf "Running test #${1} ... "
-  RESULT=$(./test $2)
+  RESULT=$(LD_LIBRARY_PATH=../bin ./test $2)
   if echo "$RESULT" | tail -n 1 | grep -q "$3"
   then
     printf "\e[32mOK\e[0m\n"
@@ -18,7 +18,7 @@ function run_test {
   fi
 }
 
-cc -D_XOPEN_SOURCE -Wall -Wextra -Werror -std=c99 -O3 test.c -o test -lmtrie
+cc -D_XOPEN_SOURCE -Wall -Wextra -Werror -std=c99 -O3 test.c -o test -L../bin -lmtrie
 
 run_test 01 '-i caravan -s caravan'                           Found
 run_test 02 '-i caravan -s carpool'                           'Not found'

@@ -9,7 +9,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <inttypes.h>
-#include <m_trie.h>
+
+#include "../src/m_trie.h"
 
 static const char* err_msg[] = {
   "M_TRIE_OK",

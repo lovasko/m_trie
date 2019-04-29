@@ -1,4 +1,25 @@
 language: c
-compiler: clang
+compiler:
+ - clang
+ - gcc
+
 sudo: required
-script: make && sudo make install && make test
+script: make
+
+env:
+  global:
+   - secure: "v6g/9x4+BJ05cbXwzxaxMSr/1HKeAdg8vI/dnR3KFeImK/E+0nm1+DAXDnxzoQPMX409DkSdfipbhE4x1RFOk5z/G1vOFIXibM8usYExdyJODexCUgoncRMtLNQ3SY39RVwe3GlUas+5Kn0XRhsePv/e+slAQqByzJzq2gPE88ByVxMNPA9LiWwRxtsZemy2CNiZ6CqznalBCThWhzEHKev8D8aqdptN5INJ8G34htdd0wKweNz7YsV005nWy6dZlVWO5Jk4nmPxSag5nMBWtOTiezCDwDt1jFm3p0Lg1CFtuNZgrFkrHEn9/T/vMQ8eY3hTVyepMWEw0dKknnb+9XekZEpxYW4/8lcRgkPgT7U2W4YwD6S7oFpZSdt4gD8PQiM0cnnV/Qkh5snC+M1iQpzsip7xpOzjPe+DbDeFzqEw1jFkeRT8NSsmDr5EMs/mjb8gkjt8NezX5mniwGuX+zo10XjjcIFJ2i1ysuIDXgPhc2NNjDaowZOQgjYUSyd7wIuEscMTlFWhovaow2TaBp9WB0eolRe51b9R2Y5qm2jqFPQfhsklfLHlsNNITYVdWL0ydacg7VASQmwx9OlcNY4WI+LduwfjM9NQ9uzQL253RZM4lLNoit2mYcTbtqnTWH4b/z8XlX6b+FkDPD/mPRm88lCE2tALFRZFGY708hw="
+
+before_install:
+ - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN
+  CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: lovasko/m_trie
+      description: Trie/Prefix Tree Implementation for C99
+    notification_email: daniel.lovasko@gmail.com
+    build_command_prepend: true
+    build_command: make
+    branch_pattern: master

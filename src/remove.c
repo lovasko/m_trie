@@ -6,6 +6,7 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "m_trie.h"
 #include "common.h"
@@ -21,13 +22,13 @@
 static uint32_t
 dfs(struct m_trie* tr,
     struct node* root,
-    int(*act)(struct m_trie*, struct node*))
+    bool (*act)(struct m_trie*, struct node*))
 {
   struct node** stack;
   struct node* nd;
   int64_t top;
   uint32_t newl;
-  int del;
+  bool del;
 
   // Initialise the stack structure.
   stack = malloc(sizeof(struct node*) * (tr->tr_maxl + 1));
@@ -44,7 +45,7 @@ dfs(struct m_trie* tr,
     if (nd->nd_chld == NULL)
       nd->nd_done = 1;
 
-    // If we have processed all child nodes. */
+    // If we have processed all child nodes.
     if (nd->nd_done == 1) {
       // Perform the action on the node.
       del = act(tr, nd);
@@ -54,7 +55,7 @@ dfs(struct m_trie* tr,
 
       // If the node was not deleted by the action, try to update the new
       // maximal length of a key.
-      if (del == 0 && top > newl)
+      if (del == false && top > newl)
         newl = (uint32_t)top;
 
     } else {
@@ -90,11 +91,11 @@ dfs(struct m_trie* tr,
 }
 
 /// Mark a node to be freed during the garbage-collection procedure.
-/// @return always 0
+/// @return always false, as this function does not actually free the memory
 ///
 /// @param[in] tr unused
 /// @param[in] nd node
-static int
+static bool
 mark_to_free(struct m_trie* tr, struct node* nd)
 {
   (void)tr;
@@ -111,18 +112,18 @@ mark_to_free(struct m_trie* tr, struct node* nd)
 
 /// Deallocate resources for all child nodes marked as to be freed.
 /// @return overall free decision
-/// @retval 0 no node was freed
-/// @retval 1 one or more child nodes were freed
+/// @retval false no node was freed
+/// @retval true  one or more child nodes were freed
 ///
 /// @param[in] tr trie
 /// @param[in] nd node
-static int
+static bool
 free_child_nodes(struct m_trie* tr, struct node* nd)
 {
-  int keep;
   uint16_t i;
+  bool keep;
 
-  keep = 0;
+  keep = false;
 
   // Traverse all child nodes.
   if (nd->nd_chld != NULL) {
@@ -136,19 +137,19 @@ free_child_nodes(struct m_trie* tr, struct node* nd)
         } else {
           // Keep this node if some of its child nodes were not marked for
           // removal.
-          keep = 1;
+          keep = true;
         }
       }
     }
   }
 
   // Optionally mark the node for removal.
-  if (keep == 0 && nd->nd_type != NODE_DATA) {
+  if (keep == false && nd->nd_type != NODE_DATA) {
     nd->nd_type = NODE_TO_FREE;
-    return 1;
+    return true;
   }
 
-  return 0;
+  return false;
 }
 
 /// Remove a key from the trie.
@@ -164,14 +165,14 @@ free_child_nodes(struct m_trie* tr, struct node* nd)
 /// @param[in] key  key
 /// @param[in] len  key length
 /// @param[in] pfix prefix mode
-int
+uint8_t
 m_trie_remove(struct m_trie* tr,
               const uint8_t* key,
               const uint32_t len,
               const uint8_t pfix)
 {
   struct node* nd;
-  int ret;
+  uint8_t ret;
 
   // Locate the inner node of the trie.
   ret = locate(tr, key, len, &nd);
@@ -209,7 +210,7 @@ m_trie_remove(struct m_trie* tr,
 /// @retval M_TRIE_OK     success
 ///
 /// @param[in] tr trie
-int
+uint8_t
 m_trie_remove_all(struct m_trie *tr)
 {
   if (tr == NULL)
@@ -233,7 +234,7 @@ m_trie_remove_all(struct m_trie *tr)
 /// @retval M_TRIE_OK     success
 ///
 /// @param[in] tr trie
-int
+uint8_t
 m_trie_trim(struct m_trie* tr)
 {
   uint32_t maxl;

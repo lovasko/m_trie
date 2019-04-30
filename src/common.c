@@ -22,7 +22,7 @@
 /// @param[in] tr  trie
 /// @param[in] key key
 /// @param[in] len key length
-int
+uint8_t
 check(const struct m_trie* tr, const uint8_t* key, const uint32_t len)
 {
   uint32_t i;
@@ -54,15 +54,15 @@ check(const struct m_trie* tr, const uint8_t* key, const uint32_t len)
 /// @param[in]  key key
 /// @param[in]  len key length
 /// @param[out] out found node
-int
+uint8_t
 locate(const struct m_trie* tr,
        const uint8_t* key,
        const uint32_t len,
        struct node** out)
 {
   struct node* nd;
-  int ret;
   uint32_t i;
+  uint8_t ret;
 
   // Validate the key.
   ret = check(tr, key, len);

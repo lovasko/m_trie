@@ -20,7 +20,7 @@
 /// @param[in] tr    trie
 /// @param[in] hash  hash function
 /// @param[in] flags behaviour flags
-int
+uint8_t
 m_trie_init(struct m_trie* tr, int16_t (*hash)(uint8_t), const uint8_t flags)
 {
   uint16_t i;
@@ -58,7 +58,7 @@ m_trie_init(struct m_trie* tr, int16_t (*hash)(uint8_t), const uint8_t flags)
 /// @retval M_TRIE_OK     success
 ///
 /// @param[in] tr trie
-int
+uint8_t
 m_trie_free(struct m_trie* tr)
 {
   if (tr == NULL)
@@ -89,7 +89,7 @@ m_trie_free(struct m_trie* tr)
 ///
 /// @param[in]  tr  trie
 /// @param[out] cnt number of keys
-int
+uint8_t
 m_trie_count(const struct m_trie* tr, uint64_t* cnt)
 {
   if (tr == NULL || cnt == NULL)

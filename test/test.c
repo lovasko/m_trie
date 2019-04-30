@@ -25,7 +25,7 @@ static const char* err_msg[] = {
 };
 
 #define CHECK(fn) {               \
-  int ret;                        \
+  uint8_t ret;                    \
   ret = fn;                       \
   if (ret != M_TRIE_OK)           \
     printf("%s\n", err_msg[ret]); \

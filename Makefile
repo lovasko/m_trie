@@ -7,7 +7,7 @@
 CC=cc
 WARNINGS=-Wall -Wextra -Werror
 STANDARDS=-std=c99
-CFLAGS=-g -O3 -fPIC $(WARNINGS) $(STANDARDS)
+CFLAGS=-O3 -fPIC $(WARNINGS) $(STANDARDS)
 LDFLAGS=-fPIC
 LIB_DIR=/usr/lib
 INC_DIR=/usr/include

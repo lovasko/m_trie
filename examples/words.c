@@ -55,9 +55,11 @@ main(void)
   gettimeofday(&start, NULL);
   while (i < st.st_size) {
     // Find the end of the current word.
-    for (k = 0; k < st.st_size; k++)
-      if (text[i + k] == '\n')
+    for (k = 0; k < st.st_size; k++) {
+      if (text[i + k] == '\n') {
         break;
+      }
+    }
 
     m_trie_insert(&tr, (uint8_t*)&text[i], (uint32_t)k, NULL);
     i += k + 1;

@@ -42,8 +42,9 @@ dfs(struct m_trie* tr,
     nd = stack[top];
 
     // If there are no child nodes to process.
-    if (nd->nd_chld == NULL)
+    if (nd->nd_chld == NULL) {
       nd->nd_done = 1;
+    }
 
     // If we have processed all child nodes.
     if (nd->nd_done == 1) {
@@ -55,19 +56,22 @@ dfs(struct m_trie* tr,
 
       // If the node was not deleted by the action, try to update the new
       // maximal length of a key.
-      if (del == false && top > newl)
+      if (del == false && top > newl) {
         newl = (uint32_t)top;
-
+      }
     } else {
       if (nd->nd_chld != NULL) {
         // Advance to the next existing child node.
-        for (; nd->nd_cidx < tr->tr_ccnt-1; nd->nd_cidx++)
-          if (nd->nd_chld[nd->nd_cidx] != NULL)
+        for (; nd->nd_cidx < tr->tr_ccnt-1; nd->nd_cidx++) {
+          if (nd->nd_chld[nd->nd_cidx] != NULL) {
             break;
+	  }
+	}
 
         // Mark the node done if all its child nodes were traversed.
-        if (nd->nd_cidx == tr->tr_ccnt-1 && nd->nd_chld[nd->nd_cidx] == NULL)
+        if (nd->nd_cidx == tr->tr_ccnt-1 && nd->nd_chld[nd->nd_cidx] == NULL) {
           nd->nd_done = 1;
+	}
 
         // Add the next node to process to the stack.
         if (nd->nd_done == 0) {
@@ -77,10 +81,11 @@ dfs(struct m_trie* tr,
           top++;
 
           // Move the pointer to the next node if possible.
-          if (nd->nd_cidx == tr->tr_ccnt-1)
+          if (nd->nd_cidx == tr->tr_ccnt-1) {
             nd->nd_done = 1;
-          else
+	  } else {
             nd->nd_cidx++;
+	  }
         }
       }
     }
@@ -101,8 +106,9 @@ mark_to_free(struct m_trie* tr, struct node* nd)
   (void)tr;
 
   // Update the number of stored keys.
-  if (nd->nd_type == NODE_DATA)
+  if (nd->nd_type == NODE_DATA) {
     tr->tr_kcnt--;
+  }
 
   nd->nd_type = NODE_TO_FREE;
 
@@ -176,14 +182,14 @@ m_trie_remove(struct m_trie* tr,
 
   // Locate the inner node of the trie.
   ret = locate(tr, key, len, &nd);
-  if (ret != M_TRIE_OK)
+  if (ret != M_TRIE_OK) {
     return ret;
+  }
 
   // Run a different procedure for prefix and normal removal modes.
   if (pfix) {
     // Traverse the trie to mark all subtree nodes for removal.
     dfs(tr, nd, mark_to_free);
-
   } else {
     // Optionally deallocate the data associated with the node.
     if (tr->tr_flags & M_TRIE_FREE)
@@ -198,8 +204,9 @@ m_trie_remove(struct m_trie* tr,
   }
 
   // Optionally run the garbage-collection procedure.
-  if (tr->tr_flags & M_TRIE_CLEANUP)
+  if (tr->tr_flags & M_TRIE_CLEANUP) {
     m_trie_trim(tr);
+  }
 
   return M_TRIE_OK;
 }
@@ -213,15 +220,17 @@ m_trie_remove(struct m_trie* tr,
 uint8_t
 m_trie_remove_all(struct m_trie *tr)
 {
-  if (tr == NULL)
+  if (tr == NULL) {
     return M_TRIE_E_NULL;
+  }
 
   // Mark all nodes of the tree to be up for removal.
   dfs(tr, tr->tr_root, mark_to_free);
 
   // Optionally run the garbage-collection procedure.
-  if (tr->tr_flags & M_TRIE_CLEANUP)
+  if (tr->tr_flags & M_TRIE_CLEANUP) {
     m_trie_trim(tr);
+  }
 
   return M_TRIE_OK;
 }
@@ -239,8 +248,9 @@ m_trie_trim(struct m_trie* tr)
 {
   uint32_t maxl;
 
-  if (tr == NULL)
+  if (tr == NULL) {
     return M_TRIE_E_NULL;
+  }
 
   maxl = dfs(tr, tr->tr_root, free_child_nodes);
   tr->tr_maxl = maxl + 1;

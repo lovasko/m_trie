@@ -27,16 +27,20 @@ check(const struct m_trie* tr, const uint8_t* key, const uint32_t len)
 {
   uint32_t i;
 
-  if (tr == NULL || key == NULL)
+  if (tr == NULL || key == NULL) {
     return M_TRIE_E_NULL;
+  }
 
-  if (len == 0)
+  if (len == 0) {
     return M_TRIE_E_LENGTH;
+  }
 
   // The hash function must return valid value for all elements of the key.
-  for (i = 0; i < len; i++)
-    if (tr->tr_hash(key[i]) < 0)
+  for (i = 0; i < len; i++) {
+    if (tr->tr_hash(key[i]) < 0) {
       return M_TRIE_E_INVALID;
+    }
+  }
 
   return M_TRIE_OK;
 }
@@ -66,15 +70,18 @@ locate(const struct m_trie* tr,
 
   // Validate the key.
   ret = check(tr, key, len);
-  if (ret != M_TRIE_OK)
+  if (ret != M_TRIE_OK) {
     return ret;
+  }
 
   nd = tr->tr_root;
 
   // Follow the elements of the key.
-  for (i = 0; i < len; i++)
-    if (nd->nd_chld == NULL || (nd = nd->nd_chld[tr->tr_hash(key[i])]) == NULL)
+  for (i = 0; i < len; i++) {
+    if (nd->nd_chld == NULL || (nd = nd->nd_chld[tr->tr_hash(key[i])]) == NULL) {
       return M_TRIE_E_NOT_FOUND;
+    }
+  }
 
   *out = nd;
   return M_TRIE_OK;

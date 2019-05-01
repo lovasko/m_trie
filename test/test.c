@@ -24,11 +24,12 @@ static const char* err_msg[] = {
   "M_TRIE_E_NO_VALUE"
 };
 
-#define CHECK(fn) {               \
-  uint8_t ret;                    \
-  ret = fn;                       \
-  if (ret != M_TRIE_OK)           \
-    printf("%s\n", err_msg[ret]); \
+#define CHECK(fn) {                \
+  uint8_t _ret;                    \
+  _ret = fn;                       \
+  if (_ret != M_TRIE_OK) {         \
+    printf("%s\n", err_msg[_ret]); \
+  }                                \
 }
 
 int
@@ -36,71 +37,77 @@ main(int argc, char* argv[])
 {
   struct m_trie tr;
   int opt;
+  uint32_t len;
+  uint8_t* key;
+  uint8_t ret;
 
   CHECK(m_trie_init(&tr, m_trie_hash_lower_alphabet, M_TRIE_OVERWRITE))
 
   while ((opt = getopt(argc, argv, "ai:klnp:r:s:t")) != -1) {
+    key = (uint8_t*)optarg;
+    len = (uint32_t)strlen(optarg);
+
     switch(opt) {
-      case 'a':
+      case 'a': {
         CHECK(m_trie_remove_all(&tr))
         printf("Removing all\n");
         break;
+      }
 
-      case 'i':
-        CHECK(m_trie_insert(&tr,
-                            (uint8_t*)optarg,
-                            (uint32_t)strlen(optarg),
-                            NULL))
-        printf ("Inserting \"%s\"\n", optarg);
+      case 'i': {
+        CHECK(m_trie_insert(&tr, key, len, NULL))
+        printf("Inserting \"%s\"\n", optarg);
         break;
+      }
 
-      case 'k':
+      case 'k': {
         printf("Number of keys: %" PRIu64 "\n", tr.tr_kcnt);
         break;
+      }
 
-      case 'l':
+      case 'l': {
         printf("Maximal length: %" PRIu32 "\n", tr.tr_maxl);
         break;
+      }
 
-      case 'n':
+      case 'n': {
         printf("Node count: %" PRIu64 "\n", tr.tr_ncnt);
         break;
+      }
 
-      case 'p':
-        CHECK(m_trie_remove(&tr,
-                            (uint8_t*)optarg,
-                            (uint32_t)strlen(optarg),
-                            1))
+      case 'p': {
+        CHECK(m_trie_remove(&tr, key, len, 1))
         printf("Removing prefix \"%s\"\n", optarg);
         break;
+      }
 
-      case 'r':
-        CHECK(m_trie_remove(&tr,
-                            (uint8_t*)optarg,
-                            (uint32_t)strlen(optarg),
-                            0))
+      case 'r': {
+        CHECK(m_trie_remove(&tr, key, len, 0))
         printf("Removing \"%s\"\n", optarg);
         break;
+      }
 
-      case 't':
+      case 't': {
         CHECK(m_trie_trim(&tr))
         printf("Trimming\n");
         break;
+      }
 
-      case 's':
+      case 's': {
         printf("Searching for \"%s\": ", optarg);
-        if (m_trie_search(&tr,
-                          (uint8_t*)optarg,
-                          (uint32_t)strlen(optarg),
-                          NULL) == M_TRIE_OK)
+	ret = m_trie_search(&tr, key, len, NULL);
+        if (ret == M_TRIE_OK) {
           printf("Found\n");
-        else
+	} else {
           printf("Not found\n");
+	}
         break;
+      }
 
-      default: 
-        fprintf(stderr, "ERROR: invalid arguments\n");
+      default: {
+        fprintf(stderr, "ERROR: invalid option '%c'\n", opt);
         return EXIT_FAILURE;
+      }
     }
   }
 

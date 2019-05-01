@@ -26,11 +26,13 @@ m_trie_hash_identity(const uint8_t key)
 int16_t
 m_trie_hash_alphabet(const uint8_t key)
 {
-  if (key >= 'A' && key <= 'Z')
+  if (key >= 'A' && key <= 'Z') {
     return key - 'A';
+  }
 
-  if (key >= 'a' && key <= 'z')
+  if (key >= 'a' && key <= 'z') {
     return 26 + key - 'a';
+  }
 
   return -1;
 }
@@ -42,8 +44,9 @@ m_trie_hash_alphabet(const uint8_t key)
 int16_t
 m_trie_hash_digits(const uint8_t key)
 {
-  if (key >= '0' && key <= '9')
+  if (key >= '0' && key <= '9') {
     return key - '0';
+  }
 
   return -1;
 }
@@ -55,17 +58,25 @@ m_trie_hash_digits(const uint8_t key)
 int16_t
 m_trie_hash_base64(const uint8_t key)
 {
-  if (key >= 'A' && key <= 'Z')
+  if (key >= 'A' && key <= 'Z') {
     return key - 'A';
+  }
 
-  if (key >= 'a' && key <= 'z')
+  if (key >= 'a' && key <= 'z') {
     return 26 + key - 'a';
+  }
 
-  if (key >= '0' && key <= '9')
+  if (key >= '0' && key <= '9') {
     return 52 + key - '0';
+  }
 
-  if (key == '/') return 62;
-  if (key == '+') return 63;
+  if (key == '/') {
+    return 62;
+  }
+
+  if (key == '+') {
+    return 63;
+  }
 
   return -1;
 }
@@ -77,14 +88,17 @@ m_trie_hash_base64(const uint8_t key)
 int16_t
 m_trie_hash_alphanumeric(const uint8_t key)
 {
-  if (key >= 'A' && key <= 'Z')
+  if (key >= 'A' && key <= 'Z') {
     return key - 'A';
+  }
 
-  if (key >= 'a' && key <= 'z')
+  if (key >= 'a' && key <= 'z') {
     return 26 + key - 'a';
+  }
 
-  if (key >= '0' && key <= '9')
+  if (key >= '0' && key <= '9') {
     return 52 + key - '0';
+  }
 
   return -1;
 }
@@ -96,8 +110,9 @@ m_trie_hash_alphanumeric(const uint8_t key)
 int16_t
 m_trie_hash_lower_alphabet(const uint8_t key)
 {
-  if (key >= 'a' && key <= 'z')
+  if (key >= 'a' && key <= 'z') {
     return key - 'a';
+  }
 
   return -1;
 }
@@ -109,8 +124,9 @@ m_trie_hash_lower_alphabet(const uint8_t key)
 int16_t
 m_trie_hash_upper_alphabet(const uint8_t key)
 {
-  if (key >= 'A' && key <= 'Z')
+  if (key >= 'A' && key <= 'Z') {
     return key - 'A';
+  }
 
   return -1;
 }

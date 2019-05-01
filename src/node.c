@@ -41,8 +41,9 @@ node_chld(const struct m_trie* tr, struct node** nd)
   uint16_t i;
 
   (*nd)->nd_chld = malloc(sizeof(struct node*) * (size_t)tr->tr_ccnt);
-  for (i = 0; i < tr->tr_ccnt; i++)
+  for (i = 0; i < tr->tr_ccnt; i++) {
     (*nd)->nd_chld[i] = NULL;
+  }
 }
 
 /// Free all memory resources held by the trie node.

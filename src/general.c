@@ -25,8 +25,9 @@ m_trie_init(struct m_trie* tr, int16_t (*hash)(uint8_t), const uint8_t flags)
 {
   uint16_t i;
 
-  if (tr == NULL || hash == NULL)
+  if (tr == NULL || hash == NULL) {
     return M_TRIE_E_NULL;
+  }
 
   tr->tr_flags = flags;
   tr->tr_hash  = hash;
@@ -37,13 +38,16 @@ m_trie_init(struct m_trie* tr, int16_t (*hash)(uint8_t), const uint8_t flags)
   // Compute the children count, by counting the number of positive answers
   // from the hash function.
   tr->tr_ccnt = 0;
-  for (i = 0; i < 256; i++)
-    if (hash((uint8_t)i) >= 0)
+  for (i = 0; i < 256; i++) {
+    if (hash((uint8_t)i) >= 0) {
       tr->tr_ccnt++;
+    }
+  }
 
   // Refuse hash functions that accept no inputs.
-  if (tr->tr_ccnt == 0)
+  if (tr->tr_ccnt == 0) {
     return M_TRIE_E_INVALID;
+  }
 
   // Initialise the root node.
   node_init(tr, (struct node**)&tr->tr_root);
@@ -61,8 +65,9 @@ m_trie_init(struct m_trie* tr, int16_t (*hash)(uint8_t), const uint8_t flags)
 uint8_t
 m_trie_free(struct m_trie* tr)
 {
-  if (tr == NULL)
+  if (tr == NULL) {
     return M_TRIE_E_NULL;
+  }
 
   // Mark all tree nodes for removal and ensure that the garbage-collection
   // process is performed.
@@ -92,8 +97,9 @@ m_trie_free(struct m_trie* tr)
 uint8_t
 m_trie_count(const struct m_trie* tr, uint64_t* cnt)
 {
-  if (tr == NULL || cnt == NULL)
+  if (tr == NULL || cnt == NULL) {
     return M_TRIE_E_NULL;
+  }
 
   *cnt = tr->tr_kcnt;
   return M_TRIE_OK;

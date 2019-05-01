@@ -35,16 +35,19 @@ m_trie_search(const struct m_trie* tr,
 
   // Locate the inner node of the trie.
   ret = locate(tr, key, len, &nd);
-  if (ret != M_TRIE_OK)
+  if (ret != M_TRIE_OK) {
     return ret;
+  }
 
   // Check whether the node contains data.
-  if (nd->nd_type != NODE_DATA)
+  if (nd->nd_type != NODE_DATA) {
     return M_TRIE_E_NOT_FOUND;
+  }
 
   // Return the value based on the caller's interest.
-  if (val != NULL)
+  if (val != NULL) {
     *val = nd->nd_data;
+  }
 
   return M_TRIE_OK;
 }
@@ -74,21 +77,23 @@ m_trie_insert(struct m_trie* tr,
 
   // Validate the key.
   ret = check(tr, key, len);
-  if (ret != M_TRIE_OK)
+  if (ret != M_TRIE_OK) {
     return ret;
+  }
 
   nd = tr->tr_root;
 
   // Traverse the key.
   for (i = 0; i < len; i++) {
-
     // Clear the removal mark from the node.
-    if (nd->nd_type == NODE_TO_FREE)
+    if (nd->nd_type == NODE_TO_FREE) {
       nd->nd_type = NODE_REGULAR;
+    }
 
     // Create new subtree.
-    if (nd->nd_chld == NULL)
+    if (nd->nd_chld == NULL) {
       node_chld(tr, &nd);
+    }
 
     // Initialise the requested node.
     h = tr->tr_hash(key[i]);
@@ -102,15 +107,17 @@ m_trie_insert(struct m_trie* tr,
   }
 
   // Raise an error if the value can not be overwritten.
-  if (nd->nd_type == NODE_DATA && (tr->tr_flags & M_TRIE_OVERWRITE))
+  if (nd->nd_type == NODE_DATA && (tr->tr_flags & M_TRIE_OVERWRITE)) {
     return M_TRIE_E_EXISTS;
+  }
 
   nd->nd_type = NODE_DATA;
   nd->nd_data = val;
 
   // Update the new maximal observed length.
-  if (len > tr->tr_maxl)
+  if (len > tr->tr_maxl) {
     tr->tr_maxl = len;
+  }
 
   // Update the number of stored keys.
   tr->tr_kcnt++;

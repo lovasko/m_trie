@@ -76,13 +76,13 @@ main(int argc, char* argv[])
       }
 
       case 'p': {
-        CHECK(m_trie_remove(&tr, key, len, 1))
+        CHECK(m_trie_remove(&tr, key, len, true))
         printf("Removing prefix \"%s\"\n", optarg);
         break;
       }
 
       case 'r': {
-        CHECK(m_trie_remove(&tr, key, len, 0))
+        CHECK(m_trie_remove(&tr, key, len, false))
         printf("Removing \"%s\"\n", optarg);
         break;
       }

@@ -170,12 +170,12 @@ free_child_nodes(struct m_trie* tr, struct node* nd)
 /// @param[in] tr   trie
 /// @param[in] key  key
 /// @param[in] len  key length
-/// @param[in] pfix prefix mode
+/// @param[in] pfix prefix decision
 uint8_t
 m_trie_remove(struct m_trie* tr,
               const uint8_t* key,
               const uint32_t len,
-              const uint8_t pfix)
+              const bool pfix)
 {
   struct node* nd;
   uint8_t ret;
@@ -187,7 +187,7 @@ m_trie_remove(struct m_trie* tr,
   }
 
   // Run a different procedure for prefix and normal removal modes.
-  if (pfix) {
+  if (pfix == true) {
     // Traverse the trie to mark all subtree nodes for removal.
     dfs(tr, nd, mark_to_free);
   } else {

@@ -26,6 +26,7 @@ uint8_t
 check(const struct m_trie* tr, const uint8_t* key, const uint32_t len)
 {
   uint32_t i;
+  int16_t h;
 
   if (tr == NULL || key == NULL) {
     return M_TRIE_E_NULL;
@@ -37,7 +38,8 @@ check(const struct m_trie* tr, const uint8_t* key, const uint32_t len)
 
   // The hash function must return valid value for all elements of the key.
   for (i = 0; i < len; i++) {
-    if (tr->tr_hash(key[i]) < 0) {
+    h = tr->tr_hash(key[i]);
+    if (h < 0) {
       return M_TRIE_E_INVALID;
     }
   }
@@ -66,6 +68,7 @@ locate(const struct m_trie* tr,
 {
   struct node* nd;
   uint32_t i;
+  int16_t h;
   uint8_t ret;
 
   // Validate the key.
@@ -78,7 +81,16 @@ locate(const struct m_trie* tr,
 
   // Follow the elements of the key.
   for (i = 0; i < len; i++) {
-    if (nd->nd_chld == NULL || (nd = nd->nd_chld[tr->tr_hash(key[i])]) == NULL) {
+    // Scenario when there are no more nodes to follow, but the key is still
+    // available.
+    if (nd->nd_chld == NULL) {
+      return M_TRIE_E_NOT_FOUND;
+    }
+
+    // Advance to the next node based on the key element.
+    h = tr->tr_hash(key[i]);
+    nd = nd->nd_chld[h];
+    if (nd == NULL) {
       return M_TRIE_E_NOT_FOUND;
     }
   }

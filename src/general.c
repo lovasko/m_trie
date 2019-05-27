@@ -24,6 +24,7 @@ uint8_t
 m_trie_init(struct m_trie* tr, int16_t (*hash)(uint8_t), const uint8_t flags)
 {
   uint16_t i;
+  int16_t h;
 
   if (tr == NULL || hash == NULL) {
     return M_TRIE_E_NULL;
@@ -39,7 +40,8 @@ m_trie_init(struct m_trie* tr, int16_t (*hash)(uint8_t), const uint8_t flags)
   // from the hash function.
   tr->tr_ccnt = 0;
   for (i = 0; i < 256; i++) {
-    if (hash((uint8_t)i) >= 0) {
+    h = hash((uint8_t)i);
+    if (h >= 0) {
       tr->tr_ccnt++;
     }
   }

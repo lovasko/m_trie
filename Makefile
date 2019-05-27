@@ -5,7 +5,7 @@
 # license is in the file LICENSE, distributed as part of this software.
 
 CC=cc
-WARNINGS=-Wall -Wextra -Werror
+WARNINGS=-Wall -Wextra -Werror -fstrict-aliasing
 STANDARDS=-std=c99
 CFLAGS=-O3 -fPIC $(WARNINGS) $(STANDARDS)
 LDFLAGS=-fPIC

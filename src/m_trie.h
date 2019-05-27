@@ -8,6 +8,7 @@
 #define M_TRIE_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 
 // Return codes.

@@ -63,13 +63,13 @@ dfs(struct m_trie* tr,
         for (; nd->nd_cidx < tr->tr_ccnt-1; nd->nd_cidx++) {
           if (nd->nd_chld[nd->nd_cidx] != NULL) {
             break;
-	  }
-	}
+          }
+        }
 
         // Mark the node done if all its child nodes were traversed.
         if (nd->nd_cidx == tr->tr_ccnt-1 && nd->nd_chld[nd->nd_cidx] == NULL) {
           nd->nd_done = 1;
-	}
+        }
 
         // Add the next node to process to the stack.
         if (nd->nd_done == 0) {
@@ -81,9 +81,9 @@ dfs(struct m_trie* tr,
           // Move the pointer to the next node if possible.
           if (nd->nd_cidx == tr->tr_ccnt-1) {
             nd->nd_done = 1;
-	  } else {
+          } else {
             nd->nd_cidx++;
-	  }
+          }
         }
       }
     }

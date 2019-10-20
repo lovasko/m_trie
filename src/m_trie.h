@@ -54,15 +54,18 @@ uint8_t m_trie_walk(struct m_trie* tr,
                     void* ptr,
                     bool (*func)(void*,const uint8_t*,const uint32_t,void*));
 
-// Access.
-uint8_t m_trie_search(const struct m_trie* tr,
-                      const uint8_t* key,
-                      const uint32_t len,
-                      void** val);
+// Addition.
 uint8_t m_trie_insert(struct m_trie* tr,
                       const uint8_t* key,
                       const uint32_t len,
                       void* val);
+uint8_t m_trie_union(struct m_trie* tr1, struct m_trie* tr2);
+
+// Retrieval.
+uint8_t m_trie_search(const struct m_trie* tr,
+                      const uint8_t* key,
+                      const uint32_t len,
+                      void** val);
 uint8_t m_trie_min(struct m_trie* tr,
                    uint8_t* key,
                    const uint32_t* len,
@@ -72,11 +75,6 @@ uint8_t m_trie_max(struct m_trie* tr,
                    const uint32_t* len,
                    void** val);
 
-// Set Operations.
-uint8_t m_trie_union(struct m_trie* tr1, struct m_trie* tr2);
-uint8_t m_trie_intersect(struct m_trie* tr1, struct m_trie* tr2);
-uint8_t m_trie_subtract(struct m_trie* tr1, struct m_trie* tr2);
-
 // Removal.
 uint8_t m_trie_remove(struct m_trie* tr,
                       const uint8_t* key,
@@ -84,6 +82,8 @@ uint8_t m_trie_remove(struct m_trie* tr,
                       const bool pfix);
 uint8_t m_trie_remove_all(struct m_trie *tr);
 uint8_t m_trie_trim(struct m_trie* tr);
+uint8_t m_trie_intersect(struct m_trie* tr1, struct m_trie* tr2);
+uint8_t m_trie_subtract(struct m_trie* tr1, struct m_trie* tr2);
 
 // Hashing.
 int16_t m_trie_hash_identity(const uint8_t key);

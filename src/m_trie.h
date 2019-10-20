@@ -50,6 +50,9 @@ uint8_t m_trie_init(struct m_trie* tr,
                     const uint8_t flags);
 uint8_t m_trie_free(struct m_trie* tr);
 uint8_t m_trie_count(const struct m_trie* tr, uint64_t* cnt);
+uint8_t m_trie_walk(struct m_trie* tr,
+                    void* ptr,
+                    bool (*func)(void*,const uint8_t*,const uint32_t,void*));
 
 // Access.
 uint8_t m_trie_search(const struct m_trie* tr,

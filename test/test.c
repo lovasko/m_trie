@@ -50,40 +50,40 @@ main(int argc, char* argv[])
     switch(opt) {
       case 'a': {
         CHECK(m_trie_remove_all(&tr))
-        printf("Removing all\n");
+        printf("Removing all");
         break;
       }
 
       case 'i': {
         CHECK(m_trie_insert(&tr, key, len, NULL))
-        printf("Inserting \"%s\"\n", optarg);
+        printf("Inserting \"%s\"", optarg);
         break;
       }
 
       case 'k': {
-        printf("Number of keys: %" PRIu64 "\n", tr.tr_kcnt);
+        printf("Cardinality: %" PRIu64, tr.tr_kcnt);
         break;
       }
 
       case 'l': {
-        printf("Maximal length: %" PRIu32 "\n", tr.tr_maxl);
+        printf("Maximal length: %" PRIu32, tr.tr_maxl);
         break;
       }
 
       case 'n': {
-        printf("Node count: %" PRIu64 "\n", tr.tr_ncnt);
+        printf("Node count: %" PRIu64, tr.tr_ncnt);
         break;
       }
 
       case 'p': {
         CHECK(m_trie_remove(&tr, key, len, true))
-        printf("Removing prefix \"%s\"\n", optarg);
+        printf("Removing prefix \"%s\"", optarg);
         break;
       }
 
       case 'r': {
         CHECK(m_trie_remove(&tr, key, len, false))
-        printf("Removing \"%s\"\n", optarg);
+        printf("Removing \"%s\"", optarg);
         break;
       }
 
@@ -97,9 +97,9 @@ main(int argc, char* argv[])
         printf("Searching for \"%s\": ", optarg);
 	ret = m_trie_search(&tr, key, len, NULL);
         if (ret == M_TRIE_OK) {
-          printf("Found\n");
+          printf("Found");
 	} else {
-          printf("Not found\n");
+          printf("Not found");
 	}
         break;
       }

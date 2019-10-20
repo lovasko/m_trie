@@ -9,8 +9,10 @@
 #include <string.h>
 #include <unistd.h>
 #include <inttypes.h>
+#include <time.h>
 
 #include "../src/m_trie.h"
+
 
 static const char* err_msg[] = {
   "M_TRIE_OK",
@@ -32,6 +34,15 @@ static const char* err_msg[] = {
   }                                \
 }
 
+uint64_t
+mono_now(void)
+{
+  struct timespec ts;
+
+  (void)clock_gettime(CLOCK_MONOTONIC, &ts);
+  return (uint64_t)ts.tv_nsec + (uint64_t)ts.tv_sec * 100000000ULL;
+}
+
 int
 main(int argc, char* argv[])
 {
@@ -47,6 +58,7 @@ main(int argc, char* argv[])
     key = (uint8_t*)optarg;
     len = (uint32_t)strlen(optarg);
 
+    start = mono_now();
     switch(opt) {
       case 'a': {
         CHECK(m_trie_remove_all(&tr))
@@ -109,6 +121,9 @@ main(int argc, char* argv[])
         return EXIT_FAILURE;
       }
     }
+
+    end = mono_now();
+    printf(" -> %" PRIu64 "\n", end - start);
   }
 
   CHECK(m_trie_free(&tr))

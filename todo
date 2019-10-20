@@ -1,0 +1,45 @@
+ - example should be cc, c99 in Makefile
+ - example should do better error checking of syscalls
+
+ - test suite should be enriched:
+   - rand (random testing with /dev/urandom)
+   - perf (somehow measure the performance?)
+   - current test should be called unit
+
+ - no more ints, uint8_t return values
+ - pfix boolean?
+ - proper comparisons 
+
+ - restrict where applicable
+ - explicit tests in conditions
+
+ - custom memory allocator possible
+ - basic malloc allocator available
+
+ - m_trie_view - way to select a sub-trie, maybe run queries there?
+   - link to previous one
+   - prefix key as well
+
+ - m_trie_walk
+   - execute a function for each key/value
+   - ability to select a starting point
+   - using DFS
+   - DFS to a separate file?
+
+ - m_trie_min/_max
+   - retrieve a minimal/maximal key and its value
+   - ability to select a starting point
+   - always just follow first available pointer
+   - is this tricky due to TO_FREE? it is very tricky, might need full DFS
+   - might need DFS choice of leftmost | rightmost
+
+ - don't allocate the stack for every call to dfs
+   - allocate more to accommodate for a new key if it increases in size
+   - trim function should trim this buffer too
+
+ - ability to give a predicate to remove
+   - maybe called filter?
+
+ - are remove, purge, and filter the same call?
+ 
+ - sonarqube test

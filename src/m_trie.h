@@ -72,6 +72,11 @@ uint8_t m_trie_max(struct m_trie* tr,
                    const uint32_t* len,
                    void** val);
 
+// Set Operations.
+uint8_t m_trie_union(struct m_trie* tr1, struct m_trie* tr2);
+uint8_t m_trie_intersect(struct m_trie* tr1, struct m_trie* tr2);
+uint8_t m_trie_subtract(struct m_trie* tr1, struct m_trie* tr2);
+
 // Removal.
 uint8_t m_trie_remove(struct m_trie* tr,
                       const uint8_t* key,

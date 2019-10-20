@@ -29,7 +29,7 @@ main(void)
   struct timeval end;
 
   // Open the dictionary for reading.
-  fd = open("/usr/share/dict/words", O_RDONLY);
+  fd = open("words.txt", O_RDONLY);
   if (fd < 0) {
     perror("open");
     return EXIT_FAILURE;

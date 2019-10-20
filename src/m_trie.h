@@ -26,6 +26,7 @@
 #define M_TRIE_E_LENGTH    6
 #define M_TRIE_E_UNKNOWN   7
 #define M_TRIE_E_NO_VALUE  8
+#define M_TRIE_E_MISMATCH  9
 
 // Behaviour flags.
 #define M_TRIE_OVERWRITE 1

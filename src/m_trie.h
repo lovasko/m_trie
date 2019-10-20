@@ -63,6 +63,14 @@ uint8_t m_trie_insert(struct m_trie* tr,
                       const uint8_t* key,
                       const uint32_t len,
                       void* val);
+uint8_t m_trie_min(struct m_trie* tr,
+                   uint8_t* key,
+                   const uint32_t* len,
+                   void** val);
+uint8_t m_trie_max(struct m_trie* tr,
+                   uint8_t* key,
+                   const uint32_t* len,
+                   void** val);
 
 // Removal.
 uint8_t m_trie_remove(struct m_trie* tr,

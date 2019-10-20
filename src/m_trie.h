@@ -11,6 +11,11 @@
 #include <stdbool.h>
 
 
+// Semantic version.
+#define M_TRIE_VERSION_MAJOR 1
+#define M_TRIE_VERSION_MINOR 0
+#define M_TRIE_VERSION_PATCH 0
+
 // Return codes.
 #define M_TRIE_OK          0
 #define M_TRIE_E_NULL      1
